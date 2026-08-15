@@ -31,6 +31,7 @@
 | 2026-08-15 | open-decision | Agent / AGT-1 | plan-AGT-1 AGT1-OD-3 · GET /conversations 要不要下发 fork 标识 | 本 batch 不做——分页修好后该需求即消失；若要给消费端识别分叉会话的能力，单开 | ⬜ | ⬜ |
 
 | 2026-08-15 | baton-confirm | Agent / AGT-1 | Agent:docs/plans/2026-08-15-对话历史分页-开发计划.md §9 · AGT1-G1 开工硬闸第 1 步未过（三个在途未提交文件属他人），但 owner 已令传棒进实现阶段 | 传棒但在门铃里显式标明 G1 未过、不得写代码、不许代管或 stash 他人改动——冻结与开工是两道独立的闸 | ⬜ | ⬜ |
+| 2026-08-15 | baton-confirm | byteme_mobile / D2a | `docs/devlogs/2026-08-12-D对话-迁移实施记录.md` §3.17 · D2a 实现/验证/交付工件三样齐备，请求 owner ack 标 Done | ack（无未关闭 finding、无未到期 watchlist、无缺失工件；reviewer 已在 ack HEAD 87207b08 亲跑全量门禁）| **ack**（owner hao · 2026-08-15）⇒ D2a Done，旧流程账目全部收尾 | ✅ 一致 |
 > 📌 **路径口径（2026-08-15，随「工件去品牌化」拍板）**：**后续行一律写迁移后的新路径**。
 > 历史行按本文件「不修改历史行」的规则**原样保留**，但其中的落点已经变了，冷启动时按下表换算：
 >
