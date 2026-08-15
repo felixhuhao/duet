@@ -7,6 +7,7 @@
 
 - **plan**：outcome / scope 与 out-of-scope / redlines+authority 来源 / 可观察 AC /
   open decisions / Errata 节（追加式）/ 冻结状态与 BASE；
+  跨仓 batch（仅限同 owner 多仓）另须声明：仓清单 + 各仓 writable scope + 各仓 BASE；
 - **devlog（或等价实施记录）**：增量 commits 范围 / 证据块（cmd·scope·result·noise）/
   已知限制 / 被暂停 slice；
 - **review**：round 计数 / BASE 与 reviewed HEAD / blockers（绑定依据）/ watchlist+到期点 /

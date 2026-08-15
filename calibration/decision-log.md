@@ -1,7 +1,11 @@
-# Decision Log（校准记录）
+# Decision Log（校准记录 · owner 收件箱）
 
 每次 escalate（及 Stage 0 的传棒放行）记一行。类型定义见 protocol/escalation.md，
-毕业规则见 stage.md。追加写入，不修改历史行。
+毕业规则见 stage.md。追加写入，不修改历史行——**例外**：「owner 裁决」「一致?」两列
+从 ⬜ 填成结论属于完成记录，不算改历史。
+
+**⬜ 行 = owner 收件箱**：owner 扫本文件即知全轨有什么等拍。closure 轮逐条重提
+悬置 ⬜ 或显式搁置（搁置也要写进裁决列）。
 
 | 日期 | 类型 | 仓库/batch | 上下文（文件+行） | agent 建议 | owner 裁决 | 一致? |
 |---|---|---|---|---|---|---|

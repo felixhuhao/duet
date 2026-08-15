@@ -28,8 +28,19 @@
 ## 通知方式
 
 - `herdr notification show "<类型>: <一句话>" --body "<文件路径>"`；
-- pane 转入 blocked 状态（sidebar 可见）；
-- open-decision 类同时在 dg-kanban 建卡（可选方案 / 影响 / 推荐 / 被暂停 slice）。
+- pane 转入 blocked 状态（sidebar 可见）。
+
+## Open decision 的落点路由（2026-08-15 拍板）
+
+| OD 作用域 | 真源 |
+|---|---|
+| 轨内（产品选择、batch 边界、存量账目） | 本 batch review 文件 OD 节 / plan 待拍板节 |
+| 跨轨结构性（不属于任何单轨） | migration ROADMAP「尚未拍板且影响排期」节 |
+| 跨 owner（要别人的仓改东西） | 对方仓需求分析文档（如 `Agent/docs/plans/`） |
+| owner 收件箱 | decision-log 中 ⬜ 行（escalate 必记，天然聚合） |
+
+kanban 建卡不强制，owner 需要排期跟踪时自建。判错路由不算 finding，
+由 escalate 时纠正。
 
 ## 不对称原则
 

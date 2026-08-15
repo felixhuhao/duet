@@ -11,7 +11,7 @@ Claude × Codex 双角色开发流程的**定义仓库**。管流程本身，不
 ```text
 运行时层   herdr workspace，两个 agent 各占一个 pane，owner 旁观并随时介入
 状态层     md 文件。定义住本仓库；实例（plan/devlog/review）住各工作仓库
-决策层     dg-kanban。open decisions 建卡，owner 在看板拍板
+决策层     OD 分层路由：真源就地，decision-log 的 ⬜ 行兼任 owner 收件箱；建卡自选
 ```
 
 **定义与实例分家**：实例文件里全是 commit SHA、baseline 和 diff 证据，必须与它管的代码同仓库。
@@ -77,7 +77,14 @@ scripts/      herdr workspace 搭建等（待 herdr 本地验证后补）
 - 运行时用 herdr，两个 agent 平级，接力棒模型，无 driver；
 - 状态层用 md 三件套 + decision log，暂不引入 loopx（升级判据：出现无人值守需求，
   或手写状态文件出现漂移）；
-- open decisions 走 dg-kanban 建卡；
+- **open decisions 分层路由**（2026-08-15 修订，取代初版「一律建卡」）：真源就地
+  （轨内 OD 住 review OD 节 / plan 待拍板节，证据不离上下文）；每次 escalate 必记的
+  decision-log 行中「owner 裁决 = ⬜」即 owner 收件箱（零新增机制）；跨轨结构性 OD
+  → migration ROADMAP「尚未拍板且影响排期」节；跨 owner → 对方仓需求分析文档；
+  kanban 建卡降为 owner 自选。closure 轮逐条重提悬置 ⬜ 或显式搁置；
+- **跨仓写边界**：跨 owner 的仓一律不写，需求走需求单流，无例外；同 owner 多仓才允许
+  跨仓 batch，且 plan 冻结前必须声明仓清单 + 各仓 writable scope + 各仓 BASE，
+  未声明即越界 escalate；默认仍是拆批、契约先行；
 - 自主性走三阶段梯子，当前 Stage 0，毕业靠 decision-log 一致率（见 calibration/stage.md）；
 - stop 从严、escalate 误报随磨合调低的不对称原则。
 

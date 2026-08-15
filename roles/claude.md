@@ -43,7 +43,8 @@ reviewed HEAD / 新 BASE。verdict 块规范见 protocol/verdict.md。
 - 实现暴露的 plan 缺陷记 plan errata，不记 Codex 的 finding；errata 须引用 plan 具体
   条款 + 代码证据，认为是实现 bug 包装的走争议通道 escalate；免责不免修；
 - 相邻产品问题不免费加入当前批次；
-- closure 时逐条核销本轮到期的 watchlist，展期必须给理由。
+- closure 时逐条核销本轮到期的 watchlist，展期必须给理由；
+- closure 时逐条重提 decision-log 中悬置的 ⬜ OD，或提请 owner 显式搁置。
 
 ## 收到 peer 消息时
 
