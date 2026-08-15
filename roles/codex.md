@@ -53,9 +53,9 @@ noise:  <已知与本 diff 无关的失败>
 ## 红线
 
 - frozen scope 之外的工作另开增量或交 owner，不为自治扩大范围；
-- **跨 owner 的仓一律不写**（要后端改 → 需求分析文档，见根目录 AGENTS.md）；
-  同 owner 的第二个仓，只有 plan 显式声明（仓 + writable scope + BASE）才可写，
-  未声明即越界，立即 escalate；
+- **任何 batch 只写本仓**。要别的仓改东西 → 需求分析文档（见根目录 AGENTS.md），
+  或由 owner 决定去该仓另开 batch；同 owner 多仓的声明式例外须 plan 声明
+  （仓 + writable scope + 各仓 BASE），未声明即越界，立即 escalate；
 - 修 finding 不得顺手混入无关变更；
 - 已关闭 finding 的关闭证据要能被静态核对；
 - reviewer 在审 `BASE..HEAD-A` 期间继续开发要显式通知，新 commits 自动进下一增量。

@@ -82,9 +82,11 @@ scripts/      herdr workspace 搭建等（待 herdr 本地验证后补）
   decision-log 行中「owner 裁决 = ⬜」即 owner 收件箱（零新增机制）；跨轨结构性 OD
   → migration ROADMAP「尚未拍板且影响排期」节；跨 owner → 对方仓需求分析文档；
   kanban 建卡降为 owner 自选。closure 轮逐条重提悬置 ⬜ 或显式搁置；
-- **跨仓写边界**：跨 owner 的仓一律不写，需求走需求单流，无例外；同 owner 多仓才允许
-  跨仓 batch，且 plan 冻结前必须声明仓清单 + 各仓 writable scope + 各仓 BASE，
-  未声明即越界 escalate；默认仍是拆批、契约先行；
+- **跨仓写边界**（同日二次修订，改为流程中心表述）：任何 batch 只写本仓；改其他仓 =
+  去该仓开 batch 遵其流程（它的 AGENTS.md、门禁、验收人），或走需求单。跨仓特性用
+  **父需求文档（authority 仓）+ 每仓子 batch** 组织，契约衔接，默认先后端后消费端；
+  同 owner 多仓的声明式同批双写保留为例外（plan 声明仓清单 + writable scope + 各仓
+  BASE，未声明即越界 escalate）；多人仓中 duet 的 owner 角色由仓 owner 担任或显式约定；
 - 自主性走三阶段梯子，当前 Stage 0，毕业靠 decision-log 一致率（见 calibration/stage.md）；
 - stop 从严、escalate 误报随磨合调低的不对称原则。
 

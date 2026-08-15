@@ -36,7 +36,7 @@
 |---|---|
 | 轨内（产品选择、batch 边界、存量账目） | 本 batch review 文件 OD 节 / plan 待拍板节 |
 | 跨轨结构性（不属于任何单轨） | migration ROADMAP「尚未拍板且影响排期」节 |
-| 跨 owner（要别人的仓改东西） | 对方仓需求分析文档（如 `Agent/docs/plans/`） |
+| 跨仓（要别的仓改东西，本 batch 不可写它） | 该仓需求分析文档（如 `Agent/docs/plans/`），或 owner 决定在该仓另开 batch |
 | owner 收件箱 | decision-log 中 ⬜ 行（escalate 必记，天然聚合） |
 
 kanban 建卡不强制，owner 需要排期跟踪时自建。判错路由不算 finding，
