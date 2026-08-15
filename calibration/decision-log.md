@@ -29,3 +29,15 @@
 | 2026-08-15 | baton-confirm | Agent / AGT-1 | Agent:docs/duet/plan-AGT-1.md · 跨仓首批 plan 送审 → review 两轮已闭（round1 四条 P1 全关，round2 PASS @901cf96b），请求冻结 | 冻结放行；⚠️ 另需 owner 动手：AGT1-G1 第一步要先释放他人在途的三个文件，否则实现开不了工 | ⬜ | ⬜ |
 | 2026-08-15 | open-decision | Agent / AGT-1 | plan-AGT-1 AGT1-OD-1 · Agent/CLAUDE.md 要不要加 duet 接入指针 | **不自行处理**：该文件是 ale 的约定面，hao 代行的是 batch owner 角色、不含它；建议由 ale 决定 | ⬜ | ⬜ |
 | 2026-08-15 | open-decision | Agent / AGT-1 | plan-AGT-1 AGT1-OD-3 · GET /conversations 要不要下发 fork 标识 | 本 batch 不做——分页修好后该需求即消失；若要给消费端识别分叉会话的能力，单开 | ⬜ | ⬜ |
+
+> 📌 **路径口径（2026-08-15，随「工件去品牌化」拍板）**：**后续行一律写迁移后的新路径**。
+> 历史行按本文件「不修改历史行」的规则**原样保留**，但其中的落点已经变了，冷启动时按下表换算：
+>
+> | 历史行里的写法 | 现落点 |
+> |---|---|
+> | `Agent:docs/duet/plan-AGT-1.md` | `Agent:docs/plans/2026-08-15-对话历史分页-开发计划.md` |
+> | `Agent:docs/duet/plan-review-AGT-1.md` | `Agent:docs/plans/2026-08-15-对话历史分页-计划评审.md` |
+> | `byteme_mobile-D:docs/duet/*` · `docs/duet/outbox/*` | ⏳ **尚未迁移**——挂在 D3b 收口（`D3b-W6`），迁完再补进本表 |
+>
+> 迁移依据：duet `d5efef2`（工件按宿主仓类型惯例归档命名，禁以流程名建目录/文件；
+> 移交单默认落点 `docs/handoffs/`）· Agent `9f9e76a6`（该仓存量已迁）。
