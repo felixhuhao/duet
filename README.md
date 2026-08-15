@@ -104,7 +104,9 @@ scripts/      herdr workspace 搭建等（待 herdr 本地验证后补）
   templates/ 仅是必备字段契约 + 新项目起步默认，不取代项目现有格式。
 - **两轮上限采用**：每 increment 最多 substantive + closure 两轮；新 diff/新事实可开新
   finding 但须写明"新在哪里"；closure 中发现修复引入的新 P0/P1 → 开新增量而非 round 3；
-  round 2 后仍有未关闭 P0/P1 或争议强制 escalate。细则见 protocol/verdict.md。
+  round 2 后仍有未关闭 P0/P1 或争议强制 escalate。同日修订上限语义：**round 3 需
+  owner 授权**——escalate 后 owner 可授予 closure 重验（门柱冻结、不得新增 findings，
+  继承旧流程 §4.2 语义），授予走 round-cap 毕业梯子。细则见 protocol/verdict.md。
 
 - **P2 默认不阻塞合并**：登记到期点进 watchlist；仅 owner 明确升级或实证 outcome 不成立
   时升 P1。
