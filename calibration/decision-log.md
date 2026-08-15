@@ -7,6 +7,9 @@
 **⬜ 行 = owner 收件箱**：owner 扫本文件即知全轨有什么等拍。closure 轮逐条重提
 悬置 ⬜ 或显式搁置（搁置也要写进裁决列）。
 
+**单写者 = Claude**（🧪 2026-08-15，诱因：round-cap 双账）：一次 escalation 只记一行，
+由 Claude 记；发起方是 Codex 时「agent 建议」列**原样摘录**其 verdict 文本，不改写。
+
 **行 = 索引级摘要**（2026-08-15 起）：一句话上下文 + 建议结论 + 裁决结论 +
 工作仓真源路径。完整语境、可选方案、依据长文一律写工作仓 review 文件——本仓私有，
 团队看不见；两处长文必漂移。首跑（D3b OD-1~6）的历史行按当时写法保留，不改。
@@ -21,6 +24,5 @@
 | 2026-08-15 | open-decision | byteme_mobile / 存量交接 | `docs/duet/review-D3b.md` OD-6 · endpoint audit 抽取债的归属 | 移出 D 账目，登记到 `tool/endpoint-audit/README`，到期点「下一次并行轨合并前」——它不该由某条轨的批次进度决定生死 | **移出 D，登 tool/endpoint-audit/README**（owner huh · 2026-08-15），到期点「下一次并行轨合并前」；补查发现 45 个调用点整类不可见，同形状第二次 | ✅ 一致 |
 | 2026-08-15 | redline-risk | byteme_mobile / D3b plan review R1 | `docs/duet/review-D3b.md` §8 · 新 authority 证据推翻 OD-2/OD-3 的翻页与请求预算前提 | 保留完整回读 outcome：分叉 runs 游标修复列为 Agent 子 batch / D3 Done 前置；AC-18 保留有界预算与并发，但不写死与 steps 分页互斥的 `1+N` | **一次做对**（owner huh · 2026-08-15）：PR1 保留完整回读 outcome，分叉游标列 Agent 跨仓前置、不接受降级；PR2 AC-18 改写，空页探针判性能项不作前置。正文 plan E-6/E-7 | ✅ 一致 |
 | 2026-08-15 | baton-confirm | byteme_mobile / D3b | Stage 0 传棒放行：交接仪式 + decision core + 门槛六项全过，请求冻结 plan 并传棒 Codex 做 plan review | 门槛已全过，建议放行并传棒 | **放行**（owner huh · 2026-08-15）；plan 冻结于 `710a898b`，棒已传 w3:p2 | ✅ 一致 |
-| 2026-08-15 | round-cap | byteme_mobile / D3b plan review R2 | `docs/duet/plan-review-D3b.md` round 2 · PR1 已关，PR2 的 E-3 Scope #4 / E-5 Done #2 仍留 `1+N 请求预算` | 追加 errata 明确两处旧门柱均由 E-7 新 AC-18 取代，并授权一轮只核该固定条件的 closure 重验 | **同意**（owner huh · 2026-08-15）：处置落 plan E-8，并授权 round 3 仅核该固定条件 | ✅ 一致 |
 | 2026-08-15 | round-cap | byteme_mobile / D3b plan review R2 | `docs/duet/plan-review-D3b.md` round 2/2 结束 PR2 仍开——缺口是作者只修了 AC 定义、漏了 E-3 Scope #4 与 E-5 Done #2 两处引用 | 补 errata 后请 owner 授权一轮窄范围 closure 重验（不建议 owner 直接判关闭：第一次撞上限就绕过去，这条上限以后不会再拦住任何东西）| **批准第三轮**（owner huh · 2026-08-15），范围锁定该缺口 ⇒ round 3 PASS，两条 P1 全关 | ✅ 一致 |
 | 2026-08-15 | baton-confirm | byteme_mobile / D3b acceptance R1 | `docs/duet/review-D3b.md` §10 · VERDICT FINDINGS(P1x1, D3b-A1)，请求把棒传回 Codex 修 | 传棒（常规：verdict 已落盘、固定条件已写死，无产品选择、无争议）| **放行传棒**（owner huh · 2026-08-15）| ✅ 一致 |
