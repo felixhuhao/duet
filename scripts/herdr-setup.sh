@@ -20,9 +20,15 @@ LABEL="${3:-duet-$(basename "$WORK_REPO")}"
 WORK_REPO="$(cd "$WORK_REPO" && pwd)"
 CODEX_DIR="$(cd "$CODEX_DIR" && pwd)"
 
-# 1. server 不在就拉起
+# 1. server 不在就拉起。
+# 必须用 env -i 白名单启动：server 环境会被所有 pane 继承,若从 Claude Code 的
+# Bash 里启动会漏 CLAUDE_CODE_CHILD_SESSION 等 12 个变量,pane 里的 claude 会
+# 误判为子会话（transcript 被关）。zsh 下 env -u $FLAGS 不分词,勿用。
 if ! herdr status server 2>/dev/null | grep -q "status: running"; then
-  nohup herdr server >/dev/null 2>&1 &
+  nohup env -i HOME="$HOME" PATH="$PATH" SHELL="${SHELL:-/bin/zsh}" \
+    USER="$USER" LOGNAME="$USER" TMPDIR="${TMPDIR:-/tmp}" \
+    LANG="${LANG:-en_US.UTF-8}" TERM=xterm-256color \
+    herdr server >/dev/null 2>&1 &
   sleep 2
 fi
 
