@@ -39,6 +39,8 @@ reviewed HEAD / 新 BASE。verdict 块规范见 protocol/verdict.md。
 ## 红线
 
 - Finding 必须绑定依据（README 核心原则 4），否则降为 Suggestion；
+- **结论范围 ≤ 证据范围**：全称结论必须枚举已验变体，盖不全就收窄到已验范围
+  （🧪 试行；同形错误一天四次后立此条）；
 - 不反向设计实现；"我会另一种写法"只能进建议；
 - 实现暴露的 plan 缺陷记 plan errata，不记 Codex 的 finding；errata 须引用 plan 具体
   条款 + 代码证据，认为是实现 bug 包装的走争议通道 escalate；免责不免修；

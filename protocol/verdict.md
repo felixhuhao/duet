@@ -8,6 +8,7 @@
 ```text
 VERDICT: PASS | FINDINGS | ESCALATE
 ROUND: <n>/2
+COVERS: <本 verdict 已消化的最新 commit>
 P0: <列表或无>
 P1: <列表或无>
 P2: <列表或无>
@@ -16,6 +17,11 @@ ESCALATE_REASON: <仅 ESCALATE 时，一句话>
 ```
 
 写入对应的 review 文件末尾；传棒消息里只复述 `VERDICT` 和 P0/P1 计数。
+
+**写 verdict 前的两个动作**（🧪 试行 · D3b Done 复核）：
+① 重读目标文件现状 + 自己上次读取之后的 git log，消化所有并发落盘（诱因：D3b
+的 PASS 没读到早 3 分钟的 §8）；② 本轮改过被引用的条款 → 先 grep 其名字，
+命中处置逐处列入 errata（诱因：E-7 修定义漏两处引用，烧掉一整轮 closure）。
 
 ## 分支语义
 
@@ -45,4 +51,5 @@ ESCALATE_REASON: <仅 ESCALATE 时，一句话>
 - 新 diff 中无新 P0/P1；
 - P2 已登记到期点；
 - reviewer baseline 前移到本轮 HEAD；
-- 已通过范围不再重审。
+- 已通过范围不再重审；
+- 终止时本增量的详细段落折叠为关票矩阵行（全文永在 git 历史）——活文件只保留活状态。
