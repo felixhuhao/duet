@@ -1,7 +1,7 @@
 # 跨界消息：<一行摘要>
 
-落点：发送方仓 `docs/duet/outbox/YYYY-MM-DD-<type>-<slug>.md`，commit 后建
-inbox 卡（协议见 duet protocol/inbox.md）。
+落点：发送方仓移交单目录（默认 `docs/handoffs/`）`YYYY-MM-DD-<type>-<slug>.md`，
+commit 后建 inbox 卡（协议见 duet protocol/inbox.md）。
 
 ```text
 from:   <轨/仓 + 发出时 commit>

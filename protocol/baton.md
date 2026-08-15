@@ -14,7 +14,7 @@
 通过 `herdr pane send-text <对方pane> "..."` + `send-keys enter` 发送：
 
 ```text
-[peer:claude] plan ready: docs/duet/plan-D3a.md · round 1/2 · 请按角色卡 review，结论写 review-D3a.md
+[peer:claude] plan ready: docs/plans/2026-08-15-X-开发计划.md · round 1/2 · 请按角色卡 review，结论写同目录-计划评审.md
 [peer:codex] VERDICT: FINDINGS · review-D3a.md · round 1/2 · P1x2，棒在你
 ```
 

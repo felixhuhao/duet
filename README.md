@@ -67,8 +67,10 @@ templates/    plan / devlog / review 三件套模板，实例化到工作仓库
 scripts/      herdr workspace 搭建等（待 herdr 本地验证后补）
 ```
 
-工作仓库接入方式：`CLAUDE.md` / `AGENTS.md` 各加一行指向对应角色卡；实例文件按
-`templates/` 落在工作仓库约定目录（建议 `docs/duet/`）。
+工作仓库接入方式：`CLAUDE.md` / `AGENTS.md` 各加一行指向对应角色卡。**工件（plan/评审/
+devlog/移交单）按宿主仓的功能/类型惯例归档与命名，不以流程名建目录或命名文件**——流程
+只活在角色卡、脚本与 commit 纪律里，不在仓里留品牌；文内首次提及流程时一句话自述；
+多人仓落点遵仓 owner 惯例。`templates/` 是字段契约，不是落点约定。
 
 ## 拍板记录
 
@@ -87,9 +89,10 @@ scripts/      herdr workspace 搭建等（待 herdr 本地验证后补）
   **父需求文档（authority 仓）+ 每仓子 batch** 组织，契约衔接，默认先后端后消费端；
   同 owner 多仓的声明式同批双写保留为例外（plan 声明仓清单 + writable scope + 各仓
   BASE，未声明即越界 escalate）；多人仓中 duet 的 owner 角色由仓 owner 担任或显式约定；
-- **跨界消息走 inbox 协议**（protocol/inbox.md）：真源 = 发送方仓 `docs/duet/outbox/`
-  文件（commit 在自己分支），dg-kanban 卡只做路由指针（标题前缀 `[→repo]`，可全丢），
-  herdr 门铃兜底，接收方登账关卡即回执；Workspace 层 docs/ 不再当信道；
+- **跨界消息走 inbox 协议**（protocol/inbox.md）：真源 = 发送方仓移交单目录（默认
+  `docs/handoffs/`，落点归项目层）的文件（commit 在自己分支），dg-kanban 卡只做路由指针
+  （标题前缀 `[→repo]`，可全丢），herdr 门铃兜底，接收方登账关卡即回执；
+  Workspace 层 docs/ 不再当信道；
 - 自主性走三阶段梯子，当前 Stage 0，毕业靠 decision-log 一致率（见 calibration/stage.md）；
 - stop 从严、escalate 误报随磨合调低的不对称原则。
 
@@ -136,5 +139,15 @@ scripts/      herdr workspace 搭建等（待 herdr 本地验证后补）
   revert，revert 即宣告该改动有决策含量、自动转正常 finding 流，不算任何人的错。
   salami 红线：不许连串顺手单拼出决策性改动；AC/scope/契约/金额权限永远不顺手。
   规则双向对称；单写者文件（review/devlog/decision-log）除外。
+
+- **工件去品牌化**（2026-08-15）：流程工件按宿主仓类型惯例归档命名（见「仓库结构」下
+  接入方式段），禁以流程名建目录/文件。存量：Agent 仓已迁 `docs/plans/`（`9f9e76a6`）；
+  byteme_mobile-D 的 `docs/duet/` 与 outbox → `docs/handoffs/` 在 D3b 收口折叠时迁。
+
+- **现状 = fetch 后的现状**（2026-08-15，并入 verdict 前置动作，同 🧪）：调查、定 BASE、
+  写 verdict 前先 `git fetch`；只读别仓走 `origin/<branch>` ref，不动对方工作树；
+  batch 仓只 fast-forward 追平，与 origin 分叉 → 报 owner，不自行 rebase；
+  fetch 不可用 → 不装新鲜，结论标注 as-of SHA 与已知落差。
+  review 轮次中不追新——门柱冻结与并行边界条款不变。
 
 **待拍板：** 无——首批 7 条已于 2026-08-15 全部拍定。机制条款的后续修订经 owner 拍板。

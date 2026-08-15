@@ -60,7 +60,7 @@ noise:  <已知与本 diff 无关的失败>
 - 已关闭 finding 的关闭证据要能被静态核对；
 - **结论范围 ≤ 证据范围**：全称结论必须枚举已验变体，盖不全就收窄（🧪 试行）；
 - reviewer 在审 `BASE..HEAD-A` 期间继续开发要显式通知，新 commits 自动进下一增量；
-- 影响其他轨/仓的事实 → 写本仓 `docs/duet/outbox/` 消息文件（templates/message.md）
+- 影响其他轨/仓的事实 → 写本仓移交单目录（默认 `docs/handoffs/`）消息文件（templates/message.md）
   并传棒请 Claude/owner 建 inbox 卡；无 kanban MCP 不是跳过投递的理由。
 
 ## 传棒与 peer 消息
