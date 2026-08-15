@@ -21,8 +21,15 @@ case "$cmd" in
     to="${1:?to-pane}"; from="${2:?from-role}"; shift 2
     msg="[peer:$from] $*"
     herdr pane send-text "$to" "$msg"
-    herdr pane send-keys "$to" enter
-    echo "baton → $to : $msg"
+    # 状态感知投递（单次查询，非监听）：忙碌的 codex 用 Tab 入 runtime 队列
+    # （实测 2026-08-15：turn 结束才投递，零 steering 污染）；其余 Enter 直投。
+    # stop 类要打断 → 别用本脚本，直接 herdr send-keys enter（steering 是 stop 特权）。
+    st=$(herdr agent list 2>/dev/null | python3 -c "import json,sys; a=[x for x in json.load(sys.stdin)['result']['agents'] if x['pane_id']=='$to']; print(a[0]['agent']+':'+a[0]['agent_status'] if a else 'none')" 2>/dev/null)
+    sleep 1   # 实测坑：send-text 后立刻发按键会丢（TUI 未渲染完）
+    case "$st" in
+      codex:working) herdr pane send-keys "$to" tab; echo "baton ⇥ 入队 → $to : $msg" ;;
+      *) herdr pane send-keys "$to" enter; echo "baton → $to : $msg" ;;
+    esac
     ;;
   wait)
     pane="${1:?pane}"; state="${2:-idle}"

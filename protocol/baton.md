@@ -37,6 +37,15 @@
 - **gate 传棒——notification owner，等亲手放行**：plan 冻结/开工、batch Done、
   round-cap 授予、escalate 终点、open decisions。owner 三个 gate 不变。
 
+## 收棒队列（🧪 2026-08-15，Codex Tab 队列已实测：QUEUED-OK）
+
+- **发送端状态感知**（单次查询，非监听）：目标是忙碌的 Codex → send-text + **Tab**
+  （runtime 原生排队，turn 结束才投递）；其余 → Enter。用 `baton.sh send` 自动判。
+  **steering（Enter 打断忙碌方）是 stop 类专属特权**；
+- **接收端收棒不弃手头**：手头有未收口阶段，先推进到收口点（落盘 + commit）再处理
+  队列；处理顺序：owner 亲手输入 > stop 类 > gate 相关 > 机械棒 FIFO；
+- 门铃丢失无害：下一步永远可从 verdict / 棒位状态重建（文件是 ground truth）。
+
 ## 并行边界
 
 - reviewer 审 `BASE..HEAD-A` 期间，实现者可继续产生 `HEAD-B`，但必须传棒通知；
