@@ -15,4 +15,7 @@
   （OD 完整语境与争议立场的真源）** / watchlist+到期点 / VERDICT 块（见
   protocol/verdict.md）。工作仓文档须对没有 duet 访问权的读者自含。
 
+- **message（跨界消息）**：from+commit / to / type / 到期点 / 事实（自含）/ 请求 /
+  回执。落点与路由见 protocol/inbox.md。
+
 字段缺失 = reviewer 可拒收，不是 finding。

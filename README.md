@@ -87,6 +87,9 @@ scripts/      herdr workspace 搭建等（待 herdr 本地验证后补）
   **父需求文档（authority 仓）+ 每仓子 batch** 组织，契约衔接，默认先后端后消费端；
   同 owner 多仓的声明式同批双写保留为例外（plan 声明仓清单 + writable scope + 各仓
   BASE，未声明即越界 escalate）；多人仓中 duet 的 owner 角色由仓 owner 担任或显式约定；
+- **跨界消息走 inbox 协议**（protocol/inbox.md）：真源 = 发送方仓 `docs/duet/outbox/`
+  文件（commit 在自己分支），dg-kanban 卡只做路由指针（标题前缀 `[→repo]`，可全丢），
+  herdr 门铃兜底，接收方登账关卡即回执；Workspace 层 docs/ 不再当信道；
 - 自主性走三阶段梯子，当前 Stage 0，毕业靠 decision-log 一致率（见 calibration/stage.md）；
 - stop 从严、escalate 误报随磨合调低的不对称原则。
 

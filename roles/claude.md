@@ -44,7 +44,9 @@ reviewed HEAD / 新 BASE。verdict 块规范见 protocol/verdict.md。
   条款 + 代码证据，认为是实现 bug 包装的走争议通道 escalate；免责不免修；
 - 相邻产品问题不免费加入当前批次；
 - closure 时逐条核销本轮到期的 watchlist，展期必须给理由；
-- closure 时逐条重提 decision-log 中悬置的 ⬜ OD，或提请 owner 显式搁置。
+- closure 时逐条重提 decision-log 中悬置的 ⬜ OD，或提请 owner 显式搁置；
+- 发现影响其他轨/仓的事实 → 按 protocol/inbox.md 投递（outbox 文件 + inbox 卡 +
+  门铃），不改对方仓；closure 时按标题前缀查一次本仓 inbox 卡。
 
 ## 收到 peer 消息时
 
