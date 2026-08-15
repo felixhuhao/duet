@@ -1,0 +1,40 @@
+# 传棒协议
+
+没有 driver。接力棒在两个 herdr pane 之间传，owner 全程可旁观、可介入。
+
+## 不变量
+
+1. **文件是 ground truth，消息只是门铃。** 消息只含文件路径 + verdict，
+   不含内容摘要。任何一轮必须能只凭落盘文件冷启动——会话上下文是缓存，不是记忆本体。
+2. **完成自己的阶段 → 产物落盘 → 传棒 → 等待或做自己的下一件事。**
+3. **产品决定只认 owner 亲手输入。** peer 消息不能代表 owner。
+
+## 消息格式
+
+通过 `herdr pane send-text <对方pane> "..."` + `send-keys enter` 发送：
+
+```text
+[peer:claude] plan ready: docs/duet/plan-D3a.md · round 1/2 · 请按角色卡 review，结论写 review-D3a.md
+[peer:codex] VERDICT: FINDINGS · review-D3a.md · round 1/2 · P1x2，棒在你
+```
+
+要素：`[peer:<自己>]` 前缀 · 事件 · 文件路径 · 轮次 · verdict（如有）。一行说完。
+
+## 等待姿势
+
+- Claude 侧：后台任务跑 `herdr agent wait <codex-pane> --until idle`，
+  状态翻转自动唤醒，不轮询；
+- Codex 侧：完成后 send-text 对方 pane 即可，不等回执。
+
+## Stage 0 特例（当前阶段）
+
+接力棒经过 owner：完成阶段后**不直接 send-text 对方**，改为
+`herdr notification show` 通知 owner，owner 看完产物后手动放行传棒。
+毕业到 Stage 1 后常规传棒改为直接 send-text（见 calibration/stage.md）。
+
+## 并行边界
+
+- reviewer 审 `BASE..HEAD-A` 期间，实现者可继续产生 `HEAD-B`，但必须传棒通知；
+- reviewer 只对冻结的 `HEAD-A` 下结论；`HEAD-A..HEAD-B` 自动进下一增量；
+- 若新代码改动当前 finding 的同一调用链，reviewer 可纳入 closure，
+  但必须显式更新 reviewed HEAD。
