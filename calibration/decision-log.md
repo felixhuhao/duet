@@ -32,6 +32,7 @@
 
 | 2026-08-15 | baton-confirm | Agent / AGT-1 | Agent:docs/plans/2026-08-15-对话历史分页-开发计划.md §9 · AGT1-G1 开工硬闸第 1 步未过（三个在途未提交文件属他人），但 owner 已令传棒进实现阶段 | 传棒但在门铃里显式标明 G1 未过、不得写代码、不许代管或 stash 他人改动——冻结与开工是两道独立的闸 | ⬜ | ⬜ |
 | 2026-08-15 | baton-confirm | byteme_mobile / D2a | `docs/devlogs/2026-08-12-D对话-迁移实施记录.md` §3.17 · D2a 实现/验证/交付工件三样齐备，请求 owner ack 标 Done | ack（无未关闭 finding、无未到期 watchlist、无缺失工件；reviewer 已在 ack HEAD 87207b08 亲跑全量门禁）| **ack**（owner hao · 2026-08-15）⇒ D2a Done，旧流程账目全部收尾 | ✅ 一致 |
+| 2026-08-15 | redline-risk | Agent / AGT-1 | Agent:docs/plans/2026-08-15-对话历史分页-验收评审.md §2.1 · 验收开出 AGT1-A1：实现停在 /private/tmp/Agent-AGT1 游离 HEAD，无 ref 指向，且与 main 分叉（各 9/23 笔独有）| 判 P1 阻塞验收——代码全过但交付未发生，/private/tmp 会被系统清理；**两线怎么收敛不代判**，merge/cherry-pick/快进属 owner 裁决面 | ⬜ | ⬜ |
 > 📌 **路径口径（2026-08-15，随「工件去品牌化」拍板）**：**后续行一律写迁移后的新路径**。
 > 历史行按本文件「不修改历史行」的规则**原样保留**，但其中的落点已经变了，冷启动时按下表换算：
 >
