@@ -26,6 +26,6 @@
 | 2026-08-15 | baton-confirm | byteme_mobile / D3b | Stage 0 传棒放行：交接仪式 + decision core + 门槛六项全过，请求冻结 plan 并传棒 Codex 做 plan review | 门槛已全过，建议放行并传棒 | **放行**（owner huh · 2026-08-15）；plan 冻结于 `710a898b`，棒已传 w3:p2 | ✅ 一致 |
 | 2026-08-15 | round-cap | byteme_mobile / D3b plan review R2 | `docs/duet/plan-review-D3b.md` round 2/2 结束 PR2 仍开——缺口是作者只修了 AC 定义、漏了 E-3 Scope #4 与 E-5 Done #2 两处引用 | 补 errata 后请 owner 授权一轮窄范围 closure 重验（不建议 owner 直接判关闭：第一次撞上限就绕过去，这条上限以后不会再拦住任何东西）| **批准第三轮**（owner huh · 2026-08-15），范围锁定该缺口 ⇒ round 3 PASS，两条 P1 全关 | ✅ 一致 |
 | 2026-08-15 | baton-confirm | byteme_mobile / D3b acceptance R1 | `docs/duet/review-D3b.md` §10 · VERDICT FINDINGS(P1x1, D3b-A1)，请求把棒传回 Codex 修 | 传棒（常规：verdict 已落盘、固定条件已写死，无产品选择、无争议）| **放行传棒**（owner huh · 2026-08-15）| ✅ 一致 |
-| 2026-08-15 | baton-confirm | Agent / AGT-1 | Agent:docs/duet/plan-AGT-1.md · 跨仓首批 plan 成稿送审，请求放行冻结 | 放行（decision core 五项齐；三条 OD 均不阻塞开工） | ⬜ | ⬜ |
+| 2026-08-15 | baton-confirm | Agent / AGT-1 | Agent:docs/duet/plan-AGT-1.md · 跨仓首批 plan 送审 → review 两轮已闭（round1 四条 P1 全关，round2 PASS @901cf96b），请求冻结 | 冻结放行；⚠️ 另需 owner 动手：AGT1-G1 第一步要先释放他人在途的三个文件，否则实现开不了工 | ⬜ | ⬜ |
 | 2026-08-15 | open-decision | Agent / AGT-1 | plan-AGT-1 AGT1-OD-1 · Agent/CLAUDE.md 要不要加 duet 接入指针 | **不自行处理**：该文件是 ale 的约定面，hao 代行的是 batch owner 角色、不含它；建议由 ale 决定 | ⬜ | ⬜ |
 | 2026-08-15 | open-decision | Agent / AGT-1 | plan-AGT-1 AGT1-OD-3 · GET /conversations 要不要下发 fork 标识 | 本 batch 不做——分页修好后该需求即消失；若要给消费端识别分叉会话的能力，单开 | ⬜ | ⬜ |
