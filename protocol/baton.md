@@ -28,11 +28,14 @@
 - 接收方不监听对方状态：不挂 `agent wait` 轮询，收到 `[peer:*]` 消息才动。
   sidebar 状态与 `agent wait --until blocked` 仅供 owner 旁观与卡死排查。
 
-## Stage 0 特例（当前阶段）
+## 传棒分级（🧪 2026-08-15 起，机械段先通电）
 
-接力棒经过 owner：完成阶段后**不直接 send-text 对方**，改为
-`herdr notification show` 通知 owner，owner 看完产物后手动放行传棒。
-毕业到 Stage 1 后常规传棒改为直接 send-text（见 calibration/stage.md）。
+- **机械传棒——直接 send-text 对方 + notification 给 owner 作旁观通报，不等放行**：
+  ①送审草稿 ②FINDINGS 回作者修 ③修复完成请 closure 重验（附 grep 自查）
+  ④增量 PASS（非 Done）后续行。下一步由 verdict 唯一确定，无判断含量；
+  任何一次传错 → 该类立即降回 gate（D3b Done 复核）；
+- **gate 传棒——notification owner，等亲手放行**：plan 冻结/开工、batch Done、
+  round-cap 授予、escalate 终点、open decisions。owner 三个 gate 不变。
 
 ## 并行边界
 
