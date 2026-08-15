@@ -20,11 +20,13 @@
 
 要素：`[peer:<自己>]` 前缀 · 事件 · 文件路径 · 轮次 · verdict（如有）。一行说完。
 
-## 等待姿势
+## 交棒是 push，不做监听（🧪 2026-08-15，owner 指令废除 listen 模式）
 
-- Claude 侧：后台任务跑 `herdr agent wait <codex-pane> --until idle`，
-  状态翻转自动唤醒，不轮询；
-- Codex 侧：完成后 send-text 对方 pane 即可，不等回执。
+- **交棒是完成动作的一部分**：产物落盘 + commit 后，完成方立即主动发门铃——
+  send-text 对方 pane + enter（Stage 0 改发 notification 给 owner）。
+  **没有门铃 = 阶段未完成**；
+- 接收方不监听对方状态：不挂 `agent wait` 轮询，收到 `[peer:*]` 消息才动。
+  sidebar 状态与 `agent wait --until blocked` 仅供 owner 旁观与卡死排查。
 
 ## Stage 0 特例（当前阶段）
 

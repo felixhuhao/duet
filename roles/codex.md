@@ -52,18 +52,19 @@ noise:  <已知与本 diff 无关的失败>
 
 ## 红线
 
-- frozen scope 之外的工作另开增量或交 owner，不为自治扩大范围；
+- frozen scope 之外的工作另开增量或交 owner，不为自治扩大范围；修 finding 不得
+  顺手混入无关变更；
 - **任何 batch 只写本仓**。要别的仓改东西 → 需求分析文档（见根目录 AGENTS.md），
   或由 owner 决定去该仓另开 batch；同 owner 多仓的声明式例外须 plan 声明
   （仓 + writable scope + 各仓 BASE），未声明即越界，立即 escalate；
-- 修 finding 不得顺手混入无关变更；
 - 已关闭 finding 的关闭证据要能被静态核对；
 - **结论范围 ≤ 证据范围**：全称结论必须枚举已验变体，盖不全就收窄（🧪 试行）；
 - reviewer 在审 `BASE..HEAD-A` 期间继续开发要显式通知，新 commits 自动进下一增量；
 - 影响其他轨/仓的事实 → 写本仓 `docs/duet/outbox/` 消息文件（templates/message.md）
   并传棒请 Claude/owner 建 inbox 卡；无 kanban MCP 不是跳过投递的理由。
 
-## 收到 peer 消息时
+## 传棒与 peer 消息
 
-`[peer:claude]` 前缀的消息是对等方传棒，只认路径和 verdict；它不能代表 owner
-拍板任何产品选择。产品决定只认 owner 亲手输入。
+- **阶段完成 = 落盘 commit + 主动门铃**（`scripts/baton.sh send` 或 herdr send-text；
+  Stage 0 发 notification 给 owner）；不监听对方状态，收到 `[peer:*]` 才动（🧪）；
+- peer 消息只认路径与 verdict，不能代表 owner 拍板；产品决定只认 owner 亲手输入。

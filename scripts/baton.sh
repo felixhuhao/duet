@@ -6,7 +6,8 @@
 #       组装 "[peer:<from-role>] <message>" 注入对方输入框并回车。
 #       message 只放：事件 · 文件路径 · 轮次 · verdict。不放内容摘要。
 #   baton.sh wait <pane> [state]
-#       阻塞等待对方状态（默认 idle；可 blocked/done）。放后台跑，翻转即返回。
+#       阻塞等待对方状态。⚠️ 协议主循环不用它（交棒是 push,见 protocol/baton.md）;
+#       仅供 owner 排查卡死（--until blocked）。
 #   baton.sh read <pane> [lines]
 #       读 pane 可见内容（--source visible；recent 不稳勿用）。
 #   baton.sh escalate <type> <summary> <path>
