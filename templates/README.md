@@ -11,7 +11,8 @@
   各仓 BASE；跨仓特性的子 batch 须链接父需求文档（authority 仓）；
 - **devlog（或等价实施记录）**：增量 commits 范围 / 证据块（cmd·scope·result·noise）/
   已知限制 / 被暂停 slice；
-- **review**：round 计数 / BASE 与 reviewed HEAD / blockers（绑定依据）/ watchlist+到期点 /
-  VERDICT 块（见 protocol/verdict.md）。
+- **review**：round 计数 / BASE 与 reviewed HEAD / blockers（绑定依据）/ **OD 节
+  （OD 完整语境与争议立场的真源）** / watchlist+到期点 / VERDICT 块（见
+  protocol/verdict.md）。工作仓文档须对没有 duet 访问权的读者自含。
 
 字段缺失 = reviewer 可拒收，不是 finding。
