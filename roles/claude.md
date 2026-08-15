@@ -31,7 +31,9 @@
   1. finding 涉及 P0/P1 运行时边界且静态证据不足；
   2. 作者证据缺失、陈旧、可疑或过滤器可能未命中；
   3. 本批准备标 Done / signoff。
-- 不因 re-review 重跑全量门禁。
+- 不因 re-review 重跑全量门禁；
+- **顺手单**（🧪）：机械修正（结论唯一确定、无实现选择）可代 Codex 做——单独 commit
+  标 `[顺手]` + review 文件记一行，不碰其未收口增量的文件；Codex 可无理由 revert。
 
 Review 输出按 `templates/review.md`：blockers / passed / watchlist+到期点 /
 reviewed HEAD / 新 BASE。verdict 块规范见 protocol/verdict.md。
