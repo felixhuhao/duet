@@ -20,6 +20,17 @@
 
 类型取值：`round-cap` / `P0P1-dispute` / `open-decision` / `redline-risk` / `baton-confirm`。
 
+## 路由：Codex 的 escalate 经 Claude 中继（🧪 2026-08-15）
+
+- Codex escalate → 门铃 Claude；Claude 只做三个**加法**动作：复核事实、附议或
+  ≤10 行反对立场、记 decision-log / 按需建卡 → 整理包 notification 给 owner；
+- **闸**：escalation 只有 owner 能关闭——复核为「不成立」也照样上报（附立场）；
+  Codex 原文永远在工作仓 review 文件，owner 可绕过整理包直读；收到门铃本回合内
+  转呈，不积压；
+- **例外**：疑似 P0 / redline（stop 类）不走中继——停 slice 同时直接 notification
+  owner + 门铃 Claude 并行，整理事后补；
+- Claude 自己发起的直达 owner（它即整理者）；争议类先给 Codex 附立场机会。
+
 ## 争议格式
 
 双方立场各 **≤10 行**：主张 / 依据 / 采纳的代价。owner 只看这两段拍板，
