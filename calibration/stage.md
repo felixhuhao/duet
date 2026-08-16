@@ -1,8 +1,12 @@
 # 阶段梯子
 
-当前阶段：**Stage 0**（2026-08-15 起）
-> 同日修订：机械传棒先通电（送审/回修/重验/续行直接 send-text + 旁观通报），
-> gate 传棒仍经 owner——见 protocol/baton.md「传棒分级」。
+当前阶段：**Stage 1**（2026-08-16 起，owner 拍板于三轨并轨 v2 之际）
+> owner 触点收缩为每 batch 两个不可逆时刻：**plan 冻结前 decision core 过目** +
+> **Done 前 ack**。增量级 pass 不经 owner；escalate/stop 仍全部到 owner。
+> 依据：owner-turns 复盘（D 轨 58 条 vs B 轨全规则下 4 条）+ decision-log 一致率。
+>
+> Stage 0 记录（2026-08-15）：机械传棒先通电（送审/回修/重验/续行直接 send-text +
+> 旁观通报），gate 传棒经 owner——见 protocol/baton.md「传棒分级」。
 
 ## 阶段定义
 
@@ -24,7 +28,8 @@
 | 类型 | 状态 | 连续一致次数 |
 |---|---|---|
 | baton-confirm·机械（送审/回修/重验/续行） | **已毕业**（owner 直批 2026-08-15，🧪 D3b Done 复核） | — |
-| baton-confirm·放行（冻结/开工/Done ack） | 未毕业 | 2 |
+| baton-confirm·放行·增量级（增量 PASS 续行确认） | **已毕业**（Stage 1 语义，owner 直批 2026-08-16） | — |
+| baton-confirm·放行·batch 级（plan 冻结 / Done ack） | **设计上不毕业**（Stage 1 的两个 owner 触点） | — |
 | round-cap（轮次上限后的处置） | 未毕业 | 0 |
 | P0P1-dispute（定级争议） | 未毕业 | 0 |
 | redline-risk | 未毕业 | 0 |

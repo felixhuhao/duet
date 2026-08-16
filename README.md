@@ -159,4 +159,12 @@ devlog/移交单）按宿主仓的功能/类型惯例归档与命名，不以流
   无损安置（内容处置归原写者）；rebase 改写的 SHA 已被文档引用（BASE/COVERS 锚）→
   随手补一行新旧映射。fetch 不可用 → 不装新鲜，标注 as-of 与已知落差。
 
+- **并轨结算包**（2026-08-16）：①**合并模式预授权**——对外动作从逐次申请升级为
+  owner 按仓/阶段设定模式（如「本地 merge 自主 + 回执，push 须批」），模式内自主执行、
+  回执照旧；各仓具体模式是域内容，写各仓 AGENTS；②**scout 任务免仪式**——纯调查类
+  （盘点/拍板包/预研）不开 batch、不走两轮 review，报告落盘即收口；③**Stage 1 生效**
+  （owner 触点 = plan 冻结 decision core + Done ack，见 calibration/stage.md）；
+  ④worktree 短命化为 mobile 仓域规则（写其 AGENTS）。🧪 试行条款集中结算见
+  calibration/trial-settlement.md。
+
 **待拍板：** 无——首批 7 条已于 2026-08-15 全部拍定。机制条款的后续修订经 owner 拍板。
