@@ -18,7 +18,8 @@
 - [ ] 每条 AC 可在 UI、状态、请求或持久化层被观察
 - [ ] 没有会让实现方向二选一的未决问题
 - [ ] 剩余未知项可由实现者读代码安全解决，或已进 watchlist 且有到期点
-- [ ] BASE 取 `git fetch` 追平后的 HEAD；本地与 origin 分叉 → 报 owner，不自行 rebase
+- [ ] BASE 取 `git fetch` 追平后的 HEAD；有未推 commits 无冲突可自行 rebase，
+      冲突即 `--abort` 报 owner；他人在途未提交文件在场 → 先由 owner 安置
 
 门槛不要求"所有实现细节无未知"。只有进代码才能查明的，留给实现阶段。
 

@@ -20,9 +20,9 @@ ESCALATE_REASON: <仅 ESCALATE 时，一句话>
 
 **写 verdict 前的两个动作**（🧪 试行 · D3b Done 复核）：
 ① 重读目标文件现状 + 自己上次读取之后的 git log，消化所有并发落盘（诱因：D3b
-的 PASS 没读到早 3 分钟的 §8）。**现状 = fetch 后的现状**：先 `git fetch`；只读别仓
-走 `origin/<branch>` ref；fetch 不可用 → 结论标注 as-of SHA 与已知落差，不装新鲜。
-review 轮次中不追新（门柱冻结不变）；② 本轮改过被引用的条款 → 先 grep 其名字，
+的 PASS 没读到早 3 分钟的 §8）。fetch 不逐次做，只锚在边界时刻（定 BASE / 实现开工 /
+Done 门禁，细则见 README 拍板记录）；跨仓断言标注 as-of SHA；轮次中不追新
+（门柱冻结不变）；② 本轮改过被引用的条款 → 先 grep 其名字，
 命中处置逐处列入 errata（诱因：E-7 修定义漏两处引用，烧掉一整轮 closure）。
 
 ## 分支语义

@@ -144,10 +144,13 @@ devlog/移交单）按宿主仓的功能/类型惯例归档与命名，不以流
   接入方式段），禁以流程名建目录/文件。存量：Agent 仓已迁 `docs/plans/`（`9f9e76a6`）；
   byteme_mobile-D 的 `docs/duet/` 与 outbox → `docs/handoffs/` 在 D3b 收口折叠时迁。
 
-- **现状 = fetch 后的现状**（2026-08-15，并入 verdict 前置动作，同 🧪）：调查、定 BASE、
-  写 verdict 前先 `git fetch`；只读别仓走 `origin/<branch>` ref，不动对方工作树；
-  batch 仓只 fast-forward 追平，与 origin 分叉 → 报 owner，不自行 rebase；
-  fetch 不可用 → 不装新鲜，结论标注 as-of SHA 与已知落差。
-  review 轮次中不追新——门柱冻结与并行边界条款不变。
+- **现状 = fetch 后的现状**（2026-08-15 立，2026-08-16 修订时机与 rebase，同 🧪）：
+  fetch 锚在**三个边界时刻**——定 BASE / 实现阶段开工 / Done 全量门禁前；轮次中间
+  不 fetch 不追新（门柱冻结不变），写 verdict 只消化本地并发落盘。跨仓只读走
+  `origin/<branch>` ref、不动对方工作树，当天已 fetch 可复用；对现状的断言一律标注
+  as-of SHA。追平时本地有未推 commits：**无冲突可自行 rebase**（解冲突有判断含量，
+  干净快进没有），一有冲突立即 `--abort` 报 owner；他人在途未提交文件在场时不动，
+  先由 owner 安置；rebase 改写的 SHA 已被文档引用（BASE/COVERS 锚）→ 随手补一行
+  新旧映射。fetch 不可用 → 不装新鲜，标注 as-of 与已知落差。
 
 **待拍板：** 无——首批 7 条已于 2026-08-15 全部拍定。机制条款的后续修订经 owner 拍板。
