@@ -278,13 +278,51 @@ def render_text(cards, repo, head, branch, color=True):
     return "\n".join(out) + "\n"
 
 
+def serve(repo, port):
+    """按需渲染：每个请求现读工件现渲，刷新即拉取。/ = HTML，/text = 终端版。"""
+    from http.server import BaseHTTPRequestHandler, HTTPServer
+
+    class Handler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            try:
+                cards = collect(repo)
+                head, branch = git_meta(repo)
+                if self.path.startswith("/text"):
+                    body = render_text(cards, repo, head, branch, color=False)
+                    ctype = "text/plain; charset=utf-8"
+                else:
+                    body = ('<!doctype html><meta charset="utf-8">'
+                            '<meta name="viewport" content="width=device-width,initial-scale=1">'
+                            + render(cards, repo, head, branch))
+                    ctype = "text/html; charset=utf-8"
+                raw = body.encode("utf-8")
+                self.send_response(200)
+                self.send_header("Content-Type", ctype)
+                self.send_header("Cache-Control", "no-store")
+                self.send_header("Content-Length", str(len(raw)))
+                self.end_headers()
+                self.wfile.write(raw)
+            except Exception as e:  # 渲染失败也别让服务死
+                self.send_error(500, str(e))
+
+        def log_message(self, *args):
+            pass
+
+    HTTPServer(("127.0.0.1", port), Handler).serve_forever()
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--repo", required=True)
     ap.add_argument("--out", help="输出文件；text 模式省略则打到 stdout")
     ap.add_argument("--format", choices=["html", "text"], default="html")
     ap.add_argument("--no-color", action="store_true")
+    ap.add_argument("--serve", type=int, metavar="PORT",
+                    help="按需渲染服务：绑 127.0.0.1，刷新即重渲")
     a = ap.parse_args()
+    if a.serve:
+        serve(Path(a.repo).expanduser().resolve(), a.serve)
+        return
     repo = Path(a.repo).expanduser().resolve()
     cards = collect(repo)
     if not cards:
