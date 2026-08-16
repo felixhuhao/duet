@@ -38,6 +38,7 @@
 | 2026-08-16 | baton-confirm | Agent / AGT-1 | Agent:docs/plans/2026-08-15-对话历史分页-验收评审.md §2.5 · AGT1-A1 收敛执行归谁——规则未明写（README 原则 1 指向实现方，roles/claude.md checklist 给了我自行 rebase 权）| 推荐实现方做以保角色分离；其 sandbox 拦 git 则我代做并附可复现的机械校验 | **owner 许可验收方直接执行**（2026-08-16）⇒ 已落盘：22 笔快进推 origin/main，他人在途改动 sha256 前后逐一相同 | ✅ 一致 |
 | 2026-08-16 | baton-confirm | Agent / AGT-1 | Agent:docs/plans/2026-08-15-对话历史分页-验收评审.md §3 · 跨仓首批全部收口，请求 ack 标 Done | ack（评审两轮 + 验收两轮全闭，W2/W3 核销，G1 四步全过，交付在 origin/main@5077594a） | **ack**（owner hao · 2026-08-16）⇒ AGT-1 Done | ✅ 一致 |
 | 2026-08-16 | baton-confirm | byteme_mobile / D3b + D3 | byteme_mobile-D:docs/devlogs/2026-08-15-D对话D3b-验收评审.md §17 · Done 六条 + 跨仓前置全满足，请求 ack | ack（D3b 名下 W5/A2/W6/A1 全清；跨仓前置由 AGT-1 交付后核销，本仓零代码改动即合规） | **ack**（owner hao · 2026-08-16）⇒ D3b 与 D3 均 Done | ✅ 一致 |
+| 2026-08-16 | open-decision | byteme_mobile / D4 | byteme_mobile-D:docs/plans/2026-08-12-D对话-接入Agent原生API-开发计划.md E-10 §⑤ · OD-D4-1 历史回显附件无落点（selectRunRows 无附件字段，web 同缺已记档）| **②接受降级但显式告知**（「附件在历史中不可见」）—— ①提 Agent 补投影会重演 D3 的跨仓等待且附件不是主链路；③静默与 D3 刚拍的「不许静默」直接冲突。把握中等：若你认为附件对留资/成交重要，①更值 | ⬜ | ⬜ |
 > 🔬 **误报归因（2026-08-16 复盘，留作校准信号，不抹）**：上一行我判 `open-decision` 并停下等裁决。对照触发条件（用户看到什么 / 新旧行为以哪边为准 / 功能去留 / 金额权限隐私 / 改变已放行 scope-outcome-AC）**一条都不命中**——实现方与验收方已一致，没有争议就没有可裁的东西。
 > 真正让我停下的是当时那条「与 origin 分叉 → 报 owner，不自行 rebase」，但它的立意是「别在 owner 不知情时重写历史」，而 owner 已知情且已授权过同性质操作。**我把「报告」执行成了「等裁决」。**
 > ⇒ 该条已于 `63d6415` 修订为「无冲突可自行 rebase，冲突即 abort 报 owner」。本行计入试运行判据 ③（owner 被打断中「真该 owner 决定」的占比）的**分母**。
