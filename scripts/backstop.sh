@@ -12,10 +12,13 @@ IDLE_THRESHOLD=900   # 连续 idle 多久算可疑（秒）
 STATE_DIR="${TMPDIR:-/tmp}/duet-backstop"; mkdir -p "$STATE_DIR"
 PING='[backstop] 你已闲置一段时间。按 protocol/baton.md 停机条件自查：当前是否处于合法停机（已交棒送达 / gate 门铃已发出）？若是，回一行确认即可；若不是，继续推进手头批次。'
 
+hcmd() { # $1=session, 其余=herdr 参数；default 不带前缀（bash3.2 空数组遇 set -u 有坑）
+  local s="$1"; shift
+  if [ "$s" = "default" ]; then herdr "$@"; else HERDR_SESSION="$s" herdr "$@"; fi
+}
+
 list_agents() { # $1=session → 行: pane_id agent status
-  local s="$1" env=()
-  [ "$s" != "default" ] && env=(env "HERDR_SESSION=$s")
-  ${env[@]+"${env[@]}"} herdr agent list 2>/dev/null | python3 -c '
+  hcmd "$1" agent list 2>/dev/null | python3 -c '
 import json,sys
 try: d=json.load(sys.stdin)
 except: sys.exit(0)
@@ -24,10 +27,7 @@ for a in d.get("result",{}).get("agents",[]):
 }
 
 send_ping() { # $1=session $2=pane
-  local s="$1" p="$2" env=()
-  [ "$s" != "default" ] && env=(env "HERDR_SESSION=$s")
-  ${env[@]+"${env[@]}"} herdr pane send-text "$p" "$PING" && sleep 1 && \
-    ${env[@]+"${env[@]}"} herdr pane send-keys "$p" enter
+  hcmd "$1" pane send-text "$2" "$PING" && sleep 1 && hcmd "$1" pane send-keys "$2" enter
 }
 
 echo "backstop 启动：sessions=${SESSIONS[*]} 阈值=${IDLE_THRESHOLD}s"
