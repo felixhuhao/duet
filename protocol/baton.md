@@ -37,6 +37,15 @@
 - **gate 传棒——notification owner，等亲手放行**：plan 冻结/开工、batch Done、
   round-cap 授予、escalate 终点、open decisions。owner 三个 gate 不变。
 
+## 送达验证（🧪 2026-08-16，诱因：Codex sandbox 拦 herdr，门铃没发出却口头宣布棒在对方）
+
+- **宣布交棒的唯一依据是门铃命令成功返回**（send-text + 按键零退出）。「我说了棒在
+  对方」不是交棒，「门铃命令成功执行」才是；
+- 发完读一次对方 pane（`--source visible`）确认消息已出现；命令失败或读不到 →
+  阶段状态是「**完成但传棒失败**」，把 DELIVERY FAILED 写进本轮落盘文件并报 owner
+  （notification 可用就用，全断就停在原地），**禁止宣布棒已传出**；
+- 门铃工具不可用是环境事故：报 owner 修环境，不得静默降级成「对方会来看文件」。
+
 ## 收棒队列（🧪 2026-08-15，Codex Tab 队列已实测：QUEUED-OK）
 
 - **发送端状态感知**（单次查询，非监听）：目标是忙碌的 Codex → send-text + **Tab**
