@@ -229,16 +229,78 @@ def render(cards, repo, head, branch):
     return "\n".join(out)
 
 
+ANSI = {"ok": "\033[32m", "warn": "\033[33m", "info": "\033[36m",
+        "idle": "\033[2m", "dim": "\033[2m", "b": "\033[1m", "r": "\033[0m"}
+
+
+def render_text(cards, repo, head, branch, color=True):
+    c_ = (lambda k, s: f"{ANSI[k]}{s}{ANSI['r']}") if color else (lambda k, s: s)
+    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    out = [c_("b", "盘面") + f" · 生成 {now} · {repo.name} {branch}@{head} · {len(cards)} 件"]
+    owner_q = [c for c in cards
+               if str(c.get("next", "")).startswith("owner:") or c.get("baton") == "owner"]
+    if owner_q:
+        out.append("")
+        out.append(c_("warn", "━━ 等 owner"))
+        for i, c in enumerate(owner_q, 1):
+            nxt = re.sub(r"^owner:\s*", "", str(c.get("next", "")))
+            out.append(f" {i}. {nxt}" + c_("dim", f"  ← {c.get('track', '')} · {c['_title']}"))
+    lanes = {}
+    for c in cards:
+        lanes.setdefault(c.get("track", "未分轨"), []).append(c)
+    for lane in lanes.values():
+        lane.sort(key=lambda c: STATUS_RANK.get(c.get("status"), 9))
+    lane_names = [t for t in LANE_ORDER if t in lanes] + \
+                 [t for t in lanes if t not in LANE_ORDER]
+    for name in lane_names:
+        cs = lanes[name]
+        live = sum(1 for c in cs if c.get("status") not in ("done", "archived"))
+        out.append("")
+        out.append(c_("b", f"━━ {name}") + c_("dim", f"（{live} 在途 / {len(cs)} 件）"))
+        for c in cs:
+            status = c.get("status", "draft")
+            cls = STATUS_CLASS.get(status, "idle")
+            label = STATUS_LABEL.get(status, status)
+            batch = f"{c['batch']} · " if c.get("batch") else ""
+            out.append(f" {c_(cls, f'[{label}]'):<18} {batch}{c['_title']}"
+                       + c_("dim", f"  ({c.get('doc', '?')})"))
+            if c.get("next"):
+                out.append(c_("info", f"    ▸ {c['next']}"))
+            for b in c.get("blocked_on") or []:
+                out.append(c_("dim", f"    ⛔ {b}"))
+            foot = [f"round {c['round']}" if c.get("round") else "",
+                    f"base {c['base']}" if c.get("base") else "",
+                    f"covers {c['covers']}" if c.get("covers") else "",
+                    f"as-of {c['as_of']}" if c.get("as_of") else ""]
+            foot = " · ".join(f for f in foot if f)
+            if foot:
+                out.append(c_("dim", f"    {foot}"))
+    return "\n".join(out) + "\n"
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--repo", required=True)
-    ap.add_argument("--out", required=True)
+    ap.add_argument("--out", help="输出文件；text 模式省略则打到 stdout")
+    ap.add_argument("--format", choices=["html", "text"], default="html")
+    ap.add_argument("--no-color", action="store_true")
     a = ap.parse_args()
     repo = Path(a.repo).expanduser().resolve()
     cards = collect(repo)
     if not cards:
         sys.exit("没有找到带状态头的工件")
     head, branch = git_meta(repo)
+    if a.format == "text":
+        color = not a.no_color and (a.out is None and sys.stdout.isatty())
+        text = render_text(cards, repo, head, branch, color=color)
+        if a.out:
+            Path(a.out).expanduser().write_text(text, encoding="utf-8")
+            print(f"{len(cards)} 张卡 → {a.out}")
+        else:
+            sys.stdout.write(text)
+        return
+    if not a.out:
+        sys.exit("html 模式需要 --out")
     Path(a.out).expanduser().write_text(
         render(cards, repo, head, branch), encoding="utf-8")
     print(f"{len(cards)} 张卡 → {a.out}")
