@@ -15,7 +15,7 @@ PING='[backstop] 你已闲置一段时间。按 protocol/baton.md 停机条件�
 list_agents() { # $1=session → 行: pane_id agent status
   local s="$1" env=()
   [ "$s" != "default" ] && env=(env "HERDR_SESSION=$s")
-  "${env[@]}" herdr agent list 2>/dev/null | python3 -c '
+  ${env[@]+"${env[@]}"} herdr agent list 2>/dev/null | python3 -c '
 import json,sys
 try: d=json.load(sys.stdin)
 except: sys.exit(0)
@@ -26,8 +26,8 @@ for a in d.get("result",{}).get("agents",[]):
 send_ping() { # $1=session $2=pane
   local s="$1" p="$2" env=()
   [ "$s" != "default" ] && env=(env "HERDR_SESSION=$s")
-  "${env[@]}" herdr pane send-text "$p" "$PING" && sleep 1 && \
-    "${env[@]}" herdr pane send-keys "$p" enter
+  ${env[@]+"${env[@]}"} herdr pane send-text "$p" "$PING" && sleep 1 && \
+    ${env[@]+"${env[@]}"} herdr pane send-keys "$p" enter
 }
 
 echo "backstop 启动：sessions=${SESSIONS[*]} 阈值=${IDLE_THRESHOLD}s"
