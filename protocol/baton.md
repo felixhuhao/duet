@@ -58,7 +58,9 @@
 
 - **发送端状态感知**（单次查询，非监听）：目标是忙碌的 Codex → send-text + **Tab**
   （runtime 原生排队，turn 结束才投递）；其余 → Enter。用 `baton.sh send` 自动判。
-  **steering（Enter 打断忙碌方）是 stop 类专属特权**；
+  忙碌的 Claude 直接 Enter 即可（2026-08-16 实测：消息入可见队列，下一个工具调用
+  边界成批按序注入，turn 不中断——天然温和，无需 Tab 等价物）。
+  **steering（对 Codex Enter 打断忙碌方）是 stop 类专属特权**；
 - **接收端收棒不弃手头**：手头有未收口阶段，先推进到收口点（落盘 + commit）再处理
   队列；处理顺序：owner 亲手输入 > stop 类 > gate 相关 > 机械棒 FIFO；
 - 门铃丢失无害：下一步永远可从 verdict / 棒位状态重建（文件是 ground truth）。
