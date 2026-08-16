@@ -54,3 +54,13 @@
 >
 > 迁移依据：duet `d5efef2`（工件按宿主仓类型惯例归档命名，禁以流程名建目录/文件；
 > 移交单默认落点 `docs/handoffs/`）· Agent `9f9e76a6`（该仓存量已迁）。
+
+| 日期 | 类型 | 仓库/batch | 上下文（文件+行） | agent 建议 | owner 裁决 | 一致? |
+|---|---|---|---|---|---|---|
+| 2026-08-16 | open-decision | byteme_mobile-B / B8 | `byteme_mobile-B:docs/devlogs/2026-08-16-B钱B8-验收评审.md` §1 OD-B8-1 · Agent 仓那份 B6-R2 stash（402 回本次事务实际价 `required`，29 行）落地 / 丢弃 / 并入 IAP 批 | **落地**（由 owner 决定在 Agent 仓开微批）：mobile 侧已交付且 fail-safe（拿不到就不说缺口），服务端补上即兑现正确的「还差多少」；不动金额与账本不变量。排期紧则并入 AGT-2；不建议丢弃——那会把「说不出缺口」变成永久状态 | ⬜ | ⬜ |
+| 2026-08-16 | open-decision | byteme_mobile-B / B8 | 同上 §1 OD-B8-2 · 需求册 B-3（iOS IAP 收据校验端点）现在立 Agent 子 batch 还是挂 iOS 上架排期 | **现在立**（AGT-1 模式：父需求 = 需求册 B-3，Agent 仓子 batch 先出契约，mobile B-X 随后）。理由：IAP 是 iOS 唯一入金口，Agent 下 iOS 余额只出不进，实质是上架前置；mobile 侧链路已就绪 | ⬜ | ⬜ |
+| 2026-08-16 | open-decision | byteme_mobile-B / B8 | 同上 §1 OD-B8-3 · B-Y 券模型保留 / 重建 / 改成「兑换码→积分」 | 本批只交付拍板包（选项 + 用户可见代价 + 推荐），不预设结论；已核实 mobile `core/reuse/coupon/` 与 Agent `routes/redemption.ts` 是两个不同模型 | ⬜ | ⬜ |
+| 2026-08-16 | open-decision | byteme_mobile-B / B8 | 同上 §1 OD-B8-4 · B5 发票：两类 GET 合成一页还是分段、状态映射、无 PDF 怎么展示 | 同上，拍板包交付后再拍；不拍则 B5 继续悬置，不阻塞 B8 Done | ⬜ | ⬜ |
+| 2026-08-16 | open-decision | byteme_mobile-B / B8 | 同上 §1 OD-B8-5 · B7 邀请页账户级后的信息架构（匿名 invitees / 佣金 records / 奖励券的取舍） | 同上；旧页是分身级且含被邀请人明细，Agent 是账户级且刻意匿名，维度与隐私模型都不同，不能拿旧 UI 倒推 | ⬜ | ⬜ |
+| 2026-08-16 | open-decision | byteme_mobile-B / B8 | 同上 §1 OD-B8-6 · B-Z 公开 profile「获赞赏 / 累计积分」统计块：客户端聚合 native tips 还是删除 | 同上；受产品红线三（公开面零经营数据外显）约束，拍板包不得给出在公开面显示收益/分成的选项 | ⬜ | ⬜ |
+| 2026-08-16 | baton-confirm | byteme_mobile-B / B8 | `byteme_mobile-B:docs/plans/2026-08-16-B钱B8-收官-开发计划.md` @ `ce3abcb3` · B 轨首个协作流程 batch，plan 成稿机械传棒 w2:p2 送审 | 机械传棒（送审草稿类，下一步由角色卡唯一确定）；**冻结仍是 owner gate**，plan 评审两轮闭合后另行门铃 | ⬜ | ⬜ |
