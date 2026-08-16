@@ -27,7 +27,7 @@
 
 | 类型 | 状态 | 连续一致次数 |
 |---|---|---|
-| baton-confirm·机械（送审/回修/重验/续行） | **已毕业**（owner 直批 2026-08-15，🧪 D3b Done 复核） | — |
+| baton-confirm·机械（送审/回修/重验/续行） | **已毕业**（owner 直批 2026-08-15，✅ 转正 2026-08-16） | — |
 | baton-confirm·放行·增量级（增量 PASS 续行确认） | **已毕业**（Stage 1 语义，owner 直批 2026-08-16） | — |
 | baton-confirm·放行·batch 级（plan 冻结 / Done ack） | **设计上不毕业**（Stage 1 的两个 owner 触点） | — |
 | round-cap（轮次上限后的处置） | 未毕业 | 0 |

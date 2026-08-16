@@ -20,7 +20,7 @@
 
 类型取值：`round-cap` / `P0P1-dispute` / `open-decision` / `redline-risk` / `baton-confirm`。
 
-## 路由：Codex 的 escalate 经 Claude 中继（🧪 2026-08-15）
+## 路由：Codex 的 escalate 经 Claude 中继（✅ 2026-08-15）
 
 - Codex escalate → 门铃 Claude；Claude 只做三个**加法**动作：复核事实、附议或
   ≤10 行反对立场、记 decision-log / 按需建卡 → 整理包 notification 给 owner；
@@ -43,7 +43,7 @@
 **工作仓**的 review / plan / devlog 里，且对没有 duet 访问权的读者自含。
 duet 只存机制定义与校准数据：**decision-log 行 = 索引级摘要**——一句话上下文 +
 建议结论 + 裁决结论 + 指向工作仓真源的路径，不复制依据长文。
-**记录者唯一**（🧪）：decision-log 由 Claude 统一写，一次 escalation 一行；发起方是
+**记录者唯一**（✅）：decision-log 由 Claude 统一写，一次 escalation 一行；发起方是
 Codex 时建议列原样摘录其 verdict，真源仍在工作仓 review 文件。两处长文必漂移，
 且 duet 是私有仓，写进来的内容团队永远看不见。
 

@@ -18,7 +18,7 @@ ESCALATE_REASON: <仅 ESCALATE 时，一句话>
 
 写入对应的 review 文件末尾；传棒消息里只复述 `VERDICT` 和 P0/P1 计数。
 
-**写 verdict 前的两个动作**（🧪 试行 · D3b Done 复核）：
+**写 verdict 前的两个动作**（✅ 转正 2026-08-16）：
 ① 重读目标文件现状 + 自己上次读取之后的 git log，消化所有并发落盘（诱因：D3b
 的 PASS 没读到早 3 分钟的 §8）。fetch 不逐次做，只锚在边界时刻（定 BASE / 实现开工 /
 Done 门禁，细则见 README 拍板记录）；跨仓断言标注 as-of SHA；轮次中不追新

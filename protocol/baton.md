@@ -20,7 +20,7 @@
 
 要素：`[peer:<自己>]` 前缀 · 事件 · 文件路径 · 轮次 · verdict（如有）。一行说完。
 
-## 交棒是 push，不做监听（🧪 2026-08-15，owner 指令废除 listen 模式）
+## 交棒是 push，不做监听（✅ 2026-08-15，owner 指令废除 listen 模式）
 
 - **交棒是完成动作的一部分**：产物落盘 + commit 后，完成方立即主动发门铃——
   send-text 对方 pane + enter（Stage 0 改发 notification 给 owner）。
@@ -28,7 +28,7 @@
 - 接收方不监听对方状态：不挂 `agent wait` 轮询，收到 `[peer:*]` 消息才动。
   sidebar 状态与 `agent wait --until blocked` 仅供 owner 旁观与卡死排查。
 
-## 传棒分级（🧪 2026-08-15 起，机械段先通电）
+## 传棒分级（✅ 2026-08-15 起，机械段先通电）
 
 - **机械传棒——直接 send-text 对方 + notification 给 owner 作旁观通报，不等放行**：
   ①送审草稿 ②FINDINGS 回作者修 ③修复完成请 closure 重验（附 grep 自查）
@@ -37,7 +37,7 @@
 - **gate 传棒——notification owner，等亲手放行**：plan 冻结/开工、batch Done、
   round-cap 授予、escalate 终点、open decisions。owner 三个 gate 不变。
 
-## 送达验证（🧪 2026-08-16，诱因：Codex sandbox 拦 herdr，门铃没发出却口头宣布棒在对方）
+## 送达验证（✅ 2026-08-16，诱因：Codex sandbox 拦 herdr，门铃没发出却口头宣布棒在对方）
 
 - **宣布交棒的唯一依据是门铃命令成功返回**（send-text + 按键零退出）。「我说了棒在
   对方」不是交棒，「门铃命令成功执行」才是；
@@ -46,7 +46,7 @@
   （notification 可用就用，全断就停在原地），**禁止宣布棒已传出**；
 - 门铃工具不可用是环境事故：报 owner 修环境，不得静默降级成「对方会来看文件」。
 
-## 停机条件（🧪 2026-08-16，诱因：只剩一个 gate 却静默待命，owner 追问才继续）
+## 停机条件（✅ 2026-08-16，诱因：只剩一个 gate 却静默待命，owner 追问才继续）
 
 - **棒在手就跑到底**：每次收口后盘点一遍「哪些下一步不需要 owner」——有就继续，
   没有才停。合法停机只有两种状态：①已交棒（送达验证通过）②已撞 gate 且 **gate
@@ -54,7 +54,7 @@
   **静默等待不是合法状态**；
 - 等 gate 期间，不依赖该 gate 的 slice 照常推进（并行边界条款不变）。
 
-## 收棒队列（🧪 2026-08-15，Codex Tab 队列已实测：QUEUED-OK）
+## 收棒队列（✅ 2026-08-15，Codex Tab 队列已实测：QUEUED-OK）
 
 - **发送端状态感知**（单次查询，非监听）：目标是忙碌的 Codex → send-text + **Tab**
   （runtime 原生排队，turn 结束才投递）；其余 → Enter。用 `baton.sh send` 自动判。

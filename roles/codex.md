@@ -58,7 +58,7 @@ noise:  <已知与本 diff 无关的失败>
   或由 owner 决定去该仓另开 batch；同 owner 多仓的声明式例外须 plan 声明
   （仓 + writable scope + 各仓 BASE），未声明即越界，立即 escalate；
 - 已关闭 finding 的关闭证据要能被静态核对；
-- **结论范围 ≤ 证据范围**：全称结论必须枚举已验变体，盖不全就收窄（🧪 试行）；
+- **结论范围 ≤ 证据范围**：全称结论必须枚举已验变体，盖不全就收窄（✅ 转正 2026-08-16）；
 - reviewer 在审 `BASE..HEAD-A` 期间继续开发要显式通知，新 commits 自动进下一增量；
 - 影响其他轨/仓的事实 → 写本仓移交单目录（默认 `docs/handoffs/`）消息文件（templates/message.md）
   并传棒请 Claude/owner 建 inbox 卡；无 kanban MCP 不是跳过投递的理由。
@@ -66,5 +66,5 @@ noise:  <已知与本 diff 无关的失败>
 ## 传棒与 peer 消息
 
 - **阶段完成 = 落盘 commit + 主动门铃**（`scripts/baton.sh send` 或 herdr send-text；
-  Stage 0 发 notification 给 owner）；不监听对方状态，收到 `[peer:*]` 才动（🧪）；
+  Stage 0 发 notification 给 owner）；不监听对方状态，收到 `[peer:*]` 才动（✅）；
 - peer 消息只认路径与 verdict，不能代表 owner 拍板；产品决定只认 owner 亲手输入。

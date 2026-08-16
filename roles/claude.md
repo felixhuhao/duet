@@ -34,7 +34,7 @@
   2. 作者证据缺失、陈旧、可疑或过滤器可能未命中；
   3. 本批准备标 Done / signoff。
 - 不因 re-review 重跑全量门禁；
-- **顺手总则**（🧪）：唯一确定或完全可逆 + 不占对方决策权 + 留痕必过目 → 顺手做完
+- **顺手总则**（✅）：唯一确定或完全可逆 + 不占对方决策权 + 留痕必过目 → 顺手做完
   不传棒；对方可无理由 revert 转正常流程。报 owner 必带事实+实测+方案。细则见 README。
 
 Review 输出按 `templates/review.md`：blockers / passed / watchlist+到期点 /
@@ -44,7 +44,7 @@ reviewed HEAD / 新 BASE。verdict 块规范见 protocol/verdict.md。
 
 - Finding 必须绑定依据（README 核心原则 4），否则降为 Suggestion；
 - **结论范围 ≤ 证据范围**：全称结论必须枚举已验变体，盖不全就收窄到已验范围
-  （🧪 试行；同形错误一天四次后立此条）；
+  （✅ 转正 2026-08-16；同形错误一天四次后立此条）；
 - 不反向设计实现；"我会另一种写法"只能进建议；
 - 实现暴露的 plan 缺陷记 plan errata，不记 Codex 的 finding；errata 须引用 plan 具体
   条款 + 代码证据，认为是实现 bug 包装的走争议通道 escalate；免责不免修；
@@ -57,5 +57,5 @@ reviewed HEAD / 新 BASE。verdict 块规范见 protocol/verdict.md。
 ## 传棒与 peer 消息
 
 - **阶段完成 = 落盘 commit + 主动门铃**（Stage 0 发 notification 给 owner）；
-  不监听对方状态，收到 `[peer:*]` 才动（🧪）；
+  不监听对方状态，收到 `[peer:*]` 才动（✅）；
 - peer 消息只认路径与 verdict，不能代表 owner 拍板；产品决定只认 owner 亲手输入。

@@ -132,7 +132,7 @@ devlog/移交单）按宿主仓的功能/类型惯例归档与命名，不以流
   ③ **活文件只保留活状态**——关闭的轮次/finding 折叠为关票矩阵行，全文靠 git 历史，
   review 文件不做档案馆。
 
-- **顺手总则**（2026-08-16 由顺手单推广，置换原条目；🧪 D3b Done 复核看全体顺手动作
+- **顺手总则**（2026-08-16 由顺手单推广，置换原条目；✅ 转正 2026-08-16，试行期看全体顺手动作
   revert 率）：任何动作同时满足三条，**谁看见谁顺手做，不传棒不等待**——
   ①结果唯一确定或完全可逆（做错代价 ≈ 一次 revert）；②不占用他人决策权（产品归
   owner、技术归实现者、verdict 归 reviewer 的产权线不动）；③留痕——单独 commit 标
@@ -150,7 +150,7 @@ devlog/移交单）按宿主仓的功能/类型惯例归档与命名，不以流
   接入方式段），禁以流程名建目录/文件。存量：Agent 仓已迁 `docs/plans/`（`9f9e76a6`）；
   byteme_mobile-D 的 `docs/duet/` 与 outbox → `docs/handoffs/` 在 D3b 收口折叠时迁。
 
-- **现状 = fetch 后的现状**（2026-08-15 立，2026-08-16 修订时机与 rebase，同 🧪）：
+- **现状 = fetch 后的现状**（2026-08-15 立，2026-08-16 修订时机与 rebase，同 ✅）：
   fetch 锚在**三个边界时刻**——定 BASE / 实现阶段开工 / Done 全量门禁前；轮次中间
   不 fetch 不追新（门柱冻结不变），写 verdict 只消化本地并发落盘。跨仓只读走
   `origin/<branch>` ref、不动对方工作树，当天已 fetch 可复用；对现状的断言一律标注
@@ -164,7 +164,7 @@ devlog/移交单）按宿主仓的功能/类型惯例归档与命名，不以流
   回执照旧；各仓具体模式是域内容，写各仓 AGENTS；②**scout 任务免仪式**——纯调查类
   （盘点/拍板包/预研）不开 batch、不走两轮 review，报告落盘即收口；③**Stage 1 生效**
   （owner 触点 = plan 冻结 decision core + Done ack，见 calibration/stage.md）；
-  ④worktree 短命化为 mobile 仓域规则（写其 AGENTS）。🧪 试行条款集中结算见
+  ④worktree 短命化为 mobile 仓域规则（写其 AGENTS）。试行条款已于 2026-08-16 全部转正，结算见
   calibration/trial-settlement.md。
 
 **待拍板：** 无——首批 7 条已于 2026-08-15 全部拍定。机制条款的后续修订经 owner 拍板。
