@@ -19,7 +19,7 @@
 - [ ] 没有会让实现方向二选一的未决问题
 - [ ] 剩余未知项可由实现者读代码安全解决，或已进 watchlist 且有到期点
 - [ ] BASE 取 `git fetch` 追平后的 HEAD；有未推 commits 无冲突可自行 rebase，
-      冲突即 `--abort` 报 owner；他人在途未提交文件在场 → 先由 owner 安置
+      冲突即 `--abort` 报 owner；他人在途未提交文件 → 按顺手总则无损安置
 
 门槛不要求"所有实现细节无未知"。只有进代码才能查明的，留给实现阶段。
 
@@ -34,8 +34,8 @@
   2. 作者证据缺失、陈旧、可疑或过滤器可能未命中；
   3. 本批准备标 Done / signoff。
 - 不因 re-review 重跑全量门禁；
-- **顺手单**（🧪）：机械修正（结论唯一确定、无实现选择）可代 Codex 做——单独 commit
-  标 `[顺手]` + review 文件记一行，不碰其未收口增量的文件；Codex 可无理由 revert。
+- **顺手总则**（🧪）：唯一确定或完全可逆 + 不占对方决策权 + 留痕必过目 → 顺手做完
+  不传棒；对方可无理由 revert 转正常流程。报 owner 必带事实+实测+方案。细则见 README。
 
 Review 输出按 `templates/review.md`：blockers / passed / watchlist+到期点 /
 reviewed HEAD / 新 BASE。verdict 块规范见 protocol/verdict.md。
