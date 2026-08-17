@@ -13,6 +13,7 @@
 **开工门槛 checklist**（全勾才可冻结）：
 
 - [ ] outcome、scope、out-of-scope 已明确
+- [ ] 同一 batch 的 slices 共用 outcome；可被独立批准/拒绝者已拆批
 - [ ] 本批所需产品选择已完成（open decisions 清零或明确不阻塞）
 - [ ] authority 和 redlines 有明确来源
 - [ ] 每条 AC 可在 UI、状态、请求或持久化层被观察

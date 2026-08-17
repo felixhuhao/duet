@@ -27,6 +27,16 @@ ESCALATE_REASON: <仅 ESCALATE 时，一句话>
 - **FINDINGS**：存在需关闭的 P0/P1（或被 owner 升级的 P2），棒传回实现者；
 - **ESCALATE**：出循环，走 protocol/escalation.md。
 
+## Plan review 特化
+
+- 只查角色卡四项，使用 `templates/plan-review.md`；PASS 不做全量事实审计，列 coverage、
+  最多三个关键锚与未验证面即可；没有生产 diff，不跑项目测试或 analyze；
+- 硬 finding 必须针对 plan 声明的精确快照；mutable HEAD、过期 checkout、记忆中的 runtime
+  状态不能支撑 P0/P1。快照不可得时写 `not-verified`，只有其本身使开工不安全才阻塞；
+- **FINDINGS** 用于正确答案唯一的修订（如误引已接受 authority、漏写关键 AC）；
+  **ESCALATE** 只用于两个合理选项会改变产品结果、authority 真冲突、需接受风险或 round-cap；
+- closure PASS 后活文件折叠为 coverage + 关票矩阵 + 最终 verdict，长证据留在 git 历史。
+
 ## 轮次上限
 
 - 每个 increment 最多两轮：round 1 = substantive（发现并固定 findings），

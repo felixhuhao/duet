@@ -8,6 +8,12 @@
 > Stage 0 记录（2026-08-15）：机械传棒先通电（送审/回修/重验/续行直接 send-text +
 > 旁观通报），gate 传棒经 owner——见 protocol/baton.md「传棒分级」。
 
+## 当前试行
+
+- **Plan review 紧凑契约**（2026-08-17 起）：从下两个新 plan review 起使用
+  `templates/plan-review.md`；完成后复核是否仍有因错误快照撤回的硬 finding、是否误跑项目门禁，
+  以及无 finding 的 PASS 能否保持一屏可读，再由 owner 决定保留、调整或撤回。
+
 ## 阶段定义
 
 | 阶段 | 传棒 | escalate/stop |

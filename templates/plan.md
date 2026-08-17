@@ -16,9 +16,12 @@ pair:    spec_owner=<herdr name>/<runtime> · delivery_owner=<herdr name>/<runti
 - in：
 - out：
 
+<能被 reviewer 独立批准/拒绝且不破坏同一 outcome 的 slice，应拆成独立 batch>
+
 ## Authority
 
-<数据及服务端 authority，注明来源（文件/接口/文档）>
+<只列会改变 decision core 的关键事实；代码/跨仓事实注明 repo + 精确 SHA + 文件，
+无法取得声明快照的写进未验证面，不用 mutable HEAD 代替>
 
 ## Redlines
 

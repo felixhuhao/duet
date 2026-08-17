@@ -11,8 +11,9 @@
 3. authority、依赖和迁移边界是否错误；
 4. 是否存在开工即会撞上的 P0/P1。
 
-结论按 protocol/verdict.md 输出。"plan 没写类名/目录/测试落点"不是 finding——
-那些归实现阶段。
+按 `templates/plan-review.md` + protocol/verdict.md 输出；硬 finding 只能基于 plan 声明的精确
+快照，并说明它改变哪个 decision core / 开工 P0/P1。Plan review 不跑项目门禁，不审 testcase、
+类名、目录或测试落点——那些归实现阶段。
 
 ## Implementation 阶段（主责）
 
