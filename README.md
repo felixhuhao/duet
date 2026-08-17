@@ -10,7 +10,7 @@
 ## 三层架构
 
 ```text
-运行时层   herdr workspace，两个 agent 各占一个 pane，owner 旁观并随时介入
+运行时层   herdr workspace，两个 agent 各占一个 pane；owner 按需介入，不做常驻盯盘
 状态层     md 文件。定义住本仓库；实例（plan/devlog/review）住各工作仓库
 决策层     OD 分层路由：真源就地，decision-log 的 ⬜ 行兼任 owner 收件箱；建卡自选
 ```

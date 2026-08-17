@@ -1,6 +1,7 @@
 # 传棒协议
 
-没有 driver。接力棒在两个 herdr pane 之间传，owner 全程可旁观、可介入。
+没有 driver，也没有 idle watchdog。接力棒在两个 herdr pane 之间传，owner 只在收到消息或
+主动查看时介入。
 
 ## 不变量
 
@@ -29,7 +30,9 @@ runtime qualification 选择传输方式并做 delivery-id 读回：
   调用门铃脚本（Stage 0 改发 notification 给 owner）。
   **没有门铃 = 阶段未完成**；
 - 接收方不监听对方状态：不挂 `agent wait` 轮询，收到 `[peer:*]` 消息才动。
-  sidebar 状态与 `agent wait --until blocked` 仅供 owner 旁观与卡死排查。
+  sidebar 状态与 `agent wait --until blocked` 仅供 owner 主动排查卡死；不得定时调用；
+- **idle 就是静默**：不设 heartbeat/backstop，不按分钟 ping agent，也不要求 orchestrator 常驻。
+  Herdr integration 只被动上报状态；下一次动作只能由 peer/owner 消息或真实 blocked 事件触发。
 
 ## 传棒分级（✅ 2026-08-15 起，机械段先通电）
 
