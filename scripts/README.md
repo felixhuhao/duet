@@ -24,5 +24,5 @@ Codex 通过 `workspace-full` permission profile 访问 Herdr；每新增命名 
 qualification 的组合。通知开关在
 `~/.config/herdr/config.toml`（`ui.toast.delivery`，默认 off，本机已设 system）。
 
-原则：只放薄封装。开始想写调度器/状态机时，先重评 loopx（见 README 拍板记录）。
+原则：只放薄封装。开始想写调度器/状态机时，先按 README 当前治理重评是否真的需要 loopx。
 不提供 idle heartbeat/backstop：空闲 pair 保持静默，仅由真实消息或 blocked 事件唤醒。

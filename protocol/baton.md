@@ -27,8 +27,7 @@ runtime qualification 选择传输方式并做 delivery-id 读回：
 ## 交棒是 push，不做监听（✅ 2026-08-15，owner 指令废除 listen 模式）
 
 - **交棒是完成动作的一部分**：产物落盘 + commit 后，完成方立即主动发门铃——
-  调用门铃脚本（Stage 0 改发 notification 给 owner）。
-  **没有门铃 = 阶段未完成**；
+  调用门铃脚本。**没有门铃 = 阶段未完成**；
 - 接收方不监听对方状态：不挂 `agent wait` 轮询，收到 `[peer:*]` 消息才动。
   sidebar 状态与 `agent wait --until blocked` 仅供 owner 主动排查卡死；不得定时调用；
 - **idle 就是静默**：不设 heartbeat/backstop，不按分钟 ping agent，也不要求 orchestrator 常驻。
@@ -57,15 +56,8 @@ runtime qualification 选择传输方式并做 delivery-id 读回：
 
 - **只在自己持棒时跑到底**：做完交棒前无需 owner 的动作后传棒。合法停机只有两种：
   ①交棒送达后结束 turn；②撞 gate 并主动发出具体 gate 门铃。停机后的 idle 静默是正常状态；
-- **依赖 parked，pair released**：当前 slice 若只剩外部 batch、跨仓交付或 owner gate 才能继续，
-  把已完成范围与剩余依赖分账，记录唯一唤醒事件，然后结束当前 turn 并明确向 owner 报告
-  `pair available`。不得把“等待 X”写成 pair 的下一项工作，不挂 `agent wait`、不轮询，
-  也不因该依赖保留 pair 的调度权；事件到达后再由门铃唤回该 slice；
-- released 只表示**可以接新任务**，不表示 agent 可以自行挑选下一批。owner 未亲手指定时保持 idle；
-  owner 指定其他独立任务后照常开工。等 gate 期间，已经授权且不依赖该 gate 的 slice 照常推进
-  （并行边界条款不变）。
-- 命中 `protocol/diagnostic-budget.md` 的 `DIAGNOSTIC_BUDGET_EXHAUSTED` 也是合法停机：
-  先落诊断短账并传给 Spec Owner，再结束 turn；不得把第三次同症状执行当作“继续工作”。
+- 只剩外部依赖时，把 slice 标为 parked、记录唯一唤醒事件并报告 `pair available`，然后结束 turn。
+  不挂 wait、不轮询、不自行选下一批；owner 可立即另派不依赖该事件的任务。
 
 ## 收棒队列（✅ 2026-08-15，Codex Tab 队列已实测：QUEUED-OK）
 

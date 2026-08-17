@@ -25,7 +25,7 @@
 **技术自主范围**（不必请示）：类拆分、缓存结构、错误映射、状态管理细节、
 定向测试落点等可逆技术选择。
 
-**open-decision 触发条件**（命中任何一条立即出循环、记录、建卡，只暂停受影响 slice）：
+**open-decision 触发条件**（命中任何一条立即出循环、记录并 escalate，只暂停受影响 slice）：
 
 - 用户最终看到什么、能做什么；
 - 新旧后台行为不一致时以哪边为准；
@@ -39,19 +39,11 @@
 
 - **AC 展开成 testcases（按项目工件规范）归实现者**；reviewer 只静态核对 TC 是否
   真覆盖生产路径，不代写；
-- 写码期间只跑最小相关测试；高风险单元补"能证明故障会被抓住"的定向测试；
-- 测试挂死、命令超时或重复无进展时，必须执行 `protocol/diagnostic-budget.md`：同一失败签名
-  只允许“首次观察 + 一次先写假设的判别性重试”。改秒数/换 probe/宽泛 `pkill` 不算诊断；
-  预算耗尽即落 `DIAGNOSTIC_BUDGET_EXHAUSTED`、传棒并停受影响 slice；
-- 阶段收口跑约定门禁一次；不为每个小 commit 重跑全量；
-- 每个增量的证据块格式（写入 devlog）：
-
-```text
-cmd:    <原样可复制的命令>
-scope:  <覆盖 diff 中哪些文件/路径>
-result: <pass/fail + 关键行>
-noise:  <已知与本 diff 无关的失败>
-```
+- **没有相关代码/配置变化，不重跑**：复用同一 HEAD、命令与环境下的新鲜结果；
+- 稳定增量后把相关文件合成一次定向测试；最终冻结 HEAD 后全量 test/analyze 各一次；
+- 同一失败最多执行两次；第二次须先写可证伪假设，仍无新证据就停 slice 并传棒。
+  改秒数/换 probe 不算新证据；只终止本次精确进程，不用宽泛 `pkill` 或 TUI `Ctrl+C`；
+- 证据按 `templates/devlog.md` 的 `cmd/scope/result/noise` 四项落盘。
 
 ## 红线
 
@@ -70,6 +62,4 @@ noise:  <已知与本 diff 无关的失败>
 
 - **阶段完成 = 落盘 commit + 主动门铃**；送达后结束 turn，不 `sleep` 或轮询；
   新消息到达才动；`baton.sh peers/send` 可跨 session，peer 只认路径/verdict、不能代 owner 拍板；
-- 当前 batch 只剩外部依赖时，按 baton 的 `dependency parked / pair released` 分账并报告
-  `pair available`；不得用“等待 X”占住 pair，也不得自行挑选下一批；
 - 凡向 owner 汇报，按 `protocol/owner-report.md` 做一屏摘要，不把读工件和提炼结论外包给 owner。

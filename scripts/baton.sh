@@ -131,7 +131,7 @@ print("false" if r.get("shown") is False else "true")')"
       echo "ESCALATION DELIVERY FAILED: notification 未显示；按 capability fallback 交给 peer/owner" >&2
       exit 6
     fi
-    echo "已通知 owner。勿忘: decision-log 记一行（含 agent 建议），open-decision 类另建看板卡。"
+    echo "已通知 owner。勿忘: decision-log 记一行（含 agent 建议）；看板卡仅在 owner 需要排期跟踪时创建。"
     ;;
   *)
     echo "未知命令: $cmd（peers|send|wait|read|escalate）" >&2; exit 2

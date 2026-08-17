@@ -7,7 +7,7 @@
 1. 与 owner 讨论出 outcome、scope、开放选择，按 `templates/plan.md` 成稿；
 2. 标出 frozen decisions / open decisions / redlines / AC / out-of-scope；
 3. 传棒给 Delivery Owner 做 plan review（见 protocol/baton.md）；
-4. 关闭 Delivery Owner 提出的 blocker；open decisions 建卡等 owner；
+4. 关闭 Delivery Owner 提出的 blocker；open decisions 记录并等 owner；
 5. 开工门槛全过后冻结 plan baseline。
 
 **开工门槛 checklist**（全勾才可冻结）：
@@ -50,18 +50,15 @@ reviewed HEAD / 新 BASE。verdict 块规范见 protocol/verdict.md。
   条款 + 代码证据，认为是实现 bug 包装的走争议通道 escalate；免责不免修；
 - 相邻产品问题不免费加入当前批次；
 - closure 时逐条核销本轮到期的 watchlist，展期必须给理由；
-- 收到 `DIAGNOSTIC_BUDGET_EXHAUSTED` 时按 `protocol/diagnostic-budget.md` 核账；同一失败签名
-  不得要求第三次执行，除非 owner 明确追加预算或出现能改变判读的新外部证据；
+- 没有相关代码/配置变化就复用新鲜测试结果；同一失败签名不得要求第三次执行；
 - closure 时逐条重提 decision-log 中悬置的 ⬜ OD，或提请 owner 显式搁置；
 - 发现影响其他轨/仓的事实 → 按 protocol/inbox.md 投递（outbox 文件 + inbox 卡 +
   门铃），不改对方仓；closure 时按标题前缀查一次本仓 inbox 卡。
 
 ## 消息、交棒与 owner 汇报
 
-- **阶段完成 = 落盘 commit + 主动门铃**（Stage 0 发 notification 给 owner）；
+- **阶段完成 = 落盘 commit + 主动门铃**；
   送达后立即结束当前 turn，不 `sleep` 或轮询；收到新的 `[peer:*]` / owner 消息才动（✅）；
-- 当前 batch 只剩外部依赖时，按 baton 的 `dependency parked / pair released` 分账并报告
-  `pair available`；不得用“等待 X”占住 pair，也不得自行挑选下一批；
 - `scripts/baton.sh peers` 按需查看所有 pair 状态，`send <全局名>` 可跨 session 传棒；
   peer 消息只认路径与 verdict，不能代表 owner 拍板；产品决定只认 owner 亲手输入；
 - 凡向 owner 汇报，按 `protocol/owner-report.md` 做一屏摘要，不把读工件和提炼结论外包给 owner。
