@@ -7,6 +7,10 @@ COVERS:        <本轮覆盖的 commit / range>
 reviewed HEAD: <本轮冻结的 HEAD SHA>
 ```
 
+## 本轮摘要
+
+<按 protocol/owner-report.md 填：结论 / 完成 / 发现 / 值得看 / 需拍板 / 下一步；作为汇报真源>
+
 ## Current blockers
 
 <P0/P1，每条绑定依据：outcome/AC、redline/authority、regression、运行时边界、未覆盖关键路径>

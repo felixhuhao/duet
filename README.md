@@ -30,8 +30,9 @@
    P0/P1 运行时边界、或证据未覆盖的关键路径。"我会换种写法"不构成 blocker。
 5. **每个增量最多两轮 review**（substantive + closure），超限强制 escalate。
    规则见 [protocol/verdict.md](protocol/verdict.md)。
-6. **传话走文件，消息只是门铃。** 任何一轮都必须能只凭落盘文件冷启动。
-   见 [protocol/baton.md](protocol/baton.md)。
+6. **传话走文件，peer 消息只是门铃；owner 汇报必须做摘要。** 任何一轮都必须能只凭
+   落盘文件冷启动；给 owner 的消息负责信息压缩与注意力路由。见
+   [baton](protocol/baton.md) 与 [owner-report](protocol/owner-report.md)。
 7. **Escalate 必附 agent 自己的推荐判定**，用于校准自动判定规则。
    见 [protocol/escalation.md](protocol/escalation.md)。
 
@@ -62,7 +63,7 @@ track ⊃ batch ⊃ increment ⊃ slice
 
 ```text
 roles/        spec-owner / delivery-owner —— 两张职责角色卡，与 runtime 客户端无关
-protocol/     baton / verdict / escalation / runtime —— 传棒、结论块、升级、运行时绑定
+protocol/     baton / verdict / escalation / owner-report / runtime —— 传棒、结论、升级、汇报、运行时
 calibration/  decision-log（校准记录）+ stage（阶段梯子与毕业状态）
 templates/    plan / devlog / review 三件套模板，实例化到工作仓库
 scripts/      已验证的 herdr pair 启动、门铃与态势工具
@@ -170,5 +171,12 @@ devlog/移交单）按宿主仓的功能/类型惯例归档与命名，不以流
   （owner 触点 = plan 冻结 decision core + Done ack，见 calibration/stage.md）；
   ④worktree 短命化为 mobile 仓域规则（写其 AGENTS）。试行条款已于 2026-08-16 全部转正，结算见
   calibration/trial-settlement.md。
+
+**已定（2026-08-17 owner 汇报复盘）：**
+
+- peer 门铃与 owner 汇报分流：前者只路由，后者必须提供结论、完成、发现、值得看、
+  需拍板、下一步，并附最小证据；不增加 heartbeat 或汇报频率；
+- 2026-08-16 停机质量复盘提出的三条候选（停机题面、编号自述、对外动作核受众）纳入
+  `protocol/owner-report.md` 试行，B/E 各下一次 Done 后结算。
 
 **待拍板：** 无——首批 7 条已于 2026-08-15 全部拍定。机制条款的后续修订经 owner 拍板。

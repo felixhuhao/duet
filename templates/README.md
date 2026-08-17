@@ -10,11 +10,11 @@
   活跃 pair 另须声明 spec_owner / delivery_owner 各自的 herdr name、runtime kind 与角色卡；
   跨仓 batch（仅限同 owner 多仓的声明式例外）另须声明：仓清单 + 各仓 writable scope +
   各仓 BASE；跨仓特性的子 batch 须链接父需求文档（authority 仓）；
-- **devlog（或等价实施记录）**：增量 commits 范围 / 证据块（cmd·scope·result·noise）/
-  已知限制 / 被暂停 slice；
+- **devlog（或等价实施记录）**：本轮摘要（owner-report 六项）/ 增量 commits 范围 /
+  证据块（cmd·scope·result·noise）/ 已知限制 / 被暂停 slice；
 - **review**：round 计数 / BASE 与 reviewed HEAD / blockers（绑定依据）/ **OD 节
   （OD 完整语境与争议立场的真源）** / watchlist+到期点 / VERDICT 块（见
-  protocol/verdict.md）。工作仓文档须对没有 duet 访问权的读者自含。
+  protocol/verdict.md）/ 本轮摘要（owner-report 六项）。工作仓文档须对没有 duet 访问权的读者自含。
 
 - **message（跨界消息）**：from+commit / to / type / 到期点 / 事实（自含）/ 请求 /
   回执。落点与路由见 protocol/inbox.md。

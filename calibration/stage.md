@@ -13,7 +13,7 @@
 | 阶段 | 传棒 | escalate/stop |
 |---|---|---|
 | Stage 0 | 全部经过 owner：完成阶段只发 notification，owner 看完产物手动放行 | 全部到 owner |
-| Stage 1 | 已毕业的传棒类型 agent 间直接 send-text，owner 旁观 sidebar | 全部到 owner |
+| Stage 1 | 已毕业的传棒类型 agent 间直接 send-text；按 owner-report 作旁观通报，不等放行 | 全部到 owner |
 | Stage 2 | 同 Stage 1 | 已毕业的 escalation 类型转自动，decision-log 留痕供抽查 |
 
 ## 毕业规则

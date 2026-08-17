@@ -36,3 +36,8 @@ Herdr 0.8.0，workspace `pair-codex-opencode`。全程只读/空载，无产品�
   的 `recent-unwrapped` / `visible` 不可靠，adapter 改用 prompt API 成功 + 状态转移；
 - 权限：Codex `workspace-full` 精确 allow Herdr Unix sockets；OpenCode 只 allow 外部
   `~/Workspace/duet/scripts/**` 且 edit deny。新增 session 必须先补 Codex socket allowlist。
+
+## Owner 汇报补验（2026-08-17）
+
+`protocol/owner-report.md` 在原空载 qualification 后新增，不推翻既有门铃/恢复结论。
+Codex×OpenCode 现役 pair 在下一次自然 Milestone / Decision 汇报时补验；不为补验中断或重启 agent。

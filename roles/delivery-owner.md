@@ -63,8 +63,8 @@ noise:  <已知与本 diff 无关的失败>
 - 影响其他轨/仓的事实 → 写本仓移交单目录（默认 `docs/handoffs/`）消息文件（templates/message.md）
   并传棒请 Spec Owner/owner 建 inbox 卡；当前 runtime 无 kanban 能力不是跳过投递的理由。
 
-## 传棒与 peer 消息
+## 消息、交棒与 owner 汇报
 
 - **阶段完成 = 落盘 commit + 主动门铃**；送达后结束 turn，不 `sleep` 或轮询；
-  新消息到达才动（Stage 0 另发 notification 给 owner，✅）；
-- `baton.sh peers` 查全局状态、`send <全局名>` 跨 session；peer 只认路径/verdict，不能代 owner 拍板。
+  新消息到达才动；`baton.sh peers/send` 可跨 session，peer 只认路径/verdict、不能代 owner 拍板；
+- 凡向 owner 汇报，按 `protocol/owner-report.md` 做一屏摘要，不把读工件和提炼结论外包给 owner。

@@ -49,7 +49,8 @@ Delivery Owner 时建议列原样摘录其 verdict，真源仍在工作仓 revie
 
 ## 通知方式
 
-- `herdr notification show "<类型>: <一句话>" --body "<文件路径>"`；
+- 当前 turn 末尾先按 `owner-report.md` 的 Decision / Incident 变体输出自含汇报；
+- 再用 `herdr notification show "<类型>: <一句话>" --body "<文件路径>"` 提醒；
 - pane 转入 blocked 状态（sidebar 可见）。
 
 ## Open decision 的落点路由（2026-08-15 拍板）

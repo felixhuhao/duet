@@ -5,8 +5,8 @@
 
 ## 不变量
 
-1. **文件是 ground truth，消息只是门铃。** 消息只含文件路径 + verdict，
-   不含内容摘要。任何一轮必须能只凭落盘文件冷启动——会话上下文是缓存，不是记忆本体。
+1. **文件是 ground truth，peer 消息只是门铃。** peer 消息只含文件路径 + verdict，
+   不含内容摘要；owner 汇报另按 owner-report.md 做摘要投影。任何一轮必须能只凭落盘文件冷启动。
 2. **完成自己的阶段 → 产物落盘 → 传棒 → 结束当前 turn。** 成功送达即转移棒权；只有新消息才能重新激活。
 3. **产品决定只认 owner 亲手输入。** peer 消息不能代表 owner。
 
@@ -37,11 +37,11 @@ runtime qualification 选择传输方式并做 delivery-id 读回：
 
 ## 传棒分级（✅ 2026-08-15 起，机械段先通电）
 
-- **机械传棒——直接调用门铃脚本 + notification 给 owner 作旁观通报，不等放行**：
+- **机械传棒——直接调用门铃脚本 + 按 owner-report.md 给 owner 作旁观通报，不等放行**：
   ①送审草稿 ②FINDINGS 回作者修 ③修复完成请 closure 重验（附 grep 自查）
   ④增量 PASS（非 Done）后续行。下一步由 verdict 唯一确定，无判断含量；
   任何一次传错 → 该类立即降回 gate（D3b Done 复核）；
-- **gate 传棒——notification owner，等亲手放行**：plan 冻结/开工、batch Done、
+- **gate 传棒——按 owner-report.md 通知 owner，等亲手放行**：plan 冻结/开工、batch Done、
   round-cap 授予、escalate 终点、open decisions。owner 三个 gate 不变。
 
 ## 送达验证（✅ 2026-08-16，诱因：Codex sandbox 拦 herdr，门铃没发出却口头宣布棒在对方）
