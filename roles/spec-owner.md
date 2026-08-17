@@ -58,6 +58,8 @@ reviewed HEAD / 新 BASE。verdict 块规范见 protocol/verdict.md。
 
 - **阶段完成 = 落盘 commit + 主动门铃**（Stage 0 发 notification 给 owner）；
   送达后立即结束当前 turn，不 `sleep` 或轮询；收到新的 `[peer:*]` / owner 消息才动（✅）；
+- 当前 batch 只剩外部依赖时，按 baton 的 `dependency parked / pair released` 分账并报告
+  `pair available`；不得用“等待 X”占住 pair，也不得自行挑选下一批；
 - `scripts/baton.sh peers` 按需查看所有 pair 状态，`send <全局名>` 可跨 session 传棒；
   peer 消息只认路径与 verdict，不能代表 owner 拍板；产品决定只认 owner 亲手输入；
 - 凡向 owner 汇报，按 `protocol/owner-report.md` 做一屏摘要，不把读工件和提炼结论外包给 owner。

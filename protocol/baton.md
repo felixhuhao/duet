@@ -57,7 +57,13 @@ runtime qualification 选择传输方式并做 delivery-id 读回：
 
 - **只在自己持棒时跑到底**：做完交棒前无需 owner 的动作后传棒。合法停机只有两种：
   ①交棒送达后结束 turn；②撞 gate 并主动发出具体 gate 门铃。停机后的 idle 静默是正常状态；
-- 等 gate 期间，不依赖该 gate 的 slice 照常推进（并行边界条款不变）。
+- **依赖 parked，pair released**：当前 slice 若只剩外部 batch、跨仓交付或 owner gate 才能继续，
+  把已完成范围与剩余依赖分账，记录唯一唤醒事件，然后结束当前 turn 并明确向 owner 报告
+  `pair available`。不得把“等待 X”写成 pair 的下一项工作，不挂 `agent wait`、不轮询，
+  也不因该依赖保留 pair 的调度权；事件到达后再由门铃唤回该 slice；
+- released 只表示**可以接新任务**，不表示 agent 可以自行挑选下一批。owner 未亲手指定时保持 idle；
+  owner 指定其他独立任务后照常开工。等 gate 期间，已经授权且不依赖该 gate 的 slice 照常推进
+  （并行边界条款不变）。
 
 ## 收棒队列（✅ 2026-08-15，Codex Tab 队列已实测：QUEUED-OK）
 

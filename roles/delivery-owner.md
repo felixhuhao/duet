@@ -67,4 +67,6 @@ noise:  <已知与本 diff 无关的失败>
 
 - **阶段完成 = 落盘 commit + 主动门铃**；送达后结束 turn，不 `sleep` 或轮询；
   新消息到达才动；`baton.sh peers/send` 可跨 session，peer 只认路径/verdict、不能代 owner 拍板；
+- 当前 batch 只剩外部依赖时，按 baton 的 `dependency parked / pair released` 分账并报告
+  `pair available`；不得用“等待 X”占住 pair，也不得自行挑选下一批；
 - 凡向 owner 汇报，按 `protocol/owner-report.md` 做一屏摘要，不把读工件和提炼结论外包给 owner。
