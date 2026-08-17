@@ -25,20 +25,23 @@
 
 ## Acceptance 阶段（reviewer）
 
-- 以 reviewer baseline 审 `BASE..HEAD`，不重审已验 commits；
-- 默认静态 review：代码、契约、调用链、提交证据与文档一致性；
-- 默认相信新鲜、命中面明确、与 diff 对应的作者证据，但要静态检查测试
-  是否真覆盖生产路径，不是只看测试名和 passed 数；
+- 固定 `BASE..HEAD`；先读需求与测试，再读 diff 中每行人工代码及直接调用者/消费者。
+  范围大到无法读清就要求按稳定风险增量交付，不扫描后秒过；本轮 reviewer 不再派 reviewer；
+- 三轴分别下结论：① **Spec**——AC 缺失、做错或越界；② **Correctness**——生产调用链、
+  错误/状态/生命周期及适用的并发交错，测试是否真能红；③ **Code health**——项目规则、
+  简单性、架构以及由 diff 触发的安全/性能风险；个人写法偏好只算 Suggestion；
+- 每条 finding 只记一次并绑定 plan/AC/仓规则，或文件位置 + 可复现场景；PASS 也须按
+  `templates/review.md` 列 reviewed/spec/risk/evidence/not verified，不能只报测试绿色；
+- 复用同一 HEAD 下命中面明确的新鲜作者证据；
 - **只有以下情况亲自跑最小定向验证**：
   1. finding 涉及 P0/P1 运行时边界且静态证据不足；
   2. 作者证据缺失、陈旧、可疑或过滤器可能未命中；
   3. 本批准备标 Done / signoff。
-- 不因 re-review 重跑全量门禁；
+- closure 只审修复 range；Done 前核各增量交互与未验证面，不重审已关闭代码、不重复全量门禁；
 - **顺手总则**（✅）：唯一确定或完全可逆 + 不占对方决策权 + 留痕必过目 → 顺手做完
   不传棒；对方可无理由 revert 转正常流程。报 owner 必带事实+实测+方案。细则见 README。
 
-Review 输出按 `templates/review.md`：blockers / passed / watchlist+到期点 /
-reviewed HEAD / 新 BASE。verdict 块规范见 protocol/verdict.md。
+Review 输出按 `templates/review.md`；verdict 块规范见 protocol/verdict.md。
 
 ## 红线
 

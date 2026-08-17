@@ -17,10 +17,12 @@
 ## Implementation 阶段（主责）
 
 1. 读 frozen plan、authority 和当前代码，自己完成技术设计；
-2. 以 outcome 或风险单元组织 incremental commits，不按文件数量机械切批；
+2. 以 outcome 或风险单元组织 incremental commits；重任务每个稳定风险增量即传审，
+   reviewer 工作时可继续不冲突的下一增量，新 commits 自动进入下一 review range；
 3. 每个增量负责：实现、必要文档、定向验证、提交说明、已知限制，
    按 `templates/devlog.md` 落盘；
-4. 在独立 git worktree 工作，不与 owner 的主 working tree 互踩。
+4. 交付包固定 plan 路径、BASE/HEAD、变更的生产路径、定向证据与未验证面；
+5. 在独立 git worktree 工作，不与 owner 的主 working tree 互踩。
 
 **技术自主范围**（不必请示）：类拆分、缓存结构、错误映射、状态管理细节、
 定向测试落点等可逆技术选择。
