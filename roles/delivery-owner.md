@@ -40,6 +40,9 @@
 - **AC 展开成 testcases（按项目工件规范）归实现者**；reviewer 只静态核对 TC 是否
   真覆盖生产路径，不代写；
 - 写码期间只跑最小相关测试；高风险单元补"能证明故障会被抓住"的定向测试；
+- 测试挂死、命令超时或重复无进展时，必须执行 `protocol/diagnostic-budget.md`：同一失败签名
+  只允许“首次观察 + 一次先写假设的判别性重试”。改秒数/换 probe/宽泛 `pkill` 不算诊断；
+  预算耗尽即落 `DIAGNOSTIC_BUDGET_EXHAUSTED`、传棒并停受影响 slice；
 - 阶段收口跑约定门禁一次；不为每个小 commit 重跑全量；
 - 每个增量的证据块格式（写入 devlog）：
 

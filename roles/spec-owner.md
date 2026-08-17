@@ -50,6 +50,8 @@ reviewed HEAD / 新 BASE。verdict 块规范见 protocol/verdict.md。
   条款 + 代码证据，认为是实现 bug 包装的走争议通道 escalate；免责不免修；
 - 相邻产品问题不免费加入当前批次；
 - closure 时逐条核销本轮到期的 watchlist，展期必须给理由；
+- 收到 `DIAGNOSTIC_BUDGET_EXHAUSTED` 时按 `protocol/diagnostic-budget.md` 核账；同一失败签名
+  不得要求第三次执行，除非 owner 明确追加预算或出现能改变判读的新外部证据；
 - closure 时逐条重提 decision-log 中悬置的 ⬜ OD，或提请 owner 显式搁置；
 - 发现影响其他轨/仓的事实 → 按 protocol/inbox.md 投递（outbox 文件 + inbox 卡 +
   门铃），不改对方仓；closure 时按标题前缀查一次本仓 inbox 卡。

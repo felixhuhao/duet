@@ -64,6 +64,8 @@ runtime qualification 选择传输方式并做 delivery-id 读回：
 - released 只表示**可以接新任务**，不表示 agent 可以自行挑选下一批。owner 未亲手指定时保持 idle；
   owner 指定其他独立任务后照常开工。等 gate 期间，已经授权且不依赖该 gate 的 slice 照常推进
   （并行边界条款不变）。
+- 命中 `protocol/diagnostic-budget.md` 的 `DIAGNOSTIC_BUDGET_EXHAUSTED` 也是合法停机：
+  先落诊断短账并传给 Spec Owner，再结束 turn；不得把第三次同症状执行当作“继续工作”。
 
 ## 收棒队列（✅ 2026-08-15，Codex Tab 队列已实测：QUEUED-OK）
 

@@ -35,6 +35,9 @@
    [baton](protocol/baton.md) 与 [owner-report](protocol/owner-report.md)。
 7. **Escalate 必附 agent 自己的推荐判定**，用于校准自动判定规则。
    见 [protocol/escalation.md](protocol/escalation.md)。
+8. **同一超时症状只有一次判别性重试。** 改秒数、换 probe 名或重复强杀不算新证据；
+   预算耗尽即停受影响 slice、交出诊断账，不把 test runner 的内部 timeout 冒充整条命令的墙钟上限。
+   见 [diagnostic-budget](protocol/diagnostic-budget.md)。
 
 ## Finding 分级
 
@@ -63,7 +66,7 @@ track ⊃ batch ⊃ increment ⊃ slice
 
 ```text
 roles/        spec-owner / delivery-owner —— 两张职责角色卡，与 runtime 客户端无关
-protocol/     baton / verdict / escalation / owner-report / runtime —— 传棒、结论、升级、汇报、运行时
+protocol/     baton / verdict / escalation / owner-report / runtime / diagnostic-budget —— 传棒、结论、升级、汇报、运行时、诊断预算
 calibration/  decision-log（校准记录）+ stage（阶段梯子与毕业状态）
 templates/    plan / devlog / review 三件套模板，实例化到工作仓库
 scripts/      已验证的 herdr pair 启动、门铃与态势工具
