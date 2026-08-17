@@ -1,6 +1,7 @@
 # duet
 
-Claude × Codex 双角色开发流程的**定义仓库**。管流程本身，不管任何一批具体开发的实例文件。
+双职责角色开发流程的**定义仓库**。管流程本身，不管任何一批具体开发的实例文件；
+职责角色与运行时客户端解耦，同一张角色卡可以由 Codex、Claude Code、OpenCode 等客户端承担。
 
 > 前身：`~/Workspace/docs/Claude-Codex双角色开发模式-待拍板草案.md`（保留作历史稿）。
 > 状态：**Stage 1**（2026-08-16 起，见 calibration/stage.md）。宪法 2026-08-15 拍定；
@@ -19,12 +20,12 @@ Claude × Codex 双角色开发流程的**定义仓库**。管流程本身，不
 
 ## 核心原则
 
-1. **每阶段一个交付 owner，另一方独立 review。** Plan 由 Claude 主笔、Codex review；
-   Implementation 由 Codex 主写、Claude 验收。Reviewer 指出可证明的问题，不遥控实现细节。
+1. **每阶段一个交付 owner，另一方独立 review。** Plan 由 Spec Owner 主笔、Delivery Owner review；
+   Implementation 由 Delivery Owner 主写、Spec Owner 验收。Reviewer 指出可证明的问题，不遥控实现细节。
 2. **Plan 要 decision-complete，不要 implementation-complete。** 说清 outcome、scope、
    redlines、AC；不预定类名、目录和测试落点。
 3. **技术选择归实现者，产品选择归 owner。** 产品选择必须走 open-decision 通道，
-   触发条件见 [roles/codex.md](roles/codex.md)。
+   触发条件见 [roles/delivery-owner.md](roles/delivery-owner.md)。
 4. **Finding 必须绑定依据**：已放行 outcome/AC、redline/authority、可复现 regression、
    P0/P1 运行时边界、或证据未覆盖的关键路径。"我会换种写法"不构成 blocker。
 5. **每个增量最多两轮 review**（substantive + closure），超限强制 escalate。
@@ -60,14 +61,15 @@ track ⊃ batch ⊃ increment ⊃ slice
 ## 仓库结构
 
 ```text
-roles/        claude.md / codex.md —— 两张角色卡，各自工作时唯一需要读的执行面
-protocol/     baton / verdict / escalation —— 传棒、结论块、升级的机制规范
+roles/        spec-owner / delivery-owner —— 两张职责角色卡，与 runtime 客户端无关
+protocol/     baton / verdict / escalation / runtime —— 传棒、结论块、升级、运行时绑定
 calibration/  decision-log（校准记录）+ stage（阶段梯子与毕业状态）
 templates/    plan / devlog / review 三件套模板，实例化到工作仓库
-scripts/      herdr workspace 搭建等（待 herdr 本地验证后补）
+scripts/      已验证的 herdr pair 启动、门铃与态势工具
 ```
 
-工作仓库接入方式：`CLAUDE.md` / `AGENTS.md` 各加一行指向对应角色卡。**工件（plan/评审/
+工作仓库接入方式：项目 `AGENTS.md` 声明 duet 入口；每次 pair 启动由 runtime manifest 和
+冷启动 prompt 把当前客户端绑定到对应角色卡。**工件（plan/评审/
 devlog/移交单）按宿主仓的功能/类型惯例归档与命名，不以流程名建目录或命名文件**——流程
 只活在角色卡、脚本与 commit 纪律里，不在仓里留品牌；文内首次提及流程时一句话自述；
 多人仓落点遵仓 owner 惯例。`templates/` 是字段契约，不是落点约定。
@@ -102,7 +104,7 @@ devlog/移交单）按宿主仓的功能/类型惯例归档与命名，不以流
   redlines/AC/open decisions 一页）必过 owner 的眼；增量级 pass 不经 owner；batch 标 Done
   前 owner ack 一次。Stage 0 不受影响（棒全经 owner）。
 - **Plan errata 机制采用**：实现暴露的 plan 缺陷记 errata、不算实现者 finding；立 errata
-  必须引用 plan 具体条款 + 暴露它的代码证据；Claude 质疑是包装的走争议通道；免责不免修；
+  必须引用 plan 具体条款 + 暴露它的代码证据；Spec Owner 质疑是包装的走争议通道；免责不免修；
   影响 scope/AC 时局部重开。
 - **三层分工**：duet 只管 agent 间的权力与循环机制（角色/传棒/verdict/轮次/escalation/校准/
   errata），机制条款项目不可覆盖（否则校准跨项目不可比），修订须经 owner；工件规范归

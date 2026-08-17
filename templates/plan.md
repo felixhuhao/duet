@@ -4,6 +4,7 @@
 status:  draft | frozen（冻结日期）
 batch:   <track>-<批次号>
 BASE:    <冻结时的 repository commit SHA>
+pair:    spec_owner=<herdr name>/<runtime> · delivery_owner=<herdr name>/<runtime>
 ```
 
 ## Outcome

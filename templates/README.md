@@ -7,6 +7,7 @@
 
 - **plan**：outcome / scope 与 out-of-scope / redlines+authority 来源 / 可观察 AC /
   open decisions / Errata 节（追加式）/ 冻结状态与 BASE；
+  活跃 pair 另须声明 spec_owner / delivery_owner 各自的 herdr name、runtime kind 与角色卡；
   跨仓 batch（仅限同 owner 多仓的声明式例外）另须声明：仓清单 + 各仓 writable scope +
   各仓 BASE；跨仓特性的子 batch 须链接父需求文档（authority 仓）；
 - **devlog（或等价实施记录）**：增量 commits 范围 / 证据块（cmd·scope·result·noise）/

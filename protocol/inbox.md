@@ -16,8 +16,8 @@
 
 ## 流程
 
-1. 发送方写 outbox 文件并 commit（Codex 无 kanban MCP：写完文件传棒
-   Claude 或报 owner 代建卡，这不是跳过建卡的理由）；
+1. 发送方写 outbox 文件并 commit；当前 runtime 无 kanban 能力时，写完文件传棒给
+   有该能力的 peer，或报 owner 代建卡——能力缺失不是跳过建卡的理由；
 2. 建 inbox 卡：标题 `[→<repo或worktree>] <一行摘要>`；description 填
    payload 锚（`仓:分支:路径 @ commit`）、类型、到期点；
 3. 接收方 pane 正在跑时补一记 herdr 门铃（push 兜底 pull）；

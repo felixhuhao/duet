@@ -5,7 +5,7 @@
 命中任何一条即出循环，通知 owner：
 
 1. round 2/2 结束仍有未关闭 P0/P1 或双方争议（protocol/verdict.md）；
-2. open-decision 触发条件命中（roles/codex.md，产品选择类立即触发，不等轮次）；
+2. open-decision 触发条件命中（roles/delivery-owner.md，产品选择类立即触发，不等轮次）；
 3. 任一方认为继续会撞 redline 或需要 owner 显式接受风险。
 
 ## Escalate 必附推荐判定（校准的核心）
@@ -20,16 +20,16 @@
 
 类型取值：`round-cap` / `P0P1-dispute` / `open-decision` / `redline-risk` / `baton-confirm`。
 
-## 路由：Codex 的 escalate 经 Claude 中继（✅ 2026-08-15）
+## 路由：Delivery Owner 的 escalate 经 Spec Owner 中继（✅ 2026-08-15）
 
-- Codex escalate → 门铃 Claude；Claude 只做三个**加法**动作：复核事实、附议或
+- Delivery Owner escalate → 门铃 Spec Owner；Spec Owner 只做三个**加法**动作：复核事实、附议或
   ≤10 行反对立场、记 decision-log / 按需建卡 → 整理包 notification 给 owner；
 - **闸**：escalation 只有 owner 能关闭——复核为「不成立」也照样上报（附立场）；
-  Codex 原文永远在工作仓 review 文件，owner 可绕过整理包直读；收到门铃本回合内
+  Delivery Owner 原文永远在工作仓 review 文件，owner 可绕过整理包直读；收到门铃本回合内
   转呈，不积压；
 - **例外**：疑似 P0 / redline（stop 类）不走中继——停 slice 同时直接 notification
-  owner + 门铃 Claude 并行，整理事后补；
-- Claude 自己发起的直达 owner（它即整理者）；争议类先给 Codex 附立场机会。
+  owner + 门铃 Spec Owner 并行，整理事后补；
+- Spec Owner 自己发起的直达 owner（它即整理者）；争议类先给 Delivery Owner 附立场机会。
 
 ## 争议格式
 
@@ -43,8 +43,8 @@
 **工作仓**的 review / plan / devlog 里，且对没有 duet 访问权的读者自含。
 duet 只存机制定义与校准数据：**decision-log 行 = 索引级摘要**——一句话上下文 +
 建议结论 + 裁决结论 + 指向工作仓真源的路径，不复制依据长文。
-**记录者唯一**（✅）：decision-log 由 Claude 统一写，一次 escalation 一行；发起方是
-Codex 时建议列原样摘录其 verdict，真源仍在工作仓 review 文件。两处长文必漂移，
+**记录者唯一**（✅）：decision-log 由 Spec Owner 统一写，一次 escalation 一行；发起方是
+Delivery Owner 时建议列原样摘录其 verdict，真源仍在工作仓 review 文件。两处长文必漂移，
 且 duet 是私有仓，写进来的内容团队永远看不见。
 
 ## 通知方式

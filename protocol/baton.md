@@ -11,26 +11,29 @@
 
 ## 消息格式
 
-通过 `herdr pane send-text <对方pane> "..."` + `send-keys enter` 发送：
+统一通过 `scripts/baton.sh send <对方agent或pane> <from-role> "..."` 发送；脚本按
+runtime qualification 选择传输方式并做 delivery-id 读回：
 
 ```text
-[peer:claude] plan ready: docs/plans/2026-08-15-X-开发计划.md · round 1/2 · 请按角色卡 review，结论写同目录-计划评审.md
-[peer:codex] VERDICT: FINDINGS · review-D3a.md · round 1/2 · P1x2，棒在你
+[peer:spec_owner] plan ready: docs/plans/2026-08-15-X-开发计划.md · round 1/2 · 请按角色卡 review，结论写同目录-计划评审.md
+[peer:delivery_owner] VERDICT: FINDINGS · review-D3a.md · round 1/2 · P1x2，棒在你
 ```
 
 要素：`[peer:<自己>]` 前缀 · 事件 · 文件路径 · 轮次 · verdict（如有）。一行说完。
+`<对方agent或pane>` 必须取 runtime 启动记录里的 Herdr 实例名或 pane id（如 `role1`），
+不能把职责名 `spec_owner` / `delivery_owner` 直接当作目标。
 
 ## 交棒是 push，不做监听（✅ 2026-08-15，owner 指令废除 listen 模式）
 
 - **交棒是完成动作的一部分**：产物落盘 + commit 后，完成方立即主动发门铃——
-  send-text 对方 pane + enter（Stage 0 改发 notification 给 owner）。
+  调用门铃脚本（Stage 0 改发 notification 给 owner）。
   **没有门铃 = 阶段未完成**；
 - 接收方不监听对方状态：不挂 `agent wait` 轮询，收到 `[peer:*]` 消息才动。
   sidebar 状态与 `agent wait --until blocked` 仅供 owner 旁观与卡死排查。
 
 ## 传棒分级（✅ 2026-08-15 起，机械段先通电）
 
-- **机械传棒——直接 send-text 对方 + notification 给 owner 作旁观通报，不等放行**：
+- **机械传棒——直接调用门铃脚本 + notification 给 owner 作旁观通报，不等放行**：
   ①送审草稿 ②FINDINGS 回作者修 ③修复完成请 closure 重验（附 grep 自查）
   ④增量 PASS（非 Done）后续行。下一步由 verdict 唯一确定，无判断含量；
   任何一次传错 → 该类立即降回 gate（D3b Done 复核）；
@@ -39,7 +42,7 @@
 
 ## 送达验证（✅ 2026-08-16，诱因：Codex sandbox 拦 herdr，门铃没发出却口头宣布棒在对方）
 
-- **宣布交棒的唯一依据是门铃命令成功返回**（send-text + 按键零退出）。「我说了棒在
+- **宣布交棒的唯一依据是门铃脚本成功返回**（含 runtime 适配与 delivery-id 读回）。「我说了棒在
   对方」不是交棒，「门铃命令成功执行」才是；
 - 发完读一次对方 pane（`--source visible`）确认消息已出现；命令失败或读不到 →
   阶段状态是「**完成但传棒失败**」，把 DELIVERY FAILED 写进本轮落盘文件并报 owner
@@ -56,11 +59,12 @@
 
 ## 收棒队列（✅ 2026-08-15，Codex Tab 队列已实测：QUEUED-OK）
 
-- **发送端状态感知**（单次查询，非监听）：目标是忙碌的 Codex → send-text + **Tab**
-  （runtime 原生排队，turn 结束才投递）；其余 → Enter。用 `baton.sh send` 自动判。
-  忙碌的 Claude 直接 Enter 即可（2026-08-16 实测：消息入可见队列，下一个工具调用
-  边界成批按序注入，turn 不中断——天然温和，无需 Tab 等价物）。
-  **steering（对 Codex Enter 打断忙碌方）是 stop 类专属特权**；
+- **发送端状态感知**（单次查询，非监听）：职责消息与 runtime 投递分开；由
+  `scripts/baton.sh` 按目标 agent kind 选择已验证的提交方式。Codex working 使用 Tab 入队；
+  OpenCode 1.18 的 prompt 会并入当前 turn，因此 adapter 先做一次 server-owned settle wait，
+  再作为新 turn 投递（这是 push 送达动作的一部分，不是接收方 listen）；其他 kind 只有通过
+  protocol/runtime.md qualification 后才能在 working 状态接普通门铃；
+  **steering 是 stop 类专属特权**；
 - **接收端收棒不弃手头**：手头有未收口阶段，先推进到收口点（落盘 + commit）再处理
   队列；处理顺序：owner 亲手输入 > stop 类 > gate 相关 > 机械棒 FIFO；
 - 门铃丢失无害：下一步永远可从 verdict / 棒位状态重建（文件是 ground truth）。

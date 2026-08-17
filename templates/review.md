@@ -3,6 +3,7 @@
 ```text
 round:         <1|2>/2
 BASE:          <reviewer baseline SHA>
+COVERS:        <本轮覆盖的 commit / range>
 reviewed HEAD: <本轮冻结的 HEAD SHA>
 ```
 

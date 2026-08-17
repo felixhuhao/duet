@@ -20,7 +20,8 @@
 | `track` | `全局` `B钱` `D对话` `E分身` `C经营` `AGT` `跨仓` … | 全部 |
 | `batch` | `B8` `D4` `D3b` … | batch 级工件 |
 | `status` | `draft` `frozen` `in-progress` `pending-owner` `paused` `done` `archived` `open` | 全部 |
-| `baton` | `claude` `codex` `owner` `none` | 活跃 batch |
+| `baton` | `spec_owner` `delivery_owner` `owner` `none` | 活跃 batch |
+| `spec_runtime` / `delivery_runtime` | `codex` `claude` `opencode` … | 活跃 batch 的职责绑定 |
 | `round` | `1/2` 等（照 verdict 块抄） | review |
 | `base` / `covers` | 短 SHA | plan / review |
 | `blocked_on` | 列表：`["B4 ← D2b", "owner: 拍板"]` | 有阻塞时 |
