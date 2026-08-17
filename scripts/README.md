@@ -6,15 +6,17 @@
 - `pair-setup.sh <spec-dir> [delivery-dir] [label] [spec-kind] [delivery-kind]` —— 建命名 pair；
   默认 `<session>-spec=codex`、`<session>-delivery=opencode`，也可通过 kind 参数替换客户端；
 - `herdr-setup.sh <work-repo> [codex-dir] [label]` —— 旧 Claude/Codex 组合的兼容入口；
-- `herdr-federation.py peers|resolve` —— 聚合 running sessions，不缓存、不轮询；
+- `herdr-federation.py peers|resolve|verify` —— 聚合 running sessions，并从 terminal + 前台进程
+  计算本次 incarnation；不缓存、不轮询；
 - `baton.sh peers|send|wait|read|escalate` —— 全局名称路由与门铃 helper。
 - `owner-turns.py` / `stop-turns.py` —— Claude/Codex JSONL 复盘；OpenCode 先经
   `opencode-turns.py <session-id>` 归一后从 stdin 输入。
 
-每个 pair 使用独立命名 session，实例名须全局唯一（推荐 `<pair>-spec/delivery`）。恢复时保留名字：
+每个 pair 使用独立命名 session，实例名须全局唯一（推荐 `<pair>-spec/delivery`）。名字是路由，
+`instance_id` 才标识本次进程；`baton.sh send` 会在提交前后校验并把它写入门铃。恢复时保留名字：
 Codex 用 `herdr agent start ... -- resume <session-id>`；
 OpenCode 用 `herdr agent start ... -- --session <session-id>`。恢复后必须用上一轮 delivery id
-做一次上下文连续性检查。
+做一次上下文连续性检查，并用 `baton.sh peers` 取得新的 instance_id。
 
 Codex 通过 `workspace-full` permission profile 访问 Herdr；每新增命名 session，须把它的
 `herdr.sock` 精确加入该 profile 的 `network.unix_sockets` allowlist，再启动/恢复 Codex。

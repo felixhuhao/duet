@@ -16,11 +16,11 @@
 runtime qualification 选择传输方式并做 delivery-id 读回：
 
 ```text
-[peer:spec_owner] plan ready: docs/plans/2026-08-15-X-开发计划.md · round 1/2 · 请按角色卡 review，结论写同目录-计划评审.md
-[peer:delivery_owner] VERDICT: FINDINGS · review-D3a.md · round 1/2 · P1x2，棒在你
+[peer:spec_owner] [delivery:d...] [to-instance:i-...] plan ready: docs/plans/2026-08-15-X-开发计划.md · round 1/2 · 请按角色卡 review
+[peer:delivery_owner] [delivery:d...] [to-instance:i-...] VERDICT: FINDINGS · review-D3a.md · round 1/2 · P1x2，棒在你
 ```
 
-要素：`[peer:<自己>]` 前缀 · 事件 · 文件路径 · 轮次 · verdict（如有）。一行说完。
+要素：脚本生成的 peer/delivery/instance 前缀 · 事件 · 文件路径 · 轮次 · verdict（如有）。一行说完。
 目标必须取 runtime 启动记录里的**全局唯一实例名**（如 `b-spec`）；`baton.sh peers` 可实时
 查看所有 session 的状态。pane id 只在 session 内唯一，职责名也不能直接当目标。
 
@@ -51,6 +51,7 @@ runtime qualification 选择传输方式并做 delivery-id 读回：
   阶段状态是「**完成但传棒失败**」，把 DELIVERY FAILED 写进本轮落盘文件并报 owner
   （notification 可用就用，全断就停在原地），**禁止宣布棒已传出**；
 - 门铃工具不可用是环境事故：报 owner 修环境，不得静默降级成「对方会来看文件」。
+- 名字只定位 agent，instance 才定位本次进程；复验不一致或为 `unknown/dead` 均按送达失败处理。
 
 ## 停机条件（✅ 2026-08-17，明确交棒后的 turn 边界）
 

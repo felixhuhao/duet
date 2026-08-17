@@ -92,9 +92,14 @@ P2="$(printf '%s\n' "$SPLIT_JSON" | python3 -c 'import json,sys; print(json.load
 hcmd agent start "$SPEC_NAME" --kind "$SPEC_KIND" --pane "$P1" --timeout 120000
 hcmd agent start "$DELIVERY_NAME" --kind "$DELIVERY_KIND" --pane "$P2" --timeout 120000
 
+SPEC_ROUTE="$(python3 "$SCRIPT_DIR/herdr-federation.py" resolve "$SESSION_NAME/$SPEC_NAME")"
+DELIVERY_ROUTE="$(python3 "$SCRIPT_DIR/herdr-federation.py" resolve "$SESSION_NAME/$DELIVERY_NAME")"
+SPEC_INSTANCE="$(printf '%s\n' "$SPEC_ROUTE" | python3 -c 'import json,sys; print(json.load(sys.stdin)["instance_id"])')"
+DELIVERY_INSTANCE="$(printf '%s\n' "$DELIVERY_ROUTE" | python3 -c 'import json,sys; print(json.load(sys.stdin)["instance_id"])')"
+
 cat <<DONE
 workspace: $LABEL
-spec_owner:     $SPEC_NAME · $SPEC_KIND · $P1 · $SPEC_DIR
-delivery_owner: $DELIVERY_NAME · $DELIVERY_KIND · $P2 · $DELIVERY_DIR
-下一步: 分别发送只读冷启动 prompt；qualification 通过前不得进入产品 batch。
+spec_owner:     $SPEC_NAME · $SESSION_NAME · $SPEC_KIND · $SPEC_INSTANCE · $P1 · $SPEC_DIR
+delivery_owner: $DELIVERY_NAME · $SESSION_NAME · $DELIVERY_KIND · $DELIVERY_INSTANCE · $P2 · $DELIVERY_DIR
+下一步: 分别发送只读冷启动 prompt，并让其回报 instance/棒位；qualification 通过前不得进入产品 batch。
 DONE

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import subprocess
@@ -16,6 +17,16 @@ HERDR = os.environ.get("HERDR_BIN", "herdr")
 
 class FederationError(RuntimeError):
     pass
+
+
+STATUS_MAP = {
+    "working": "working",
+    "idle": "idle",
+    "blocked": "blocked",
+    "done": "dead",
+    "dead": "dead",
+    "exited": "dead",
+}
 
 
 def run_json(args: list[str]) -> dict[str, Any]:
@@ -39,6 +50,40 @@ def run_json(args: list[str]) -> dict[str, Any]:
     return payload
 
 
+def process_identity(session: str, name: str, raw: dict[str, Any]) -> dict[str, Any]:
+    """Build an opaque incarnation from the live terminal and foreground process."""
+    pane = raw.get("pane_id", "")
+    process_id: int | str = ""
+    if pane:
+        try:
+            result = run_json(["--session", session, "pane", "process-info", "--pane", pane])
+            process = result.get("result", {}).get("process_info", {})
+            process_id = process.get("foreground_process_group_id", "")
+        except FederationError:
+            pass
+
+    agent_session = raw.get("agent_session") or {}
+    agent_session_id = agent_session.get("value", "")
+    terminal_id = raw.get("terminal_id", "")
+    if not terminal_id or not process_id:
+        return {"instance_id": "", "process_id": process_id, "agent_session_id": agent_session_id}
+
+    material = "\0".join((session, name, terminal_id, str(process_id))).encode()
+    instance_id = "i-" + hashlib.sha256(material).hexdigest()[:12]
+    return {
+        "instance_id": instance_id,
+        "process_id": process_id,
+        "agent_session_id": agent_session_id,
+    }
+
+
+def semantic_status(raw_status: str, instance_id: str) -> str:
+    status = STATUS_MAP.get(raw_status, "unknown")
+    if status in {"working", "idle", "blocked"} and not instance_id:
+        return "unknown"
+    return status
+
+
 def discover() -> list[dict[str, Any]]:
     sessions = run_json(["session", "list", "--json"]).get("sessions", [])
     agents: list[dict[str, Any]] = []
@@ -57,6 +102,8 @@ def discover() -> list[dict[str, Any]]:
             if not agent_name:
                 continue
             workspace_id = raw.get("workspace_id", "")
+            identity = process_identity(name, agent_name, raw)
+            raw_status = raw.get("agent_status", "unknown")
             agents.append(
                 {
                     "name": agent_name,
@@ -65,8 +112,10 @@ def discover() -> list[dict[str, Any]]:
                     "workspace_label": workspace_labels.get(workspace_id, ""),
                     "pane": raw.get("pane_id", ""),
                     "kind": raw.get("agent", "unknown"),
-                    "status": raw.get("agent_status", "unknown"),
+                    "status": semantic_status(raw_status, identity["instance_id"]),
+                    "raw_status": raw_status,
                     "cwd": raw.get("foreground_cwd") or raw.get("cwd", ""),
+                    **identity,
                 }
             )
     return sorted(agents, key=lambda item: (item["session"], item["name"]))
@@ -94,8 +143,18 @@ def resolve(agents: list[dict[str, Any]], target: str) -> dict[str, Any]:
     return matches[0]
 
 
+def verify(agents: list[dict[str, Any]], target: str, instance_id: str) -> dict[str, Any]:
+    current = resolve(agents, target)
+    if not instance_id or current.get("instance_id") != instance_id:
+        actual = current.get("instance_id") or "unverified"
+        raise FederationError(
+            f"stale agent instance: {target} expected {instance_id or 'unverified'}, got {actual}"
+        )
+    return current
+
+
 def print_table(agents: list[dict[str, Any]]) -> None:
-    headers = ("NAME", "SESSION", "WORKSPACE", "RUNTIME", "STATUS", "PANE", "CWD")
+    headers = ("NAME", "SESSION", "WORKSPACE", "RUNTIME", "STATUS", "INSTANCE", "PANE", "CWD")
     rows = [
         (
             item["name"],
@@ -103,6 +162,7 @@ def print_table(agents: list[dict[str, Any]]) -> None:
             item["workspace_label"] or item["workspace"],
             item["kind"],
             item["status"],
+            item["instance_id"] or "unverified",
             item["pane"],
             item["cwd"],
         )
@@ -124,6 +184,9 @@ def main() -> int:
     peers_parser.add_argument("--json", action="store_true")
     resolve_parser = subparsers.add_parser("resolve")
     resolve_parser.add_argument("target")
+    verify_parser = subparsers.add_parser("verify")
+    verify_parser.add_argument("target")
+    verify_parser.add_argument("instance_id")
     args = parser.parse_args()
 
     try:
@@ -134,7 +197,11 @@ def main() -> int:
             else:
                 print_table(agents)
             return 0
-        print(json.dumps(resolve(agents, args.target), ensure_ascii=False))
+        if args.command == "resolve":
+            result = resolve(agents, args.target)
+        else:
+            result = verify(agents, args.target, args.instance_id)
+        print(json.dumps(result, ensure_ascii=False))
         return 0
     except (FederationError, subprocess.TimeoutExpired) as exc:
         print(f"HERDR FEDERATION ERROR: {exc}", file=sys.stderr)

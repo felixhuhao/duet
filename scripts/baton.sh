@@ -6,6 +6,7 @@
 #       实时列出所有 running Herdr session 中的命名 agent；不轮询、不缓存。
 #   baton.sh send <to-agent-name> <from-role> <message>
 #       组装 "[peer:<from-role>] <message>"，按目标 runtime 的已验证方式投递并读回。
+#       投递绑定实时 incarnation；提交前后发生重启则拒绝宣布送达。
 #       message 只放：事件 · 文件路径 · 轮次 · verdict。不放内容摘要。
 #   baton.sh wait <pane> [state]
 #       阻塞等待对方状态。⚠️ 协议主循环不用它（交棒是 push,见 protocol/baton.md）;
@@ -22,6 +23,10 @@ FEDERATION="$SCRIPT_DIR/herdr-federation.py"
 
 resolve_target() {
   python3 "$FEDERATION" resolve "$1"
+}
+
+verify_target() {
+  python3 "$FEDERATION" verify "$1" "$2" >/dev/null
 }
 
 route_field() {
@@ -55,14 +60,21 @@ case "$cmd" in
   send)
     to="${1:?to-agent-name}"; from="${2:?from-role}"; shift 2
     delivery_id="d$(date +%s)-$$"
-    msg="[peer:$from] [delivery:$delivery_id] $*"
     route="$(resolve_target "$to")"
     target_name="$(route_field "$route" name)"
     target_session="$(route_field "$route" session)"
     kind="$(route_field "$route" kind)"
     status="$(route_field "$route" status)"
     pane="$(route_field "$route" pane)"
+    instance_id="$(route_field "$route" instance_id)"
+    if [ -z "$instance_id" ]; then
+      echo "DELIVERY FAILED: $to 无法确认当前进程 incarnation" >&2
+      exit 4
+    fi
+    msg="[peer:$from] [delivery:$delivery_id] [to-instance:$instance_id] $*"
+    pinned_target="$target_session/$target_name"
     prompt_confirmed=false
+    verify_target "$pinned_target" "$instance_id"
     case "$kind:$status" in
       *:blocked)
         echo "DELIVERY DEFERRED: $to 正在等待批准/回答；普通门铃不得写入交互 UI" >&2
@@ -70,7 +82,7 @@ case "$cmd" in
         ;;
       codex:working)
         hcmd "$target_session" pane send-text "$pane" "$msg"
-        sleep 1
+        verify_target "$pinned_target" "$instance_id"
         hcmd "$target_session" pane send-keys "$pane" tab
         ;;
       opencode:working)
@@ -78,6 +90,7 @@ case "$cmd" in
         # 因此把一次 event-driven settle wait 作为 push 送达动作的一部分；不做轮询。
         hcmd "$target_session" agent wait "$target_name" --until idle --until done \
           --timeout "${DUET_DELIVERY_TIMEOUT_MS:-300000}" >/dev/null
+        verify_target "$pinned_target" "$instance_id"
         prompt_opencode
         ;;
       claude:working)
@@ -87,6 +100,10 @@ case "$cmd" in
         echo "runtime '$kind' 的 working 投递未 qualification；拒绝普通门铃" >&2
         exit 3
         ;;
+      *:dead|*:unknown)
+        echo "DELIVERY FAILED: $to 当前语义状态为 $status；不向不确定/已退出实例投递" >&2
+        exit 4
+        ;;
       opencode:*)
         prompt_opencode
         ;;
@@ -95,18 +112,19 @@ case "$cmd" in
         ;;
     esac
     sleep 1
+    verify_target "$pinned_target" "$instance_id"
     seen="$(hcmd "$target_session" agent read "$target_name" --source recent-unwrapped --lines 200 2>/dev/null || true)"
     if ! printf '%s\n' "$seen" | tr -d '[:space:]' | grep -Fq "$delivery_id"; then
       seen="$(hcmd "$target_session" agent read "$target_name" --source visible --lines 200 2>/dev/null || true)"
     fi
     if ! printf '%s\n' "$seen" | tr -d '[:space:]' | grep -Fq "$delivery_id"; then
       if [ "$kind" = "opencode" ] && [ "$prompt_confirmed" = true ]; then
-        echo "baton delivered → $target_session/$target_name ($kind/$status) · $delivery_id · state-confirmed"
+        echo "baton delivered → $target_session/$target_name@$instance_id ($kind/$status) · $delivery_id · state-confirmed"
         exit 0
       fi
       echo "DELIVERY FAILED: $delivery_id 未从目标读回；禁止宣布交棒" >&2; exit 4
     fi
-    echo "baton delivered → $target_session/$target_name ($kind/$status) · $delivery_id"
+    echo "baton delivered → $target_session/$target_name@$instance_id ($kind/$status) · $delivery_id"
     ;;
   wait)
     target="${1:?agent-name}"; state="${2:-idle}"

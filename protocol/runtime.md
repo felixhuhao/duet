@@ -13,11 +13,22 @@ sidebar 只显示本 session，跨 pair 状态由 `baton.sh peers` 按需查询�
 ## 每个 pair 必须声明
 
 ```text
-spec_owner:     <global herdr name> · <session> · <kind> · <cwd> · roles/spec-owner.md
-delivery_owner: <global herdr name> · <session> · <kind> · <cwd> · roles/delivery-owner.md
+spec_owner:     <global name> · <session> · <kind> · <instance_id> · <cwd> · roles/spec-owner.md
+delivery_owner: <global name> · <session> · <kind> · <instance_id> · <cwd> · roles/delivery-owner.md
 ```
 
-plan 或启动记录须保存这些项；calibration 同时记职责角色与 runtime，不能把客户端表现归因给角色。
+名字只负责路由；`instance_id` 由 terminal + 本次前台进程实时计算，重启即变化。门铃提交前后必须
+复验并带目标 instance，变化则按送达失败处理。plan 或启动记录须保存这些项；calibration 同时
+记职责角色与 runtime，不能把客户端表现归因给角色。
+
+## 状态与新上下文
+
+对外状态只用 `working / idle / blocked / unknown / dead`；未知 runtime 状态或无法确认本次进程
+一律归 `unknown`。`unknown/dead` 禁止普通门铃，且任何状态都不触发 heartbeat、自动唤醒或重启。
+
+模型切换但 session/context 未变，不重做冷启动。context reset、进程重启或换 session 后，先读项目
+规则、角色卡、frozen plan、最新 devlog/review、当前 HEAD 与棒位；回报新 instance 和下一动作后
+再收产品棒。恢复只重建上下文，不自行选下一任务、不启动自动 loop。
 
 ## Runtime 资格
 
@@ -25,7 +36,7 @@ plan 或启动记录须保存这些项；calibration 同时记职责角色与 ru
 
 1. 用 `herdr agent start <name> --kind <kind>` 启动，重启后名字与原会话都能恢复；
 2. 从真实工作目录读取项目规则与角色卡，并验证该 batch 所需目录权限；
-3. idle/working/blocked 可识别，跨 session 门铃有 delivery-id 回执；
+3. 五态可归一，跨 session 门铃有 delivery-id + target-instance 回执；
 4. working 时普通门铃不会 steering 或丢失，stop 类能安全停止受影响工作；
 5. 跑通一次 plan review → implementation review → owner gate，并生成一屏自含摘要。
 
