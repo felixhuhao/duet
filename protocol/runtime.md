@@ -31,7 +31,8 @@ plan 或启动记录须保存这些项；calibration 同时记职责角色与 ru
 4. working 时的普通门铃不 steering，按 FIFO 只消费一次；stop 类可以显式打断；
 5. 发送命令成功且以 delivery id 从目标 pane 读回；失败必须报 `DELIVERY FAILED`；
 6. owner gate、escalation 中继和一轮 FINDINGS→closure PASS 能走完；
-7. 两端能从同一份已提交工件生成符合 `owner-report.md` 的 synthetic Milestone / Decision 汇报；
+7. 两端能从同一份已提交工件生成符合 `owner-report.md` 的 synthetic Milestone / Decision 汇报，
+   删除其中全部链接后仍可独立理解和决策；
 8. runtime 缺通知、看板或外部目录权限时，capability fallback 能把动作交给 peer/owner。
 
 未通过的组合只能做 qualification，不得进入产品 batch。已通过组合出现一次坏 case，立即降级重验。

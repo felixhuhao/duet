@@ -9,7 +9,8 @@ reviewed HEAD: <本轮冻结的 HEAD SHA>
 
 ## 本轮摘要
 
-<按 protocol/owner-report.md 填：结论 / 完成 / 发现 / 值得看 / 需拍板 / 下一步；作为汇报真源>
+<按 protocol/owner-report.md 填：结论 / 完成及影响 / 发现及意义 / 需拍板 / 下一步；
+链接和“值得看”均为可选，删除链接后正文仍须自含>
 
 ## Current blockers
 
