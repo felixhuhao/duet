@@ -1,16 +1,23 @@
 # Runtime 绑定与资格协议
 
 职责角色固定，客户端可换：`spec_owner` = Plan 主笔 + Acceptance Reviewer；
-`delivery_owner` = Plan Reviewer + Implementation Owner。`role1` / `role2` 只是 herdr 活实例名。
+`delivery_owner` = Plan Reviewer + Implementation Owner。Herdr 活实例按 `<pair>-<role>` 唯一命名。
+
+## 多 pair 拓扑
+
+一个 pair 独占一个命名 Herdr session，因此多个 terminal 可分别显示完整 pair，互不争抢
+active workspace。`scripts/herdr-federation.py` 每次从所有 running session 实时聚合 agent；
+`baton.sh peers/send/read/wait` 据此跨 session 路由，不缓存状态、不发送 heartbeat。原生 TUI
+sidebar 只显示本 session，跨 pair 状态由 `baton.sh peers` 按需查询。
 
 ## 每个 pair 必须声明
 
 ```text
-spec_owner:     <herdr name> · <kind> · <cwd> · roles/spec-owner.md
-delivery_owner: <herdr name> · <kind> · <cwd> · roles/delivery-owner.md
+spec_owner:     <global herdr name> · <session> · <kind> · <cwd> · roles/spec-owner.md
+delivery_owner: <global herdr name> · <session> · <kind> · <cwd> · roles/delivery-owner.md
 ```
 
-plan 或启动记录须保存这四项；calibration 同时记职责角色与 runtime，不能把客户端表现归因给角色。
+plan 或启动记录须保存这些项；calibration 同时记职责角色与 runtime，不能把客户端表现归因给角色。
 
 ## Runtime 资格
 

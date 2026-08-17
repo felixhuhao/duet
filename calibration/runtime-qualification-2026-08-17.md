@@ -23,3 +23,16 @@ Herdr 0.8.0，workspace `pair-codex-opencode`。全程只读/空载，无产品�
 
 结论：该 pair 的空载 qualification 已完成，达到**待 owner gate 后进入产品 batch**的条件。
 当前保持 `done/done`，未开始任何具体开发。
+
+## 多 session federation 补验（2026-08-17）
+
+- 拓扑：`btrack`（`b-spec` Codex + `b-delivery` OpenCode）与 `etrack`（`e-spec` Codex +
+  `e-delivery` OpenCode）独立 session；两个完整 TUI 不共享 active workspace；
+- `baton.sh peers` 从 running sessions 实时聚合四个 agent，无缓存、heartbeat 或 watchdog；
+- Codex B→E→B：`d1786949589-36091` / `d1786949602-36404`，两端均看见四 agent 且
+  delivery-id 读回，PASS；
+- OpenCode B→E→B：`d1786949649-37263` / `d1786949679-37939`（重试
+  `d1786949864-41425`），目标数据库确认三条均消费，PASS；Herdr 对 OpenCode alternate-screen
+  的 `recent-unwrapped` / `visible` 不可靠，adapter 改用 prompt API 成功 + 状态转移；
+- 权限：Codex `workspace-full` 精确 allow Herdr Unix sockets；OpenCode 只 allow 外部
+  `~/Workspace/duet/scripts/**` 且 edit deny。新增 session 必须先补 Codex socket allowlist。

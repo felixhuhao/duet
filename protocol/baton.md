@@ -1,7 +1,7 @@
 # 传棒协议
 
-没有 driver，也没有 idle watchdog。接力棒在两个 herdr pane 之间传，owner 只在收到消息或
-主动查看时介入。
+没有 driver，也没有 idle watchdog。每个 pair 独占一个 Herdr session，接力棒可在 session
+内外按全局唯一 agent 名传递；owner 只在收到消息或主动查看时介入。
 
 ## 不变量
 
@@ -21,8 +21,8 @@ runtime qualification 选择传输方式并做 delivery-id 读回：
 ```
 
 要素：`[peer:<自己>]` 前缀 · 事件 · 文件路径 · 轮次 · verdict（如有）。一行说完。
-`<对方agent或pane>` 必须取 runtime 启动记录里的 Herdr 实例名或 pane id（如 `role1`），
-不能把职责名 `spec_owner` / `delivery_owner` 直接当作目标。
+目标必须取 runtime 启动记录里的**全局唯一实例名**（如 `b-spec`）；`baton.sh peers` 可实时
+查看所有 session 的状态。pane id 只在 session 内唯一，职责名也不能直接当目标。
 
 ## 交棒是 push，不做监听（✅ 2026-08-15，owner 指令废除 listen 模式）
 
@@ -46,9 +46,9 @@ runtime qualification 选择传输方式并做 delivery-id 读回：
 
 ## 送达验证（✅ 2026-08-16，诱因：Codex sandbox 拦 herdr，门铃没发出却口头宣布棒在对方）
 
-- **宣布交棒的唯一依据是门铃脚本成功返回**（含 runtime 适配与 delivery-id 读回）。「我说了棒在
-  对方」不是交棒，「门铃命令成功执行」才是；
-- 发完读一次对方 pane（`--source visible`）确认消息已出现；命令失败或读不到 →
+- **宣布交棒的唯一依据是门铃脚本成功返回**（Codex 用 delivery-id 读回；OpenCode 因
+  alternate-screen 不可稳定读回，使用 prompt API 成功 + 状态转移）。「我说了」不算交棒；
+- 发完按 runtime qualification 验证送达；命令失败或证据不足 →
   阶段状态是「**完成但传棒失败**」，把 DELIVERY FAILED 写进本轮落盘文件并报 owner
   （notification 可用就用，全断就停在原地），**禁止宣布棒已传出**；
 - 门铃工具不可用是环境事故：报 owner 修环境，不得静默降级成「对方会来看文件」。

@@ -10,7 +10,7 @@
 ## 三层架构
 
 ```text
-运行时层   herdr workspace，两个 agent 各占一个 pane；owner 按需介入，不做常驻盯盘
+运行时层   每 pair 一个 Herdr session；全局名称路由跨 session 通信；owner 按需介入
 状态层     md 文件。定义住本仓库；实例（plan/devlog/review）住各工作仓库
 决策层     OD 分层路由：真源就地，decision-log 的 ⬜ 行兼任 owner 收件箱；建卡自选
 ```
@@ -78,7 +78,8 @@ devlog/移交单）按宿主仓的功能/类型惯例归档与命名，不以流
 
 **已定（2026-08-15 brainstorm）：**
 
-- 运行时用 herdr，两个 agent 平级，接力棒模型，无 driver；
+- 运行时用 Herdr：每个 pair 独占命名 session，多个 terminal 独立监控；agent 通过全局唯一
+  名称查看跨 pair 状态并传棒，无 driver；
 - 状态层用 md 三件套 + decision log，暂不引入 loopx（升级判据：出现无人值守需求，
   或手写状态文件出现漂移）；
 - **open decisions 分层路由**（2026-08-15 修订，取代初版「一律建卡」）：真源就地
