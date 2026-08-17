@@ -85,7 +85,8 @@ class FederationTest(unittest.TestCase):
     def test_semantic_status_fails_closed_without_process_identity(self):
         self.assertEqual(FEDERATION.semantic_status("idle", ""), "unknown")
         self.assertEqual(FEDERATION.semantic_status("mystery", "i-123"), "unknown")
-        self.assertEqual(FEDERATION.semantic_status("done", ""), "dead")
+        self.assertEqual(FEDERATION.semantic_status("done", "i-123"), "idle")
+        self.assertEqual(FEDERATION.semantic_status("done", ""), "unknown")
 
     def test_process_restart_changes_instance(self):
         raw = {"pane_id": "w1:p1", "terminal_id": "term-1"}

@@ -101,7 +101,7 @@ case "$cmd" in
         exit 3
         ;;
       *:dead|*:unknown)
-        echo "DELIVERY FAILED: $to 当前语义状态为 $status；不向不确定/已退出实例投递" >&2
+        echo "DELIVERY FAILED: $to 当前语义状态为 ${status}；不向不确定/已退出实例投递" >&2
         exit 4
         ;;
       opencode:*)

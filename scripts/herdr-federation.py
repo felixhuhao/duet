@@ -23,7 +23,7 @@ STATUS_MAP = {
     "working": "working",
     "idle": "idle",
     "blocked": "blocked",
-    "done": "dead",
+    "done": "idle",
     "dead": "dead",
     "exited": "dead",
 }
