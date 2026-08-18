@@ -84,8 +84,9 @@ devlog/移交单）按宿主仓的功能/类型惯例归档与命名，不以流
 - plan 冻结后发现计划缺陷，追加 Errata；影响 scope/AC 时局部重开，不把它包装成实现 finding。
 - P2 默认不阻塞，只登记到期点；P0/P1 与两轮上限见 `protocol/verdict.md`。
 - 纯调查/scout 不开 batch、不走两轮 review，报告交付即结束。
-- 多 pair 可按 owner 的监控需求共用一个 Herdr session，但必须保持一 pair 一 workspace/工作树、
-  实例名全局唯一；需要 terminal 完全隔离时仍用一 pair 一 session。
+- pair 默认跨相邻 scout/规划/review 续用；只在进入实现需隔离提交、BASE 无法安全沿用或确需并行
+  写入时新建 worktree/pair。多个 pair 可共用 Herdr session，但仍须一 pair 一 workspace/工作树、
+  实例名全局唯一；需要 terminal 完全隔离时可一 pair 一 session。
 - 顺手动作必须同时满足：结果唯一或可逆、不占他人决策权、留痕可 review；AC/scope/契约/
   金额权限/verdict 不得顺手改。
 - fetch 只在定 BASE、实施开工、Done 门禁三个边界做；轮次中不追新。无冲突可自行追平，
