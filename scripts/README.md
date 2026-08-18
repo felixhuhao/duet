@@ -5,6 +5,7 @@
 
 - `pair-setup.sh <spec-dir> [delivery-dir] [label] [spec-kind] [delivery-kind]` —— 建命名 pair；
   默认 `<session>-spec=codex`、`<session>-delivery=opencode`，也可通过 kind 参数替换客户端；
+  OpenCode 默认带官方 `--auto`，自动批准所有非显式 deny 的 permission request；
 - `herdr-setup.sh <work-repo> [codex-dir] [label]` —— 旧 Claude/Codex 组合的兼容入口；
 - `herdr-federation.py peers|resolve|verify` —— 聚合 running sessions，并从 terminal + 前台进程
   计算本次 incarnation；不缓存、不轮询；
@@ -16,11 +17,12 @@
 其他 pair 共用 session。实例名始终须全局唯一（推荐 `<pair>-spec/delivery`）。名字是路由，
 `instance_id` 才标识本次进程；`baton.sh send` 会在提交前后校验并把它写入门铃。恢复时保留名字：
 Codex 用 `herdr agent start ... -- resume <session-id>`；
-OpenCode 用 `herdr agent start ... -- --session <session-id>`。恢复后必须用上一轮 delivery id
+OpenCode 用 `herdr agent start ... -- --session <session-id> --auto`。恢复后必须用上一轮 delivery id
 做一次上下文连续性检查，并用 `baton.sh peers` 取得新的 instance_id。
 
-Codex 通过 `workspace-full` permission profile 访问 Herdr；每新增命名 session，须把它的
-`herdr.sock` 精确加入该 profile 的 `network.unix_sockets` allowlist，再启动/恢复 Codex。
+Codex 权限由用户级配置统一提供；本机采用 `:danger-full-access` + `approval_policy=never`，
+无需再按 Herdr session 维护 socket allowlist。OpenCode 除全局 permission 外仍在启动时带
+`--auto`，避免存量 `ask` 或项目级规则让非交互 pair 停在确认框；显式 `deny` 仍生效。
 
 送达验证由 `baton.sh send` 自动完成：Codex 读回 delivery id；OpenCode alternate-screen
 无法稳定读回，使用 prompt API 成功 + 状态转移。runtime working 队列只允许已完成

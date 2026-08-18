@@ -63,17 +63,6 @@ for kind in "$SPEC_KIND" "$DELIVERY_KIND"; do
   fi
 done
 
-if [ "$SPEC_KIND" = "codex" ] || [ "$DELIVERY_KIND" = "codex" ]; then
-  if ! codex sandbox -P workspace-full -C "$SPEC_DIR" "$HERDR_BIN" \
-    --session "$SESSION_NAME" agent list 2>/dev/null | python3 -c '
-import json,sys
-r=json.load(sys.stdin)
-sys.exit(0 if "result" in r and "error" not in r else 1)'; then
-    echo "Codex workspace-full 尚未 allow 本 session 的 herdr.sock；先补精确 socket 权限" >&2
-    exit 1
-  fi
-fi
-
 if [ "$SPEC_KIND" = "opencode" ]; then
   CREATE_JSON="$(hcmd workspace create --cwd "$SPEC_DIR" --label "$LABEL" \
     --env OPENCODE_DISABLE_CLAUDE_CODE=1 --no-focus)"
@@ -89,8 +78,17 @@ else
 fi
 P2="$(printf '%s\n' "$SPLIT_JSON" | python3 -c 'import json,sys; print(json.load(sys.stdin)["result"]["pane"]["pane_id"])')"
 
-hcmd agent start "$SPEC_NAME" --kind "$SPEC_KIND" --pane "$P1" --timeout 120000
-hcmd agent start "$DELIVERY_NAME" --kind "$DELIVERY_KIND" --pane "$P2" --timeout 120000
+start_agent() {
+  local name="$1" kind="$2" pane="$3"
+  if [ "$kind" = "opencode" ]; then
+    hcmd agent start "$name" --kind "$kind" --pane "$pane" --timeout 120000 -- --auto
+  else
+    hcmd agent start "$name" --kind "$kind" --pane "$pane" --timeout 120000
+  fi
+}
+
+start_agent "$SPEC_NAME" "$SPEC_KIND" "$P1"
+start_agent "$DELIVERY_NAME" "$DELIVERY_KIND" "$P2"
 
 SPEC_ROUTE="$(python3 "$SCRIPT_DIR/herdr-federation.py" resolve "$SESSION_NAME/$SPEC_NAME")"
 DELIVERY_ROUTE="$(python3 "$SCRIPT_DIR/herdr-federation.py" resolve "$SESSION_NAME/$DELIVERY_NAME")"
