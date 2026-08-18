@@ -12,7 +12,7 @@
 ```text
 运行时层   每 pair 一个独立 workspace；可独占 session，也可多 pair 共用 session；owner 按需介入
 状态层     md 文件。定义住本仓库；实例（plan/devlog/review）住各工作仓库
-决策层     OD 分层路由：真源就地，decision-log 的 ⬜ 行兼任 owner 收件箱；建卡自选
+决策层     OD 分层路由：真源就地；owner 轨同步 decision-log，⬜ 行兼任收件箱；建卡自选
 ```
 
 **定义与实例分家**：实例文件里全是 commit SHA、baseline 和 diff 证据，必须与它管的代码同仓库。

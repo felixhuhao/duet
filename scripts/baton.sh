@@ -15,7 +15,7 @@
 #       读 pane 可见内容（--source visible；recent 不稳勿用）。
 #   baton.sh escalate <type> <summary> <path>
 #       系统通知 owner。type ∈ round-cap|P0P1-dispute|open-decision|redline-risk|baton-confirm
-#       发完记得把 agent 建议写进 duet:calibration/decision-log.md（escalation 协议要求）。
+#       发起方在工作仓写完整记录；owner 轨据 notification 同步 duet 中央 decision-log。
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -149,7 +149,7 @@ print("false" if r.get("shown") is False else "true")')"
       echo "ESCALATION DELIVERY FAILED: notification 未显示；按 capability fallback 交给 peer/owner" >&2
       exit 6
     fi
-    echo "已通知 owner。勿忘: decision-log 记一行（含 agent 建议）；看板卡仅在 owner 需要排期跟踪时创建。"
+    echo "已通知 owner。请确认工作仓已记录完整升级与 agent 建议；中央 decision-log 由 owner 轨同步。看板卡仅在 owner 需要排期跟踪时创建。"
     ;;
   *)
     echo "未知命令: $cmd（peers|send|wait|read|escalate）" >&2; exit 2

@@ -7,8 +7,10 @@
 **⬜ 行 = owner 收件箱**：owner 扫本文件即知全轨有什么等拍。closure 轮逐条重提
 悬置 ⬜ 或显式搁置（搁置也要写进裁决列）。
 
-**单写者 = Claude**（🧪 2026-08-15，诱因：round-cap 双账）：一次 escalation 只记一行，
-由 Claude 记；发起方是 Codex 时「agent 建议」列**原样摘录**其 verdict 文本，不改写。
+**中央账单写者 = owner 轨**（✅；2026-08-15 round-cap 双账后建立，2026-08-18 随角色泛化
+去客户端名）：一次 escalation 只记一行。batch 的 Spec Owner 在工作仓写完整记录并随
+notification 备齐索引字段；owner 轨同步本表。发起方是 Delivery Owner 时，「agent 建议」列
+**原样摘录**其 verdict 文本，不改写；batch 不跨仓写 duet。
 
 **行 = 索引级摘要**（2026-08-15 起）：一句话上下文 + 建议结论 + 裁决结论 +
 工作仓真源路径。完整语境、可选方案、依据长文一律写工作仓 review 文件——本仓私有，

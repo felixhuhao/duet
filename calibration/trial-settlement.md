@@ -14,7 +14,7 @@
 | 7 | 停机条件（baton.md） | 立据事故（AGT-1 静默待命）；B8 合并申请是正例 | **转正** |
 | 8 | 顺手总则（README/roles） | 卡锚更新、W3 顺手核销、stash 无损安置等；**revert 数 = 0** | **转正** |
 | 9 | fetch 三锚点 + 无冲突 rebase + as-of（README/verdict/roles） | AGT-1 重放 rebase 零冲突；B8 as-of 降级两次；凭据根治后恢复正常语义 | **转正**（as-of 保留给真离线） |
-| 10 | 单写者 = Claude（decision-log） | 双账事故后运行至今无重复账 | **转正** |
+| 10 | 中央账单写者唯一（当时由 Claude 承担，现泛化为 owner 轨） | 双账事故后运行至今无重复账 | **转正** |
 | 11 | watchlist 核销写去向（项目补充卡 #9） | OD-4、B8 多次核销写去向；B 版裁决卡已按转正引用 | **转正**（项目层条款，随卡固化） |
 | 12 | escalate 中继路由 / 记录者唯一（escalation.md） | **举证齐（2026-08-16 三例）**：D4-PR1（ESCALATE→Claude 复核补第三选项→owner→闭合，见 mobile `docs/devlogs/2026-08-16-D对话D4-计划评审.md` + decision-log `730ddf7`）；D4 round-cap（`ef307d0`）；AGT-2 中继（Agent `docs/plans/2026-08-16-三条钱路径正确性-计划评审.md@a9feb00f` + decision-log 末行，Codex 未直发 owner、三个加法动作齐） | **转正** |
 
