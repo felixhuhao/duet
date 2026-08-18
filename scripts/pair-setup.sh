@@ -28,7 +28,7 @@ SERVER_STATUS="$(hcmd status server 2>/dev/null || true)"
 if ! printf '%s\n' "$SERVER_STATUS" | grep -q "status: running"; then
   nohup env -i HOME="$HOME" PATH="$PATH" SHELL="${SHELL:-/bin/zsh}" \
     USER="$USER" LOGNAME="$USER" TMPDIR="${TMPDIR:-/tmp}" \
-    LANG="${LANG:-en_US.UTF-8}" TERM=xterm-256color \
+    LANG="${LANG:-en_US.UTF-8}" TERM=xterm-256color COLORTERM=truecolor \
     "$HERDR_BIN" --session "$SESSION_NAME" server >/dev/null 2>&1 &
   sleep 2
 fi
@@ -78,10 +78,27 @@ else
 fi
 P2="$(printf '%s\n' "$SPLIT_JSON" | python3 -c 'import json,sys; print(json.load(sys.stdin)["result"]["pane"]["pane_id"])')"
 
+prepare_pane_env() {
+  local pane="$1" marker="__DUET_ENV_READY__"
+  # Herdr may already be running inside a host that exports NO_COLOR (for example
+  # the Codex VS Code host).  Clear it in the persistent pane shell so every
+  # subsequently started TUI gets the same capabilities as a normal terminal.
+  hcmd pane run "$pane" \
+    "unset NO_COLOR CODEX_CI CODEX_INTERNAL_ORIGINATOR_OVERRIDE CODEX_PERMISSION_PROFILE CODEX_THREAD_ID; export TERM=xterm-256color COLORTERM=truecolor; printf '__DUET_%s_READY__\\n' ENV"
+  hcmd pane wait-output "$pane" --match "$marker" --source recent --timeout 5000 >/dev/null
+}
+
+prepare_pane_env "$P1"
+prepare_pane_env "$P2"
+
 start_agent() {
   local name="$1" kind="$2" pane="$3"
   if [ "$kind" = "opencode" ]; then
     hcmd agent start "$name" --kind "$kind" --pane "$pane" --timeout 120000 -- --auto
+  elif [ "$kind" = "codex" ]; then
+    # v0.147.0: the experimental network proxy interrupts the built-in
+    # codex_apps MCP on this runtime; normal network access remains available.
+    hcmd agent start "$name" --kind "$kind" --pane "$pane" --timeout 120000 -- --disable network_proxy
   else
     hcmd agent start "$name" --kind "$kind" --pane "$pane" --timeout 120000
   fi

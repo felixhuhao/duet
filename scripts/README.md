@@ -16,12 +16,14 @@
 每个 pair 使用独立 workspace/工作树；可独占命名 session，也可在 owner 需要统一 sidebar 时与
 其他 pair 共用 session。实例名始终须全局唯一（推荐 `<pair>-spec/delivery`）。名字是路由，
 `instance_id` 才标识本次进程；`baton.sh send` 会在提交前后校验并把它写入门铃。恢复时保留名字：
-Codex 用 `herdr agent start ... -- resume <session-id>`；
+Codex 用 `herdr agent start ... -- resume <session-id> --disable network_proxy`；
 OpenCode 用 `herdr agent start ... -- --session <session-id> --auto`。恢复后必须用上一轮 delivery id
 做一次上下文连续性检查，并用 `baton.sh peers` 取得新的 instance_id。
 
 Codex 权限由用户级配置统一提供；本机采用 `:danger-full-access` + `approval_policy=never`，
-无需再按 Herdr session 维护 socket allowlist。OpenCode 除全局 permission 外仍在启动时带
+无需再按 Herdr session 维护 socket allowlist。pair 启动会清除宿主注入的 `NO_COLOR` 并固定
+truecolor terminal，同时关闭当前会打断内置 `codex_apps` MCP 的实验 `network_proxy`；普通网络
+能力不受影响。OpenCode 除全局 permission 外仍在启动时带
 `--auto`，避免存量 `ask` 或项目级规则让非交互 pair 停在确认框；显式 `deny` 仍生效。
 
 送达验证由 `baton.sh send` 自动完成：Codex 读回 delivery id；OpenCode alternate-screen
