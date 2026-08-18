@@ -10,7 +10,7 @@
 ## 三层架构
 
 ```text
-运行时层   每 pair 一个 Herdr session；全局名称路由跨 session 通信；owner 按需介入
+运行时层   每 pair 一个独立 workspace；可独占 session，也可多 pair 共用 session；owner 按需介入
 状态层     md 文件。定义住本仓库；实例（plan/devlog/review）住各工作仓库
 决策层     OD 分层路由：真源就地，decision-log 的 ⬜ 行兼任 owner 收件箱；建卡自选
 ```
@@ -84,6 +84,8 @@ devlog/移交单）按宿主仓的功能/类型惯例归档与命名，不以流
 - plan 冻结后发现计划缺陷，追加 Errata；影响 scope/AC 时局部重开，不把它包装成实现 finding。
 - P2 默认不阻塞，只登记到期点；P0/P1 与两轮上限见 `protocol/verdict.md`。
 - 纯调查/scout 不开 batch、不走两轮 review，报告交付即结束。
+- 多 pair 可按 owner 的监控需求共用一个 Herdr session，但必须保持一 pair 一 workspace/工作树、
+  实例名全局唯一；需要 terminal 完全隔离时仍用一 pair 一 session。
 - 顺手动作必须同时满足：结果唯一或可逆、不占他人决策权、留痕可 review；AC/scope/契约/
   金额权限/verdict 不得顺手改。
 - fetch 只在定 BASE、实施开工、Done 门禁三个边界做；轮次中不追新。无冲突可自行追平，

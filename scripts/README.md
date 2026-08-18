@@ -12,7 +12,8 @@
 - `owner-turns.py` / `stop-turns.py` —— Claude/Codex JSONL 复盘；OpenCode 先经
   `opencode-turns.py <session-id>` 归一后从 stdin 输入。
 
-每个 pair 使用独立命名 session，实例名须全局唯一（推荐 `<pair>-spec/delivery`）。名字是路由，
+每个 pair 使用独立 workspace/工作树；可独占命名 session，也可在 owner 需要统一 sidebar 时与
+其他 pair 共用 session。实例名始终须全局唯一（推荐 `<pair>-spec/delivery`）。名字是路由，
 `instance_id` 才标识本次进程；`baton.sh send` 会在提交前后校验并把它写入门铃。恢复时保留名字：
 Codex 用 `herdr agent start ... -- resume <session-id>`；
 OpenCode 用 `herdr agent start ... -- --session <session-id>`。恢复后必须用上一轮 delivery id

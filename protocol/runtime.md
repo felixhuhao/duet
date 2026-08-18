@@ -5,10 +5,12 @@
 
 ## 多 pair 拓扑
 
-一个 pair 独占一个命名 Herdr session，因此多个 terminal 可分别显示完整 pair，互不争抢
-active workspace。`scripts/herdr-federation.py` 每次从所有 running session 实时聚合 agent；
-`baton.sh peers/send/read/wait` 据此跨 session 路由，不缓存状态、不发送 heartbeat。原生 TUI
-sidebar 只显示本 session，跨 pair 状态由 `baton.sh peers` 按需查询。
+运行隔离单位是 pair 的 workspace + 工作树，不强绑 session。默认一个 pair 独占一个命名
+Herdr session，适合多个 terminal 各看一对；owner 要在同一 sidebar 监控时，也可让多个 pair
+共用一个命名 session，但必须一 pair 一 workspace、实例名全局唯一，且不得跨工作树写入。
+`scripts/herdr-federation.py` 每次从所有 running session 实时聚合 agent；
+`baton.sh peers/send/read/wait` 对同 session 和跨 session 使用同一名称路由，不缓存状态、不发送
+heartbeat。原生 TUI sidebar 显示本 session 的所有 workspace；其他 session 状态按需查 `peers`。
 
 ## 每个 pair 必须声明
 

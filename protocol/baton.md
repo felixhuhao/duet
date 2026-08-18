@@ -1,7 +1,7 @@
 # 传棒协议
 
-没有 driver，也没有 idle watchdog。每个 pair 独占一个 Herdr session，接力棒可在 session
-内外按全局唯一 agent 名传递；owner 只在收到消息或主动查看时介入。
+没有 driver，也没有 idle watchdog。每个 pair 独占一个 workspace/工作树，可独占或共用
+Herdr session；接力棒按全局唯一 agent 名在 session 内外传递，owner 只在收到消息或主动查看时介入。
 
 ## 不变量
 
