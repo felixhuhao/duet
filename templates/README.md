@@ -2,8 +2,18 @@
 
 **这里是必备字段契约 + 新项目起步默认，不取代项目现有格式。**（2026-08-15 拍板）
 
-已有自己文档规范的项目（如 byteme_mobile 的 `AI_AGENT_DEV_SPEC.md` + migration 文档约定）
-继续用自己的格式，只要下列字段在某个真源里存在即可：
+新工作默认采用 `goal.md` + `outcome-roadmap.md` + `validation-ledger.md` 三份真源；旧项目的
+plan/devlog/review 工件保留历史，不批量重写。已有格式只要能一一映射下列字段即可：
+
+- **Goal**：稳定 Contract + 可更新 Execution Notes/Resume Capsule + Completion Package + 条件式
+  Retrospective；具体字段见 `goal.md`；
+- **Outcome Roadmap**：用户结果、Priority、依赖、状态与已授权 Ready Queue；
+- **Validation Ledger**：I0/I1/I2、DEV/Integration/Device、frozen HEAD 与 defect links；
+
+以下为旧 plan/batch 兼容字段，未映射到 Goal 的旧未完成项不得继续执行：
+
+`plan-review.md`、`review.md`、`devlog.md` 仅为旧 batch 兼容入口；Goal v1 的 readiness、review、
+执行记录和完成包全部写在同一 Goal 文件，避免再造第四类状态文档。
 
 - **plan**：outcome / scope 与 out-of-scope / redlines+authority 来源 / 可观察 AC /
   open decisions / Errata 节（追加式）/ 冻结状态与 BASE；

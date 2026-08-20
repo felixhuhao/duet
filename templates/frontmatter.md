@@ -16,10 +16,14 @@
 
 | 键 | 取值 | 适用 |
 |---|---|---|
-| `doc` | `plan` `review` `devlog` `decision-pack` `handoff` `handoff-index` `roadmap` | 全部 |
+| `doc` | `goal` `review` `handoff` `roadmap` `validation-ledger`；旧值继续兼容 | 全部 |
+| `goal` | `MOB-U0-LOGIN-RETURN` 等全局唯一 ID | Goal 与其 review |
+| `process_version` | `goal-v1` | Goal |
+| `priority` / `size` | `P0/P1/P2/enablement` · `S/M/L` | Goal |
 | `track` | `全局` `B钱` `D对话` `E分身` `C经营` `AGT` `跨仓` … | 全部 |
 | `batch` | `B8` `D4` `D3b` … | batch 级工件 |
-| `status` | `draft` `frozen` `in-progress` `pending-owner` `paused` `done` `archived` `open` | 全部 |
+| `status` | `queued` `active` `ready-for-review` `dev-done` `blocked` `needs-refresh` `cancelled`；旧值兼容 | 全部 |
+| `integration` / `device` | `NOT_RUN` `PASS` `FAIL` `BLOCKED` `N/A` | Goal |
 | `baton` | `spec_owner` `delivery_owner` `owner` `none` | 活跃 batch |
 | `spec_runtime` / `delivery_runtime` | `codex` `claude` `opencode` … | 活跃 batch 的职责绑定 |
 | `round` | `1/2` 等（照 verdict 块抄） | review |

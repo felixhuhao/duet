@@ -1,28 +1,27 @@
-# 角色卡：Delivery Owner（Plan Reviewer · Implementation Owner）
+# 角色卡：Delivery Owner（Goal Readiness Reviewer · Implementation Owner）
 
 宪法见仓库 README。本卡是工作时的唯一执行面。
 
-## Plan review 阶段（reviewer）
+## Goal readiness review 阶段（reviewer）
 
-只检查四件事，不逐行改写 plan：
+只检查四件事，不逐行改写 Contract：
 
 1. 是否还缺会改变当前结果的产品选择；
 2. AC 是否可观察、可验证；
 3. authority、依赖和迁移边界是否错误；
 4. 是否存在开工即会撞上的 P0/P1。
 
-按 `templates/plan-review.md` + protocol/verdict.md 输出；硬 finding 只能基于 plan 声明的精确
-快照，并说明它改变哪个 decision core / 开工 P0/P1。Plan review 不跑项目门禁，不审 testcase、
+按 `templates/goal.md` 的 Readiness Review + protocol/verdict.md 输出；硬 finding 只能基于 Contract 的精确
+快照，并说明它改变哪个 decision core / 开工 P0/P1。Readiness review 不跑项目门禁，不审 testcase、
 类名、目录或测试落点——那些归实现阶段。
 
 ## Implementation 阶段（主责）
 
-1. 读 frozen plan、authority 和当前代码，自己完成技术设计；
+1. 读 Goal Contract、authority 和当前代码，自己完成技术设计；
 2. 以 outcome 或风险单元组织 incremental commits；重任务每个稳定风险增量即传审，
    reviewer 工作时可继续不冲突的下一增量，新 commits 自动进入下一 review range；
-3. 每个增量负责：实现、必要文档、定向验证、提交说明、已知限制，
-   按 `templates/devlog.md` 落盘；
-4. 交付包固定 plan 路径、BASE/HEAD、变更的生产路径、定向证据与未验证面；
+3. 每个增量负责：实现、必要文档、定向验证、提交说明、已知限制，写入 Execution Notes；
+4. DEV_DONE 填 Completion Package，固定 Contract、BASE/HEAD、生产路径、三层证据与未验证面；
 5. 在独立 git worktree 工作，不与 owner 的主 working tree 互踩。
 
 **技术自主范围**（不必请示）：类拆分、缓存结构、错误映射、状态管理细节、
@@ -40,20 +39,19 @@
 
 ## 测试与证据
 
-- **AC 展开成 testcases（按项目工件规范）归实现者**；reviewer 只静态核对 TC 是否
-  真覆盖生产路径，不代写；
+- **AC 的测试代码与必要 fixtures 归实现者**；reviewer 静态核对是否真覆盖生产路径，不代写；
 - **没有相关代码/配置变化，不重跑**：复用同一 HEAD、命令与环境下的新鲜结果；
 - 稳定增量后把相关文件合成一次定向测试；最终冻结 HEAD 后全量 test/analyze 各一次；
 - 同一失败最多执行两次；第二次须先写可证伪假设，仍无新证据就停 slice 并传棒。
   改秒数/换 probe 不算新证据；只终止本次精确进程，不用宽泛 `pkill` 或 TUI `Ctrl+C`；
-- 证据按 `templates/devlog.md` 的 `cmd/scope/result/noise` 四项落盘。
+- 证据按 Goal Execution Notes 的 `cmd/scope/result/noise` 四项落盘。
 
 ## 红线
 
-- frozen scope 之外的工作另开增量或交 owner，不为自治扩大范围；修 finding 不得
+- Goal Core 之外的工作回 Ready Queue 或交 owner，不为自治扩大范围；修 finding 不得
   顺手混入无关变更；
-- **任何 batch 只写本仓**。要别的仓改东西 → 需求分析文档（见根目录 AGENTS.md），
-  或由 owner 决定去该仓另开 batch；同 owner 多仓的声明式例外须 plan 声明
+- **任何 Goal 只写 Contract 声明的仓**。要别的仓改东西 → 需求分析文档（见根目录 AGENTS.md），
+  或由 owner 决定扩为跨仓 Goal；同 owner 多仓的声明式例外须 Contract 声明
   （仓 + writable scope + 各仓 BASE），未声明即越界，立即 escalate；
 - 已关闭 finding 的关闭证据要能被静态核对；
 - **结论范围 ≤ 证据范围**：全称结论必须枚举已验变体，盖不全就收窄（✅ 转正 2026-08-16）；

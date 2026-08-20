@@ -1,8 +1,9 @@
 # 阶段梯子
 
-当前阶段：**Stage 1**（2026-08-16 起，owner 拍板于三轨并轨 v2 之际）
-> owner 触点收缩为每 batch 两个不可逆时刻：**plan 冻结前 decision core 过目** +
-> **Done 前 ack**。增量级 pass 不经 owner；escalate/stop 仍全部到 owner。
+当前阶段：**Stage 1 · Goal v1 pilot**（Goal 模式 2026-08-20 owner 拍板）
+> owner 触点收缩为：roadmap grooming 批量授权 2–3 个 Goal、产品/open decision、Q4 级大问题、
+> 队列补充与 pilot review。普通 Goal readiness、review、merge 与 DEV_DONE 不逐项等 owner ack；
+> Completion Package 始终落盘，推送频率由 owner 指定。
 > 依据：owner-turns 复盘（D 轨 58 条 vs B 轨全规则下 4 条）+ decision-log 一致率。
 >
 > Stage 0 记录（2026-08-15）：机械传棒先通电（送审/回修/重验/续行直接 send-text +
@@ -35,7 +36,8 @@
 |---|---|---|
 | baton-confirm·机械（送审/回修/重验/续行） | **已毕业**（owner 直批 2026-08-15，✅ 转正 2026-08-16） | — |
 | baton-confirm·放行·增量级（增量 PASS 续行确认） | **已毕业**（Stage 1 语义，owner 直批 2026-08-16） | — |
-| baton-confirm·放行·batch 级（plan 冻结 / Done ack） | **设计上不毕业**（Stage 1 的两个 owner 触点） | — |
+| goal-queue·批量授权 / pilot 推广 | **设计上不毕业** | — |
+| baton-confirm·旧 batch 冻结 / Done ack | **历史模式，不用于新 Goal** | — |
 | round-cap（轮次上限后的处置） | 未毕业 | 2 |
 | P0P1-dispute（定级争议） | 未毕业 | 0 |
 | redline-risk | 未毕业 | 0 |

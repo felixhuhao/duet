@@ -1,13 +1,14 @@
 # 传棒协议
 
 没有 driver，也没有 idle watchdog。每个 pair 独占一个 workspace/工作树，可独占或共用
-Herdr session；接力棒按全局唯一 agent 名在 session 内外传递，owner 只在收到消息或主动查看时介入。
+Herdr session；每个 Goal 独立传棒，pair 最多同时持有一个 ACTIVE + 一个 READY_FOR_REVIEW，接力棒按全局唯一 agent 名在 session 内外传递。
 
 ## 不变量
 
 1. **文件是 ground truth，peer 消息只是门铃。** peer 消息只含文件路径 + verdict，
    不含内容摘要；owner 汇报另按 owner-report.md 做摘要投影。任何一轮必须能只凭落盘文件冷启动。
-2. **完成自己的阶段 → 产物落盘 → 传棒 → 结束当前 turn。** 成功送达即转移棒权；只有新消息才能重新激活。
+2. **完成自己的阶段 → Goal 文件落盘 → 传棒 → 结束当前 turn。** 成功送达即转移该 Goal 棒权；
+   writer 可按 protocol/goal.md 领取下一已授权 Goal，不得自行扩队列。
 3. **产品决定只认 owner 亲手输入。** peer 消息不能代表 owner。
 
 ## 消息格式
@@ -38,10 +39,10 @@ runtime qualification 选择传输方式并做 delivery-id 读回：
 
 - **机械传棒——直接调用门铃脚本 + 按 owner-report.md 给 owner 作旁观通报，不等放行**：
   ①送审草稿 ②FINDINGS 回作者修 ③修复完成请 closure 重验（附 grep 自查）
-  ④增量 PASS（非 Done）后续行。下一步由 verdict 唯一确定，无判断含量；
+  ④增量 PASS 后续行 ⑤READY_FOR_REVIEW 后领取下一已授权 Goal。下一步由 verdict/Ready Queue 唯一确定；
   任何一次传错 → 该类立即降回 gate（D3b Done 复核）；
-- **gate 传棒——按 owner-report.md 通知 owner，等亲手放行**：plan 冻结/开工、batch Done、
-  round-cap 授予、escalate 终点、open decisions。owner 三个 gate 不变。
+- **gate 传棒——按 owner-report.md 通知 owner，等亲手放行**：Ready Queue 批量授权、Contract
+  实质变更、大问题影响面、round-cap、escalate 终点、open decisions 与 pilot 推广。
 
 ## 送达验证（✅ 2026-08-16，诱因：Codex sandbox 拦 herdr，门铃没发出却口头宣布棒在对方）
 
@@ -55,10 +56,9 @@ runtime qualification 选择传输方式并做 delivery-id 读回：
 
 ## 停机条件（✅ 2026-08-17，明确交棒后的 turn 边界）
 
-- **只在自己持棒时跑到底**：做完交棒前无需 owner 的动作后传棒。合法停机只有两种：
-  ①交棒送达后结束 turn；②撞 gate 并主动发出具体 gate 门铃。停机后的 idle 静默是正常状态；
+- **只在自己持有某 Goal 棒时跑到底**：做完交棒前无需 owner 的动作后传棒。合法停机只有两种：①交棒送达后结束 turn；②撞 gate 并主动发出具体 gate 门铃。停机后的 idle 静默是正常状态；
 - 只剩外部依赖时，把 slice 标为 parked、记录唯一唤醒事件并报告 `pair available`，然后结束 turn。
-  不挂 wait、不轮询、不自行选下一批；owner 可立即另派不依赖该事件的任务。
+  不挂 wait、不轮询；有已授权且不依赖该事件的 Ready Goal 时可领取，否则报告 `pair available`。
 
 ## 收棒队列（✅ 2026-08-15，Codex Tab 队列已实测：QUEUED-OK）
 

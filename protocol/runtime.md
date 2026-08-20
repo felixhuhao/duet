@@ -12,9 +12,9 @@ Herdr session，适合多个 terminal 各看一对；owner 要在同一 sidebar 
 `baton.sh peers/send/read/wait` 对同 session 和跨 session 使用同一名称路由，不缓存状态、不发送
 heartbeat。原生 TUI sidebar 显示本 session 的所有 workspace；其他 session 状态按需查 `peers`。
 
-pair 是按 track 长期存在的协作上下文，不是一次性 batch 容器。同轨的 scout、规划、review 与实现
-默认全部续用原 pair，直接发送带 authority、当前 HEAD 与明确 scope 的新任务；不要仅因阶段、batch
-或编号变化重启 runtime。BASE 更新优先在原工作树安全 fetch/rebase；有未收口改动则先收口再换批。
+pair 是跨 Goal 续用的协作上下文，不是一次性任务容器。scout、规划、review 与实现默认续用原 pair，
+从 owner 已授权的 Ready Queue 领取；不要仅因阶段或 Goal 编号变化重启 runtime。BASE 更新优先在原
+工作树安全 fetch/rebase；有未收口改动则先收口再领取下一 Goal。
 只有确需并行写入，或原 session 已损坏且无法恢复时，才新建 worktree/pair。runtime 或模型异常优先
 恢复原 session；重建 pair 是最后手段，不是清上下文。
 
@@ -36,8 +36,8 @@ delivery_owner: <global name> · <session> · <kind> · <instance_id> · <cwd> �
 Herdr 的 `done` 表示本 turn 完成且进程仍在，归一为 `idle`，不能据此宣告 agent 丢失。
 
 模型切换但 session/context 未变，不重做冷启动。context reset、进程重启或换 session 后，先读项目
-规则、角色卡、frozen plan、最新 devlog/review、当前 HEAD 与棒位；回报新 instance 和下一动作后
-再收产品棒。恢复只重建上下文，不自行选下一任务、不启动自动 loop。
+规则、角色卡、Goal Contract、Resume Capsule、最新 review、当前 HEAD 与棒位；回报新 instance 和
+下一动作后继续同一 Goal。恢复只重建上下文，不自行扩大 Ready Queue、不启动自动 loop。
 
 ## Runtime 资格
 

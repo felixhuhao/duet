@@ -4,14 +4,15 @@
 职责角色与运行时客户端解耦，同一张角色卡可以由 Codex、Claude Code、OpenCode 等客户端承担。
 
 > 前身：`~/Workspace/docs/Claude-Codex双角色开发模式-待拍板草案.md`（保留作历史稿）。
-> 状态：**Stage 1**（2026-08-16 起，见 calibration/stage.md）。宪法 2026-08-15 拍定；
-> 试运行已完成（D3b/AGT-1/B8/D4 四批 + 三轨并轨），试行条款全部转正。
+> 状态：**Stage 1 · Goal v1 pilot**（2026-08-20 owner 确认，见
+> [Goal 运行协议](protocol/goal.md) 与 calibration/stage.md）。旧 batch 工件保留历史，
+> 新工作映射为用户结果 Goal 后才可执行。
 
 ## 三层架构
 
 ```text
 运行时层   每 pair 一个独立 workspace；可独占 session，也可多 pair 共用 session；owner 按需介入
-状态层     md 文件。定义住本仓库；实例（plan/devlog/review）住各工作仓库
+状态层     md 文件。定义住本仓库；实例（roadmap/Goal/validation ledger）住各工作仓库
 决策层     OD 分层路由：真源就地；owner 轨同步 decision-log，⬜ 行兼任收件箱；建卡自选
 ```
 
@@ -20,10 +21,10 @@
 
 ## 核心原则
 
-1. **每阶段一个交付 owner，另一方独立 review。** Plan 由 Spec Owner 主笔、Delivery Owner review；
-   Implementation 由 Delivery Owner 主写、Spec Owner 验收。Reviewer 指出可证明的问题，不遥控实现细节。
-2. **Plan 要 decision-complete，不要 implementation-complete。** 说清 outcome、scope、
-   redlines、AC；不预定类名、目录和测试落点。
+1. **每个 Goal 一个交付 owner，另一方独立 review。** Goal Contract 由 Spec Owner 主笔、
+   Delivery Owner review；Implementation 由 Delivery Owner 主写、Spec Owner 验收。
+2. **Goal Contract 要 decision-complete，不要 implementation-complete。** 一页说清 outcome、Core、
+   non-goals、invariants、AC、stop/validation/fallback；文件、类、命令进 Execution Notes。
 3. **技术选择归实现者，产品选择归 owner。** 产品选择必须走 open-decision 通道，
    触发条件见 [roles/delivery-owner.md](roles/delivery-owner.md)。
 4. **Finding 必须绑定依据**：已放行 outcome/AC、redline/authority、可复现 regression、
@@ -35,8 +36,8 @@
    [baton](protocol/baton.md) 与 [owner-report](protocol/owner-report.md)。
 7. **Escalate 必附 agent 自己的推荐判定**，用于校准自动判定规则。
    见 [protocol/escalation.md](protocol/escalation.md)。
-8. **验证要有触发条件。** 没有相关代码/配置变化就复用新鲜结果；稳定增量跑一次定向，
-   最终冻结 HEAD 跑一次项目门禁；同一失败最多执行两次，第二次仍无新证据就停。
+8. **验证按 I0/I1/I2 分层并限频。** `DEV_DONE` 与 Integration/Device 分开；昂贵测试通常只跑
+   基线一次 + 相关修复后一次，frozen HEAD 集中验，债务上限见 protocol/goal.md。
 
 ## Finding 分级
 
@@ -53,13 +54,13 @@ watchlist 必须有核销时刻，没有到期点的 watchlist 等于噪声。
 ## 术语层级
 
 ```text
-track ⊃ batch ⊃ increment ⊃ slice
+canonical outcome roadmap ⊃ Goal ⊃ increment
 ```
 
-- **track**：一条产品线/迁移线（如 D track）；
-- **batch**：一份 frozen plan 覆盖的范围，plan baseline 的单位；
-- **increment**：一轮 review 的 commits 集合，两轮上限的作用对象；
-- **slice**：可独立暂停的最小工作单元，open decision 只暂停受影响的 slice。
+- **Goal**：完整用户结果的调度、ownership 与交付单位；
+- **increment**：一轮 review 的冻结 commits 集合，两轮上限仍作用于它；
+- **slice**：只在大问题影响分析时使用的最小暂停面；
+- **track / batch**：历史工件术语，不再作为新工作的固定队列或 owner gate。
 
 ## 仓库结构
 
@@ -67,7 +68,7 @@ track ⊃ batch ⊃ increment ⊃ slice
 roles/        spec-owner / delivery-owner —— 两张职责角色卡，与 runtime 客户端无关
 protocol/     baton / verdict / escalation / owner-report / runtime —— 传棒、结论、升级、汇报、运行时
 calibration/  decision-log（校准记录）+ stage（阶段梯子与毕业状态）
-templates/    plan / devlog / review 三件套模板，实例化到工作仓库
+templates/    Goal / outcome roadmap / validation ledger + review 模板，实例化到工作仓库
 scripts/      已验证的 herdr pair 启动、门铃与态势工具
 ```
 
@@ -79,12 +80,13 @@ devlog/移交单）按宿主仓的功能/类型惯例归档与命名，不以流
 
 ## 当前治理
 
-- 当前是 **Stage 1**：owner 只在 plan 冻结与 batch Done 前确认；增量 review 由 pair 自行闭环。
+- 当前是 **Stage 1 · Goal v1 pilot**：owner 在 roadmap grooming 批量授权 2–3 个 Goal；普通
+  readiness/review/merge 自行闭环，只有产品拍板、Q4 级风险、队列补充和 pilot review 到 owner。
 - duet 只管角色、交棒、review 与升级；门禁内容、产品红线和仓库操作写在项目自己的规则里。
-- plan 冻结后发现计划缺陷，追加 Errata；影响 scope/AC 时局部重开，不把它包装成实现 finding。
+- 实现中发现 Contract 缺陷，追加 Addendum；影响 Outcome/Core/AC 时局部重开，不包装成实现 finding。
 - P2 默认不阻塞，只登记到期点；P0/P1 与两轮上限见 `protocol/verdict.md`。
 - 纯调查/scout 不开 batch、不走两轮 review，报告交付即结束。
-- pair 默认按 track 长期续用，覆盖 scout、规划、review 与实现；BASE 更新也优先在原工作树安全
+- pair 默认跨 Goal 续用，覆盖 scout、规划、review 与实现；BASE 更新也优先在原工作树安全
   追平。只有真实并行写入或原 session 无法恢复时才新建 worktree/pair。多个 pair 可共用 Herdr
   session，但仍须一 pair 一 workspace/工作树、实例名全局唯一；需要 terminal 完全隔离时可一
   pair 一 session。

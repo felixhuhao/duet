@@ -1,21 +1,21 @@
 # Owner 汇报协议
 
-> 🧪 2026-08-17 起试行。复核点：B/E 两个现役 pair 各完成下一次 batch Done 后。
-> 目标不是增加汇报频率，而是让 owner 用一屏看懂进展、发现、注意点与待决事项。
+> Goal v1：每个 Goal 在 DEV_DONE 生成结构化 Completion Package；是否立即推送、每日汇总或累计
+> 若干 Goal 汇总由 owner 指定。目标不是增加汇报频率，而是让 owner 用一屏看懂结果与决策点。
 
 ## 与 peer 门铃的边界
 
 - **peer 门铃**只负责唤醒和路由：路径、轮次、verdict；不复制工件内容；
 - **owner 汇报**负责信息压缩和注意力路由：是已提交工件的摘要投影，不是第二真源；
 - 汇报正文由 agent 在当前 turn 末尾输出；system notification 只提醒事件和真源路径，不能替代正文；
-- 仍然事件驱动：只在既有 milestone、gate、incident、Done 或 owner 主动询问时汇报，
+- 仍然事件驱动：只在 owner 指定摘要点、gate、incident、有意义状态变化或 owner 主动询问时汇报，
   不新增 heartbeat、定时 ping 或 orchestrator 常驻；
 - 汇报中的状态、读数、commit 和判断必须能回链到工作仓真源。
 
 ## 通用格式
 
 ```text
-【<batch>｜<一句话状态>】
+【<Goal>｜<一句话状态>】
 
 结论：当前结果、所处阶段，以及是否按计划推进。
 完成及影响：本轮最重要的 1～3 项，以及它们让产品、计划或风险发生了什么变化。
@@ -28,7 +28,7 @@
 ```
 
 正文五项必须自含：**删除所有链接后，owner 仍能理解做了什么、意味着什么并完成决策**。
-字段可以合并成短段，但不得省略“需拍板”和“下一步”。首次出现 batch、finding、watchlist
+字段可以合并成短段，但不得省略“需拍板”和“下一步”。首次出现 Goal、finding、watchlist
 等编号时，必须跟一句人话自述。
 
 ## 常见变体
