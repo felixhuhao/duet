@@ -17,6 +17,7 @@
 | resume 后终端无颜色 | 手工执行 `agent start ... resume`，漏掉 pair setup 中的 pane 环境准备 | `followup-solo` 活进程继承 `NO_COLOR=1`、`CODEX_CI=1`；用户可见颜色回归 | 新建/resume统一走 `herdr-agent-start.sh`；活 Codex 进程禁色变量断言进入自动测试 |
 | MCP startup 后首次门铃未读回 | resume ready早于内置 MCP 完成启动，prompt API进入状态变化但屏幕无delivery | `d1787285903-51712` 明确失败；启动完成后 `d1787285932-52534` 单次重投成功 | 保持“无读回=未送达”；resume check在MCP ready后投递，最多确认后重投一次 |
 | resume 复用已删除 cwd | helper 只在新 pane 启进程，未显式传 Codex `--cd`；native session 的旧 cwd 继续进入 turn/hook/MCP | dev2 主进程 cwd 正确但 SessionStart、node_repl、dg-kanban 同报 `os error 2`；显式 `--cd` 后原 session 全绿 | helper 从 pane 读取现存 cwd，自动注入/校验 `--cd`；fake-Herdr 回归测试锁定 argv |
+| 维护退出遗留 composer | idle 画面不证明 composer 真为空，直接 `Ctrl+D` 后残留文本跨 resume 拼到下一门铃 | dev2 恢复回验前多出一小段旧文本，未改变本轮只读动作 | 维护退出固定 `Ctrl+U` 清 composer → `Ctrl+D`，resume 门铃仍须读回完整 delivery |
 | Goal 迁移后 clean worktree 残留 | 契约混同 branch 与 checkout 生命周期，迁移成功没有旧树 disposition 终止条件 | FOLLOWUP/NOTIFY clean、无 agent 仍留 checkout；API-CONTRACT dirty/unowned 另属在途现场 | 单次 worktree audit 成为迁移/关闭 agent 门禁；clean/unowned 删除 checkout留 branch，dirty/unowned 只升级 |
 | 旧 worktree清理绕过Herdr原语 | 先 `workspace close`，再raw `git worktree remove` | checkout成功删除、branch `cbff38b1` 保留，无数据损失；但绕过Herdr原子remove路径 | 后续统一 `herdr worktree remove --workspace`，默认不用force |
 | 校验脚本覆盖zsh特殊变量 | GitHub链接循环误用变量名 `path`，覆盖zsh的命令搜索数组 | 一次只读校验报 `gh: command not found`，无运行态或文件影响 | shell变量使用任务专用名；不复用 `path`/`HOME` 等系统语义名 |

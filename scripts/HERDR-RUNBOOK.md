@@ -87,8 +87,9 @@ helper 同时从 pane 实时读取 cwd，自动给 Codex 加 `--cd`；pane cwd �
 4. 核对 cwd、workspace、agent 名与 native session 都未变化，再走 Pickup Context/Receipt；
 5. 没有下一 Goal 时保持原 branch idle，不退出、不清 worktree。
 
-只有进程退出、workspace 丢失或 owner 指定拓扑变更才 resume。此时先 `worktree open` 固定树，再按第 4 节
-恢复原 native session；禁止创建替代树。恢复后核 cwd/session/instance/color/MCP，并发一次回验门铃。
+只有进程退出、workspace 丢失或 owner 指定拓扑变更才 resume。维护退出前必须确认 idle，先用
+`Ctrl+U` 清空未提交 composer，再 `Ctrl+D`；不能只凭画面空白推断输入为空。随后 `worktree open` 固定树，
+按第 4 节恢复原 native session；禁止创建替代树。恢复后核 cwd/session/instance/color/MCP，并发一次回验门铃。
 
 MCP 启动阶段可能让第一次 prompt API 返回但屏幕尚无 delivery ID。此时判定“未送达”，等启动完成，
 确认消息没有消费后最多重投一次；API success 不是交棒成功。
