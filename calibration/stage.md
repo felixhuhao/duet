@@ -14,6 +14,11 @@
 - **Plan review 紧凑契约**（2026-08-17 起）：从下两个新 plan review 起使用
   `templates/plan-review.md`；完成后复核是否仍有因错误快照撤回的硬 finding、是否误跑项目门禁，
   以及无 finding 的 PASS 能否保持一屏可读，再由 owner 决定保留、调整或撤回。
+- **Pre-Done Code Review**（2026-08-21 起）：先在一个 Goal 试行一轮静态 feedback。实现者冻结
+  `BASE..HEAD` 后留在当前 Goal；reviewer 不跑 test/analyze/build、不做 signoff 或 closure，只把一轮
+  feedback 写进 Goal 的 `Code Review`。实现者处理一次后自行标 `DEV_DONE`；P0/P1 必须修复或
+  escalate，P2/Suggestion 进 follow-up。试行完成后由 owner 决定转正、调整或撤回，现行通用 review
+  契约不标 legacy。
 
 ## 阶段定义
 
