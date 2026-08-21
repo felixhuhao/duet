@@ -38,9 +38,11 @@ delivery_owner: <stable name> · default · <kind> · <instance_id> · <cwd> · 
 一律归 `unknown`。`unknown/dead` 禁止普通门铃，且任何状态都不触发 heartbeat、自动唤醒或重启。
 Herdr 的 `done` 表示本 turn 完成且进程仍在，归一为 `idle`，不能据此宣告 agent 丢失。
 
-模型切换但 session/context 未变，不重做冷启动。context reset、进程重启或换 session 后，先读项目
-规则、角色卡、Goal Contract、Resume Capsule、最新 review、当前 HEAD 与棒位；回报新 instance 和
-下一动作后继续同一 Goal。恢复只重建上下文，不自行扩大 Ready Queue、不启动自动 loop。
+模型切换但 session/context 未变，不重做冷启动。context reset、进程重启或换 session 后，若继续同一
+Goal，先读项目规则、角色卡、Goal Contract、Resume Capsule、最新 review、当前 HEAD 与棒位；回报
+新 instance 和下一动作后继续。若领取新 Goal，无论 native session 是否复用，都必须按 Goal 文件的
+Pickup Context 做只读装载并落盘 Context Receipt；`ACCEPTED` 前禁止生产写。恢复/领取都不自行扩大
+Ready Queue、不启动自动 loop。
 
 ## Runtime 资格
 

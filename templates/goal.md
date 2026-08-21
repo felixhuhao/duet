@@ -58,6 +58,25 @@ updated: <YYYY-MM-DD HH:mm>
 - findings：无；或固定关闭条件
 - verdict：`PASS | FINDINGS | ESCALATE`（最多 substantive + closure 两轮）
 
+## Pickup Context / Launch Capsule · 开工前冻结
+
+- pickup mode：`RESUME | COLD_START`；target role / repo / cwd / branch：
+- Goal authority：`repo@sha:path`；跨仓 parent / 本仓 child：
+- 必读集（每项写 `repo@sha:path` + 它裁决什么）：
+  1. `<repo>@<sha>:<path>` — <裁决内容>
+- 继承决定 / 禁止重开项：
+- 本仓 writable scope / 明确不写：
+- 首个 increment / 第一动作：
+- refresh / stop：<文件缺失、SHA 漂移、契约冲突或其他条件>
+
+### Context Receipt · 接收者落盘后才可写生产
+
+- recipient / stable agent / instance / cwd：
+- 实际读取：<逐项路径 + SHA；不得只写“已读”>
+- 复述：Outcome / Core / Non-goals / invariants / 当前 checkpoint / 第一动作
+- mismatch / blocker：无；或 <精确冲突>
+- verdict：`PENDING | ACCEPTED | REJECTED`（`REJECTED` ⇒ `NEEDS_REFRESH`）
+
 ## Execution Notes / Resume Capsule · 可更新层
 
 - branch / HEAD / worktree：

@@ -105,6 +105,20 @@ MCP 启动阶段可能让第一次 prompt API 返回但屏幕尚无 delivery ID�
 
 只有 native session 无法恢复或 owner 明确要求时才 cold start，并在汇报中明确写 `COLD START`。
 
+### Goal pickup：迁移成功不等于上下文已装载
+
+新 Goal 的 worktree/agent ready 后，用 `baton.sh send` 投递一条指针，不在 prompt 里重新口述合同：
+
+```text
+[GOAL PICKUP] <GOAL-ID> · role=<role> · goal=<repo@sha:path> · target=<cwd/branch>
+先只读完成 Launch Capsule 并落盘 Context Receipt；ACCEPTED 前禁止生产写。
+```
+
+接收者必须核对 Goal commit、逐项必读 authority 与 target cwd，再在本仓 Goal child 写 Context Receipt。
+Receipt commit + 门铃读回才表示 pickup 完成；Herdr delivery success、agent `working` 或 worktree 已创建都
+只证明消息/进程存在。Receipt 缺文件、SHA 漂移或结论冲突时标 `REJECTED/NEEDS_REFRESH` 并停在只读边界，
+不得重新 discovery 或自行补产品决定。复用旧 native session 只省冷启动，不豁免新 Goal receipt。
+
 ## 6. 门铃验收
 
 `baton.sh send` 成功必须同时满足：目标 instance 在提交前后没变、runtime 状态允许投递、delivery ID

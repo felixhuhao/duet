@@ -17,7 +17,9 @@
 
 ## Implementation 阶段（主责）
 
-1. 读 Goal Contract、authority 和当前代码，自己完成技术设计；
+0. 按 Launch Capsule 只读装载上下文并落盘 Context Receipt；verdict `ACCEPTED` 前禁止生产写，
+   缺文件、SHA 漂移或合同冲突则记 `REJECTED/NEEDS_REFRESH`，不得重做产品 discovery；
+1. Receipt 接受后读当前代码，自己完成技术设计；
 2. 以 outcome 或风险单元组织 incremental commits；重任务每个稳定风险增量即传审，
    reviewer 工作时可继续不冲突的下一增量，新 commits 自动进入下一 review range；
 3. 每个增量负责：实现、必要文档、定向验证、提交说明、已知限制，写入 Execution Notes；

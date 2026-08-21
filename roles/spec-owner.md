@@ -16,12 +16,13 @@
 - [ ] 合并的小场景属于同一用户旅程、共享上下文与验收证据
 - [ ] 本 Goal 所需产品选择已完成（open decisions 清零或明确不阻塞）
 - [ ] authority 和 redlines 有明确来源
+- [ ] Launch Capsule 已冻结；全部 `repo@sha:path` 可从 target cwd 解析，继承决定与首个动作明确
 - [ ] 每条 AC 可在 UI、状态、请求或持久化层被观察
 - [ ] 没有会让实现方向二选一的未决问题
 - [ ] 剩余未知项可由实现者读代码安全解决，或已进 watchlist 且有到期点
 - [ ] size 为 S/M/L 且不超过两日 checkpoint；I0/I1/I2 与 integration 责任已声明
-- [ ] BASE 取边界 fetch 追平后的 HEAD；有未推 commits 无冲突可自行 rebase，
-      冲突即 `--abort` 报 owner；他人在途未提交文件 → 按顺手总则无损安置
+- [ ] BASE 取边界 fetch 追平后的 HEAD；未推 commits 无冲突可自行 rebase，冲突即 `--abort` 报 owner；
+      他人在途未提交文件 → 按顺手总则无损安置
 
 门槛不要求"所有实现细节无未知"。只有进代码才能查明的，留给实现阶段。
 

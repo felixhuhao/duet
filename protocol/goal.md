@@ -24,6 +24,13 @@
 - Goal 只分 S（约半天）/M（约一天）/L（最多两天），超过 L 在 Ready 前拆分；
 - owner 一次授权每对 2–3 个有序 Goal；降到一个 Ready 时请求补队列，开工不重复确认。
 
+**Ready 不等于已领取。** `QUEUED → ACTIVE` 前，Goal 必须冻结 Pickup Context：目标仓/cwd/role、
+可从目标 cwd 解析的精确 `repo@sha:path` 必读集、继承决定/禁止重开项、首个 increment 与 refresh/stop
+条件。跨仓 Goal 各仓有同 Goal ID 的本地 child，链接 parent authority，不让接收者从另一仓零散文档拼合同。
+投递只需携 Goal 文件路径与 commit；接收者先只读装载并把 Context Receipt 落盘：实际读取的路径/SHA、
+Outcome/Core/Non-goals/invariants 复述、第一动作和冲突。Receipt `ACCEPTED` 前禁止生产写；缺文件、SHA
+漂移或结论冲突则记 `REJECTED`、Goal 转 `NEEDS_REFRESH` 并升级，不得以重新 discovery 代替上下文。
+
 ## 3. 生命周期与并行
 
 `QUEUED → ACTIVE → READY_FOR_REVIEW → DEV_DONE`；`BLOCKED/NEEDS_REFRESH/CANCELLED` 为旁路状态。
@@ -32,7 +39,8 @@
 commit，由一个 delivery owner 汇总。共享热点遵守单写者。
 
 两日是强制 checkpoint，不是停工线：Contract 与 stop condition 未变则继续；Core 外 extension 自动回队列。
-模型/session/terminal 更换时读 Resume Capsule 继续同一 Goal，不从头调查。
+同一 Goal 的模型/session/terminal 更换读 Resume Capsule；换 Goal 必须重新走 Pickup Context/Receipt，
+不能把长期 agent 的旧上下文当作新 Goal 已装载。
 
 ## 4. 问题、Review 与 Merge
 
