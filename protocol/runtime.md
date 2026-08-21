@@ -2,6 +2,8 @@
 
 职责角色固定，客户端可换：`spec_owner` = Plan 主笔 + Acceptance Reviewer；
 `delivery_owner` = Plan Reviewer + Implementation Owner。Herdr 活实例按 `<pair>-<role>` 唯一命名。
+Herdr 0.8.0 的具体创建、通信、resume、worktree迁移与故障恢复命令见
+[`scripts/HERDR-RUNBOOK.md`](../scripts/HERDR-RUNBOOK.md)；raw CLI 编排不得靠试错发现语义。
 
 ## 多 pair 拓扑
 

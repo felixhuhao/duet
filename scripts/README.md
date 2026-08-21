@@ -12,6 +12,9 @@
 - `baton.sh peers|send|wait|read|escalate` —— 全局名称路由与门铃 helper。
 - `owner-turns.py` / `stop-turns.py` —— Claude/Codex JSONL 复盘；OpenCode 先经
   `opencode-turns.py <session-id>` 归一后从 stdin 输入。
+- [HERDR-RUNBOOK.md](HERDR-RUNBOOK.md) —— Herdr 0.8.0 owner 轨操作手册：命名 session、
+  agent 创建、跨 Goal resume、门铃、worktree 生命周期与故障恢复。任何 raw CLI 编排先查此页；
+  不用临场试错学习 Herdr。
 
 每个 pair 使用独立 workspace/工作树；可独占命名 session，也可在 owner 需要统一 sidebar 时与
 其他 pair 共用 session。实例名始终须全局唯一（推荐 `<pair>-spec/delivery`）。名字是路由，
@@ -26,9 +29,9 @@ truecolor terminal，同时关闭当前会打断内置 `codex_apps` MCP 的实�
 能力不受影响。OpenCode 除全局 permission 外仍在启动时带
 `--auto`，避免存量 `ask` 或项目级规则让非交互 pair 停在确认框；显式 `deny` 仍生效。
 
-送达验证由 `baton.sh send` 自动完成：Codex 读回 delivery id；OpenCode alternate-screen
-无法稳定读回，使用 prompt API 成功 + 状态转移。runtime working 队列只允许已完成
-qualification 的组合。通知开关在
+送达验证由 `baton.sh send` 自动完成：idle Codex 先观察 prompt 生命周期变化，再读回 delivery id；
+working Codex 使用已 qualification 的 Tab 队列；OpenCode alternate-screen 无法稳定读回，使用
+prompt API 成功 + 状态转移。runtime working 队列只允许已完成 qualification 的组合。通知开关在
 `~/.config/herdr/config.toml`（`ui.toast.delivery`，默认 off，本机已设 system）。
 
 原则：只放薄封装。开始想写调度器/状态机时，先按 README 当前治理重评是否真的需要 loopx。

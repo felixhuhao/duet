@@ -38,15 +38,20 @@ hcmd() {
   herdr --session "$target_session_name" "$@"
 }
 
-prompt_opencode() {
-  prompt_response="$(hcmd "$target_session" agent prompt "$target_name" "$msg" --wait \
-    --until working --until idle --until done --until blocked --timeout 10000)"
+prompt_with_state_confirmation() {
+  local runtime_label="$1"
+  if ! prompt_response="$(hcmd "$target_session" agent prompt "$target_name" "$msg" --wait \
+    --until working --until idle --until done --until blocked --timeout 10000)"; then
+    printf '%s\n' "$prompt_response" >&2
+    echo "DELIVERY FAILED: $runtime_label prompt 未观察到状态转移" >&2
+    exit 4
+  fi
   if ! printf '%s\n' "$prompt_response" | python3 -c '
 import json,sys
 r=json.load(sys.stdin)
 sys.exit(0 if "result" in r and "error" not in r else 1)'; then
     printf '%s\n' "$prompt_response" >&2
-    echo "DELIVERY FAILED: OpenCode prompt 未观察到状态转移" >&2
+    echo "DELIVERY FAILED: $runtime_label prompt 未观察到状态转移" >&2
     exit 4
   fi
   prompt_confirmed=true
@@ -91,7 +96,7 @@ case "$cmd" in
         hcmd "$target_session" agent wait "$target_name" --until idle --until done \
           --timeout "${DUET_DELIVERY_TIMEOUT_MS:-300000}" >/dev/null
         verify_target "$pinned_target" "$instance_id"
-        prompt_opencode
+        prompt_with_state_confirmation "OpenCode"
         ;;
       claude:working)
         hcmd "$target_session" agent prompt "$target_name" "$msg"
@@ -105,7 +110,12 @@ case "$cmd" in
         exit 4
         ;;
       opencode:*)
-        prompt_opencode
+        prompt_with_state_confirmation "OpenCode"
+        ;;
+      codex:*)
+        # v0.8.0 在 agent 刚 resume 后可能先返回 prompt API success，但输入尚未真正启动 turn。
+        # 要求观察到一次生命周期变化，再继续做 delivery-id 屏幕读回。
+        prompt_with_state_confirmation "Codex"
         ;;
       *)
         hcmd "$target_session" agent prompt "$target_name" "$msg"
