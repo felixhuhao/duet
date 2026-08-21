@@ -51,8 +51,8 @@ commit，由一个 delivery owner 汇总。共享热点遵守单写者。
 - 最多 substantive + closure 两轮；writer 等 review/merge 时可领取下一已授权 Goal；
 - reviewer PASS 后由 merge-owner 候选池串行合并；frozen HEAD 验证已合入 Goal，不是日常 merge gate；
 - Goal branch 到 merged、superseded 或 owner cancelled 后才删除；阻塞时保留 HEAD + Resume Capsule；
-- worktree checkout 生命周期独立：agent 已迁往别处或退出后，clean checkout 当次移除并保留 branch；
-  dirty/unowned 保留现场、记录 owner 与处置条件，不得把“未合 branch”当成长期保留 checkout 的理由。
+- worktree 是 owner 预置的长期席位，Goal 完成只合并/处置 branch，不删除或新建 checkout；席位下一 Goal
+  继续在原 cwd 使用。任何创建、移动、删除 worktree 的动作都必须由 owner 明确安排。
 
 ## 5. Validation 成本模型
 

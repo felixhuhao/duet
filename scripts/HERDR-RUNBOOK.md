@@ -8,7 +8,7 @@
 | 对象 | 含义 | 生命周期 |
 |---|---|---|
 | Herdr `default` session | 全部 agent 与 terminal 布局 | 长期存在；终端直接 `herdr` 进入 |
-| workspace/pane/worktree | 一个席位当前工作的隔离目录和 PTY | Goal 切换时可更换 |
+| workspace/pane/worktree | 一个席位固定的隔离目录和 PTY | 长期存在；Goal 只换 branch |
 | agent name | 稳定席位名，如 `dev1/dev2` | 跨 Goal 复用；不是任务名 |
 | native session ID | Codex/Claude/OpenCode conversation identity | resume 连续性的真源 |
 
@@ -30,31 +30,22 @@ scripts/baton.sh send <agent-name> <from-role> "事件 · 真源路径 · verdic
 - 不 heartbeat、不轮询；只有 owner/peer 消息或真实 blocked 事件唤醒 agent；
 - agent 是 `dev1/dev2` 一类长期席位，Goal 只是当前工作，不按 Goal 创建/删除 agent。
 
-当前仍在旧 named session 中工作的 agent 不为统一显示而中断；在下一次自然 Goal/worktree 迁移时，
-resume 到 `default`，确认上下文连续后再停旧 session。
+worktree 创建、移动、删除只由 owner 安排；agent、reviewer、orchestrator 禁止临时建树。事故恢复也只能
+打开 owner 已准备的树，不能以“恢复”为由创建 checkout。
 
-## 3. 创建或打开工作树
+## 3. 只打开 owner 已准备的工作树
 
-新 worktree：
-
-```bash
-created=$(herdr worktree create \
-  --cwd /absolute/repo/root --branch goal/example --base v2 \
-  --path /absolute/worktree/path --label example --no-focus)
-pane_id=$(printf '%s\n' "$created" | jq -r '.result.root_pane.pane_id')
-```
-
-已有 worktree：
+`herdr worktree create` 与 `git worktree add` 不进入日常命令面。owner 准备好长期树后，只用 open：
 
 ```bash
 opened=$(herdr worktree open \
   --cwd /absolute/repo/root --path /absolute/worktree/path \
-  --label example --no-focus)
+  --label wt1 --no-focus)
 pane_id=$(printf '%s\n' "$opened" | jq -r '.result.root_pane.pane_id')
 ```
 
-已有树必须用 `worktree open`，不能用 `workspace create --cwd` 冒充；必须从 JSON 读取 pane ID，
-不能猜 `wN:p1`。
+必须确认路径、branch 与 owner 分配一致；用 `worktree open`，不能用 `workspace create --cwd` 冒充；
+从 JSON 读取 pane ID，不能猜 `wN:p1`。
 
 ## 4. 启动和 resume 只走一个入口
 
@@ -86,19 +77,18 @@ helper 同时从 pane 实时读取 cwd，自动给 Codex 加 `--cd`；pane cwd �
 
 不要手写 `pane run` + `agent start`；这正是 2026-08-21 无颜色 regression 的入口。
 
-## 5. Goal/worktree 迁移，不冷启动
+## 5. Goal 切换不迁 cwd
 
 固定顺序：
 
-1. 让旧 agent 到安全停点，记录 agent 名、旧 pane/cwd、native session ID、当前 Goal/commit；
-2. 用 `worktree create/open` 准备新 workspace，旧树先保留；
-3. 对 Codex 清空未提交的 prompt 后发送 `ctrl+d`；
-4. 同时确认旧 agent 名已释放、旧 pane 前台已回 shell；
-5. 在新 pane 用 `herdr-agent-start.sh` 以同名、同 native session ID resume；
-6. 核对新 cwd、native session ID 不变、instance ID 已变化、`color=ok`；
-7. 用 `baton.sh send` 发 `RESUME-OK CHECK`，要求复述上一 Goal/commit/下一步，并读回 delivery ID；
-8. 运行 `scripts/worktree-audit.py <repo-root>`；clean source checkout 当次移除，dirty source 升级；
-9. audit 无未处置项后才能宣布迁移完成。
+1. agent 在固定 `wt1/wt2` 完成当前 Goal、提交并回报 branch/HEAD；
+2. owner/merge-owner 在 canonical 主树把 branch 合入 `v2`；
+3. owner 指定下一 Goal branch 与 BASE，agent 在同一席位树切 branch；
+4. 核对 cwd、workspace、agent 名与 native session 都未变化，再走 Pickup Context/Receipt；
+5. 没有下一 Goal 时保持原 branch idle，不退出、不清 worktree。
+
+只有进程退出、workspace 丢失或 owner 指定拓扑变更才 resume。此时先 `worktree open` 固定树，再按第 4 节
+恢复原 native session；禁止创建替代树。恢复后核 cwd/session/instance/color/MCP，并发一次回验门铃。
 
 MCP 启动阶段可能让第一次 prompt API 返回但屏幕尚无 delivery ID。此时判定“未送达”，等启动完成，
 确认消息没有消费后最多重投一次；API success 不是交棒成功。
@@ -128,31 +118,25 @@ Receipt commit + 门铃读回才表示 pickup 完成；Herdr delivery success、
 Codex working 时门铃用 `Tab` 排入下一 turn。普通消息不得写入 blocked approval UI；`unknown/dead`
 也拒绝投递。`agent wait` 只用于 owner 点名诊断或一次迁移验证，必须带 timeout。
 
-## 7. Worktree 收尾
+## 7. Worktree 拓扑审计
 
 ```bash
 scripts/worktree-audit.py /absolute/repo/root
 ```
 
-结果只有三种：`ACTIVE` 正被 agent 使用；`CLEAN_UNOWNED` 是契约违规，保留 branch 并在本次迁移动作
-中删除 checkout；`DIRTY_UNOWNED` 是未知在途现场，禁止删除，必须报告 dirty 文件、owner 和处置条件。
-audit 是事件后的单次验收，不是 heartbeat。
+最终拓扑只允许 canonical 主树与 owner 声明的长期席位树。`ACTIVE` 表示 agent 正绑定；维护窗口中固定
+席位可暂时 unowned，resume 后必须回到 `ACTIVE`。除此以外的 `CLEAN_UNOWNED/DIRTY_UNOWNED` 都是 legacy，
+只报告 branch、HEAD、dirty 文件与可恢复指针；不得自行处置。audit 是事件后的单次验收，不是 heartbeat。
 
-Herdr 管理的 workspace 优先使用：
+只有 owner 明确给出目标后，才可在维护窗口执行移动/删除；不删 branch、不使用 `--force`：
 
 ```bash
-herdr worktree remove --workspace <old-workspace-id>
+git -C <repo-root> worktree move <old-path> <owner-approved-path>
+git -C <repo-root> worktree remove <owner-approved-legacy-path>
 ```
 
-若 checkout 不在当前 Herdr session，使用 `git -C <repo-root> worktree remove <path>`。两者都不删 branch，
-都不得使用 `--force`。只有以下条件全满足才清：
-
-- 同一 native session 已在新 cwd 恢复，instance 与上下文连续性已确认；
-- 旧树 clean；
-- 旧 commit 有 branch、已合主线或其他可恢复指针。
-
-下一 Goal 未定时让 agent 在当前 worktree idle，不退出、不另留无 agent checkout；这同时保护活 context
-并避免残留。agent 一旦迁往新 cwd，旧 clean checkout 必须在同一动作清掉。
+执行前必须确认目标树 clean 或已保存、commit 有 branch/其他恢复指针、无 agent 进程占用；执行后重新
+open 固定树并 resume 原 session。普通 Goal 收尾只处理 branch，永不触发这里的 worktree 命令。
 
 ## 8. 最短诊断表
 

@@ -2,24 +2,22 @@
 
 职责角色固定，客户端可换：`spec_owner` = Plan 主笔 + Acceptance Reviewer；
 `delivery_owner` = Plan Reviewer + Implementation Owner。Herdr agent 是长期开发席位，不是 Goal 容器；
-使用稳定名字（如 `dev1/dev2` 或 `<pair>-<role>`），换 Goal 不换 identity。Herdr 0.8.0 的具体创建、
-通信、resume、worktree迁移与故障恢复命令见
+使用稳定名字（如 `dev1/dev2` 或 `<pair>-<role>`），换 Goal 不换 identity。Herdr 0.8.0 的具体启动、
+通信、resume、固定 worktree 绑定与故障恢复命令见
 [`scripts/HERDR-RUNBOOK.md`](../scripts/HERDR-RUNBOOK.md)；raw CLI 编排不得靠试错发现语义。
 
 ## 唯一默认拓扑
 
 所有 agent 放在 Herdr `default` session，因此 owner 在 terminal 直接运行 `herdr` 就能看到全部席位。
-每个活 agent 独占一个 workspace/pane/工作树，名字在该 session 内唯一，且只能写自己的工作树。
+每个活 agent 独占一个长期 workspace/pane/worktree 席位，名字在该 session 内唯一，且只能写自己的树。
 `baton.sh peers/send/read/wait` 默认只操作这个 session，不缓存状态、不发送 heartbeat。旧命名 session
 只在自然 Goal 迁移时搬入 `default`；不得为了统一显示中断在途工作。跨-session federation 仅是事故
 恢复兼容面，不进入正常调度或文档主路径。
 
-agent/pair 是跨 Goal 续用的协作上下文，不是一次性任务容器。scout、规划、review 与实现默认续用原
-native session，从 owner 已授权的 Ready Queue 领取；不要仅因阶段或 Goal 编号变化冷启动。
-宿主仓要求一 Goal 一 worktree 时，切换顺序固定为：新 worktree 就绪 → 同一 session 迁入/恢复并回报
-新 cwd、instance 与上下文连续性 → `worktree-audit.py` → 当次移除旧 clean checkout（branch 保留）。
-下一 Goal 未确定时，agent 在原 cwd 保持 idle；一旦 agent 退出或迁往新 cwd，该例外立即失效。
-dirty/unowned 一律升级并保留现场。只有原 native session 无法恢复时才冷启动新上下文。
+agent/pair 与其 worktree 是跨 Goal 续用的长期席位，不是一次性任务容器；换 Goal 只换 branch，不换
+cwd、workspace、identity 或 native session。worktree 的创建、移动、删除只由 owner 安排；agent、pair、
+orchestrator 严禁运行创建命令或为任务临时加树。规划/grilling 在宿主仓 canonical 主树进行，开发席位
+只消费已授权 Goal。下一 Goal 未确定时原地 idle；只有原 native session 无法恢复时才冷启动。
 
 ## 每个 pair 必须声明
 

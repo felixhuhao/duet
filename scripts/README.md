@@ -20,10 +20,11 @@
   agent 创建、跨 Goal resume、门铃、worktree 生命周期与故障恢复；
   不用临场试错学习 Herdr。
 
-所有长期 agent 席位使用 Herdr `default` session，各自占独立 workspace/工作树；terminal 直接运行
+所有长期 agent 席位使用 Herdr `default` session，各自绑定 owner 预置的长期 workspace/worktree；terminal 直接运行
 `herdr` 即可统一查看。实例名在该 session 内唯一（推荐稳定的 `dev1/dev2` 或
 `<pair>-spec/delivery`）。名字是路由，
-`instance_id` 才标识本次进程；`baton.sh send` 会在提交前后校验并把它写入门铃。恢复时保留名字：
+`instance_id` 才标识本次进程；Goal 切换只换 branch，严禁 agent/orchestrator 创建 worktree。
+`baton.sh send` 会在提交前后校验并把 instance 写入门铃。进程恢复时保留名字：
 Codex 用 `herdr-agent-start.sh ... resume <session-id> --disable network_proxy`；
 OpenCode 用 `herdr-agent-start.sh ... --session <session-id> --auto`。恢复后必须用上一轮 delivery id
 做一次上下文连续性检查，并用 `baton.sh peers` 取得新的 instance_id。

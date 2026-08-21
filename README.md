@@ -91,10 +91,10 @@ devlog/移交单）按宿主仓的功能/类型惯例归档与命名，不以流
 - P2 默认不阻塞，只登记到期点；P0/P1 与两轮上限见 `protocol/verdict.md`。
 - 纯调查/scout 不开 batch、不走两轮 review，报告交付即结束。
 - 所有 agent 默认住 Herdr `default` session，终端直接运行 `herdr` 即可查看；agent 是跨 Goal 续用的
-  长期席位，不按任务创建或删除。宿主仓若要求一 Goal 一 worktree，先创建下一树，再用同一 native
-  session 恢复同名 agent。迁移完成必须同时满足上下文连续和 worktree audit 无未处置项：clean 且无
-  agent 的 checkout 当次移除但保留 branch；dirty 且无 agent 的现场立即升级、禁止自动处理。下一 Goal
-  未定时让 agent 在原 cwd idle；一旦 agent 退出或迁往新 cwd，保留例外立即失效。跨-session 只用于事故恢复。
+  长期席位，不按任务创建或删除；每个席位绑定 owner 预置的长期 worktree，换 Goal 只换 branch。
+  worktree 创建、移动、删除严格由 owner 安排，agent/orchestrator 不得临时建树。canonical 主树承载
+  grilling、规划、merge 与真源回写，开发席位只写自己的树；下一 Goal 未定时原地 idle。跨-session
+  与 cwd 迁移只用于 owner 指定的拓扑变更或事故恢复。
 - 顺手动作必须同时满足：结果唯一或可逆、不占他人决策权、留痕可 review；AC/scope/契约/
   金额权限/verdict 不得顺手改。
 - fetch 只在定 BASE、实施开工、Done 门禁三个边界做；轮次中不追新。无冲突可自行追平，
