@@ -29,7 +29,9 @@ class HerdrAgentStartTest(unittest.TestCase):
                     with pathlib.Path(os.environ["CALL_LOG"]).open("a") as stream:
                         stream.write(" ".join(args) + "\\n")
                     core = args[2:] if args[:2] == ["--session", "default"] else args
-                    if core[:2] == ["pane", "process-info"]:
+                    if core[:2] == ["pane", "get"]:
+                        print(json.dumps({"result": {"pane": {"cwd": "/tmp"}}}))
+                    elif core[:2] == ["pane", "process-info"]:
                         print(json.dumps({"result": {"process_info": {"foreground_processes": [{"name": "codex", "pid": 123}]}}}))
                     else:
                         print(json.dumps({"result": {"type": "ok"}}))
@@ -59,6 +61,15 @@ class HerdrAgentStartTest(unittest.TestCase):
         self.assertLess(calls.index("pane run"), calls.index("agent start"))
         self.assertIn("unset NO_COLOR CODEX_CI", calls)
         self.assertIn("agent start dev1 --kind codex --pane w1:p1 --timeout 120000 -- resume native-session", calls)
+
+    def test_resume_pins_codex_to_the_pane_worktree(self):
+        result, calls = self.run_start("codex TERM=xterm-256color COLORTERM=truecolor")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn(
+            "agent start dev1 --kind codex --pane w1:p1 --timeout 120000 -- "
+            "resume native-session --cd /tmp",
+            calls,
+        )
 
     def test_live_codex_with_no_color_is_rejected(self):
         result, _ = self.run_start(

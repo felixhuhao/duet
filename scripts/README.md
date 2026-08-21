@@ -8,7 +8,7 @@
   OpenCode 默认带官方 `--auto`，自动批准所有非显式 deny 的 permission request；
 - `herdr-setup.sh <work-repo> [codex-dir] [label]` —— 旧 Claude/Codex 组合的兼容入口；
 - `herdr-agent-start.sh <name> <kind> <pane> [runtime args...]` —— 新建和 resume 的唯一启动入口；
-  准备 truecolor pane 环境，并对活 Codex 进程做禁色变量断言；
+  准备 truecolor pane 环境，把 Codex `--cd` 固定到 pane 的现存 worktree，并对活进程做禁色变量断言；
 - `herdr-federation.py peers|resolve|verify` —— `baton.sh` 的实时 instance 计算器；正常只看当前 session，
   无缓存、无轮询，跨-session 仅保留为事故兼容；
 - `baton.sh peers|send|wait|read|escalate` —— 当前 session 内的名称路由与门铃 helper；默认 `default`。

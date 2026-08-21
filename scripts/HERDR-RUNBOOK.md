@@ -81,6 +81,8 @@ scripts/herdr-agent-start.sh dev2 opencode "$pane_id" \
 helper 在启动前清除 `NO_COLOR/CODEX_CI` 等宿主变量，固定
 `TERM=xterm-256color`、`COLORTERM=truecolor`，并检查活 Codex 进程确实继承。出现
 `color preflight` 失败时不得继续交棒；先修环境并 resume 同一 native session。
+helper 同时从 pane 实时读取 cwd，自动给 Codex 加 `--cd`；pane cwd 不存在或显式参数与 pane 不一致时
+拒绝启动。否则 Codex resume 会复用旧 session cwd，使 SessionStart hook 和 MCP 在旧树删除后一起失败。
 
 不要手写 `pane run` + `agent start`；这正是 2026-08-21 无颜色 regression 的入口。
 
@@ -148,7 +150,7 @@ herdr worktree remove --workspace <old-workspace-id>
 | `name_taken` | `pane process-info` | 等旧进程退出和名字释放，不换名字 |
 | cwd 错 | `agent get` 的 foreground cwd | 立即停写，resume 到正确 worktree |
 | 无颜色 | 活 Codex 进程的 `NO_COLOR/CODEX_CI/TERM/COLORTERM` | 同 session 安全退出，再走唯一启动 helper |
-| MCP startup interrupted | `agent read` | 等启动结束；不把 prompt API success 当送达 |
+| MCP startup interrupted | `agent read` | 若是等待则等启动；若 hook/MCP 同报 `No such file`，核 Codex `--cd` 与 pane cwd |
 
 需要深查再看 `~/.config/herdr/herdr*.log`，只摘取已脱敏的信号。未经 owner 指令不升级 Herdr、
 不 stop server、不 push、不删 branch、不使用 `--force`。
