@@ -17,7 +17,8 @@
 agent/pair 与其 worktree 是跨 Goal 续用的长期席位，不是一次性任务容器；换 Goal 只换 branch，不换
 cwd、workspace、identity 或 native session。worktree 的创建、移动、删除只由 owner 安排；agent、pair、
 orchestrator 严禁运行创建命令或为任务临时加树。规划/grilling 在宿主仓 canonical 主树进行，开发席位
-只消费已授权 Goal。下一 Goal 未确定时原地 idle；只有原 native session 无法恢复时才冷启动。
+只消费已授权 Goal；每次领取前先让目标 branch 包含冻结的 canonical BASE，再验 ancestor/Receipt。
+下一 Goal 未确定时原地 idle；只有原 native session 无法恢复时才冷启动。
 
 ## 每个 pair 必须声明
 

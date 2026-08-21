@@ -61,6 +61,7 @@ updated: <YYYY-MM-DD HH:mm>
 ## Pickup Context / Launch Capsule · 开工前冻结
 
 - pickup mode：`RESUME | COLD_START`；target role / repo / cwd / branch：
+- canonical BASE：`v2@<sha>`（或宿主仓等价主线）；目标 branch 必须包含此 SHA：
 - Goal authority：`repo@sha:path`；跨仓 parent / 本仓 child：
 - 必读集（每项写 `repo@sha:path` + 它裁决什么）：
   1. `<repo>@<sha>:<path>` — <裁决内容>
@@ -72,6 +73,7 @@ updated: <YYYY-MM-DD HH:mm>
 ### Context Receipt · 接收者落盘后才可写生产
 
 - recipient / stable agent / instance / cwd：
+- BASE pickup：`git merge-base --is-ancestor <base-sha> HEAD` → `PASS | FAIL`：
 - 实际读取：<逐项路径 + SHA；不得只写“已读”>
 - 复述：Outcome / Core / Non-goals / invariants / 当前 checkpoint / 第一动作
 - mismatch / blocker：无；或 <精确冲突>

@@ -30,6 +30,9 @@
 投递只需携 Goal 文件路径与 commit；接收者先只读装载并把 Context Receipt 落盘：实际读取的路径/SHA、
 Outcome/Core/Non-goals/invariants 复述、第一动作和冲突。Receipt `ACCEPTED` 前禁止生产写；缺文件、SHA
 漂移或结论冲突则记 `REJECTED`、Goal 转 `NEEDS_REFRESH` 并升级，不得以重新 discovery 代替上下文。
+新 Goal 领取前还必须冻结 canonical BASE（如本地 `v2@SHA`），让固定 worktree 的目标 branch 包含该
+SHA，并以 `git merge-base --is-ancestor <SHA> HEAD` 通过为准；Receipt 记录命令与结果。不同步不 ACTIVE，
+冲突则停止；不得用 reset/rebase 覆盖现场，也不把“同步本地 v2”解释成自动 fetch/pull。
 
 ## 3. 生命周期与并行
 

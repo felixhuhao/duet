@@ -83,9 +83,10 @@ helper 同时从 pane 实时读取 cwd，自动给 Codex 加 `--cd`；pane cwd �
 
 1. agent 在固定 `wt1/wt2` 完成当前 Goal、提交并回报 branch/HEAD；
 2. owner/merge-owner 在 canonical 主树把 branch 合入 `v2`；
-3. owner 指定下一 Goal branch 与 BASE，agent 在同一席位树切 branch；
-4. 核对 cwd、workspace、agent 名与 native session 都未变化，再走 Pickup Context/Receipt；
-5. 没有下一 Goal 时保持原 branch idle，不退出、不清 worktree。
+3. owner 冻结下一 Goal 的本地 `v2@SHA`，agent 在同一席位树切到 owner 指定 branch；
+4. 生产写前让 branch 包含该 SHA，并运行 `git merge-base --is-ancestor <SHA> HEAD`；不通过或冲突即停；
+5. 核对 cwd/workspace/session 未变化，把 BASE 与 ancestor 结果写入 Pickup Context/Receipt；
+6. 没有下一 Goal 时保持原 branch idle，不退出、不清 worktree。
 
 只有进程退出、workspace 丢失或 owner 指定拓扑变更才 resume。维护退出前必须确认 idle，先用
 `Ctrl+U` 清空未提交 composer，再 `Ctrl+D`；不能只凭画面空白推断输入为空。随后 `worktree open` 固定树，
@@ -101,11 +102,11 @@ MCP 启动阶段可能让第一次 prompt API 返回但屏幕尚无 delivery ID�
 新 Goal 的 worktree/agent ready 后，用 `baton.sh send` 投递一条指针，不在 prompt 里重新口述合同：
 
 ```text
-[GOAL PICKUP] <GOAL-ID> · role=<role> · goal=<repo@sha:path> · target=<cwd/branch>
+[GOAL PICKUP] <GOAL-ID> · role=<role> · goal=<repo@sha:path> · target=<cwd/branch> · base=v2@<sha>
 先只读完成 Launch Capsule 并落盘 Context Receipt；ACCEPTED 前禁止生产写。
 ```
 
-接收者必须核对 Goal commit、逐项必读 authority 与 target cwd，再在本仓 Goal child 写 Context Receipt。
+接收者必须核对 Goal commit、逐项必读 authority、target cwd 与冻结 BASE 的 ancestor 证明，再写 Receipt。
 Receipt commit + 门铃读回才表示 pickup 完成；Herdr delivery success、agent `working` 或 worktree 已创建都
 只证明消息/进程存在。Receipt 缺文件、SHA 漂移或结论冲突时标 `REJECTED/NEEDS_REFRESH` 并停在只读边界，
 不得重新 discovery 或自行补产品决定。复用旧 native session 只省冷启动，不豁免新 Goal receipt。
