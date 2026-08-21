@@ -33,7 +33,7 @@ if ! printf '%s\n' "$SERVER_STATUS" | grep -q "status: running"; then
   sleep 2
 fi
 
-GLOBAL_AGENTS="$(python3 "$SCRIPT_DIR/herdr-federation.py" peers --json)"
+GLOBAL_AGENTS="$(python3 "$SCRIPT_DIR/herdr-federation.py" peers --json --session "$SESSION_NAME")"
 for candidate in "$SPEC_NAME" "$DELIVERY_NAME"; do
   if printf '%s\n' "$GLOBAL_AGENTS" | python3 -c '
 import json,sys
@@ -78,37 +78,27 @@ else
 fi
 P2="$(printf '%s\n' "$SPLIT_JSON" | python3 -c 'import json,sys; print(json.load(sys.stdin)["result"]["pane"]["pane_id"])')"
 
-prepare_pane_env() {
-  local pane="$1" marker="__DUET_ENV_READY__"
-  # Herdr may already be running inside a host that exports NO_COLOR (for example
-  # the Codex VS Code host).  Clear it in the persistent pane shell so every
-  # subsequently started TUI gets the same capabilities as a normal terminal.
-  hcmd pane run "$pane" \
-    "unset NO_COLOR CODEX_CI CODEX_INTERNAL_ORIGINATOR_OVERRIDE CODEX_PERMISSION_PROFILE CODEX_THREAD_ID; export TERM=xterm-256color COLORTERM=truecolor; printf '__DUET_%s_READY__\\n' ENV"
-  hcmd pane wait-output "$pane" --match "$marker" --source recent --timeout 5000 >/dev/null
-}
-
-prepare_pane_env "$P1"
-prepare_pane_env "$P2"
-
 start_agent() {
   local name="$1" kind="$2" pane="$3"
   if [ "$kind" = "opencode" ]; then
-    hcmd agent start "$name" --kind "$kind" --pane "$pane" --timeout 120000 -- --auto
+    HERDR_SESSION="$SESSION_NAME" HERDR_BIN="$HERDR_BIN" \
+      "$SCRIPT_DIR/herdr-agent-start.sh" "$name" "$kind" "$pane" --auto
   elif [ "$kind" = "codex" ]; then
     # v0.147.0: the experimental network proxy interrupts the built-in
     # codex_apps MCP on this runtime; normal network access remains available.
-    hcmd agent start "$name" --kind "$kind" --pane "$pane" --timeout 120000 -- --disable network_proxy
+    HERDR_SESSION="$SESSION_NAME" HERDR_BIN="$HERDR_BIN" \
+      "$SCRIPT_DIR/herdr-agent-start.sh" "$name" "$kind" "$pane" --disable network_proxy
   else
-    hcmd agent start "$name" --kind "$kind" --pane "$pane" --timeout 120000
+    HERDR_SESSION="$SESSION_NAME" HERDR_BIN="$HERDR_BIN" \
+      "$SCRIPT_DIR/herdr-agent-start.sh" "$name" "$kind" "$pane"
   fi
 }
 
 start_agent "$SPEC_NAME" "$SPEC_KIND" "$P1"
 start_agent "$DELIVERY_NAME" "$DELIVERY_KIND" "$P2"
 
-SPEC_ROUTE="$(python3 "$SCRIPT_DIR/herdr-federation.py" resolve "$SESSION_NAME/$SPEC_NAME")"
-DELIVERY_ROUTE="$(python3 "$SCRIPT_DIR/herdr-federation.py" resolve "$SESSION_NAME/$DELIVERY_NAME")"
+SPEC_ROUTE="$(python3 "$SCRIPT_DIR/herdr-federation.py" resolve "$SESSION_NAME/$SPEC_NAME" --session "$SESSION_NAME")"
+DELIVERY_ROUTE="$(python3 "$SCRIPT_DIR/herdr-federation.py" resolve "$SESSION_NAME/$DELIVERY_NAME" --session "$SESSION_NAME")"
 SPEC_INSTANCE="$(printf '%s\n' "$SPEC_ROUTE" | python3 -c 'import json,sys; print(json.load(sys.stdin)["instance_id"])')"
 DELIVERY_INSTANCE="$(printf '%s\n' "$DELIVERY_ROUTE" | python3 -c 'import json,sys; print(json.load(sys.stdin)["instance_id"])')"
 

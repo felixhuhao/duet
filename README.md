@@ -11,7 +11,7 @@
 ## 三层架构
 
 ```text
-运行时层   每 pair 一个独立 workspace；可独占 session，也可多 pair 共用 session；owner 按需介入
+运行时层   一个 default Herdr session；长期 agent 席位各占一个 workspace/工作树；owner 按需介入
 状态层     md 文件。定义住本仓库；实例（roadmap/Goal/validation ledger）住各工作仓库
 决策层     OD 分层路由：真源就地；owner 轨同步 decision-log，⬜ 行兼任收件箱；建卡自选
 ```
@@ -20,6 +20,10 @@
 唯一例外是跨仓库积累的校准数据，住本仓库 `calibration/`。
 
 ## 核心原则
+
+**Simple and effective：默认路径只保留一种。** 一个 Herdr `default` session、长期 agent 席位、
+事件驱动门铃、文件真源、可读回验收。新规则只有在替换旧分支并减少 owner/agent 的认知负担时才进入
+主流程；兼容路径留在故障说明，不得反向污染日常操作。
 
 1. **每个 Goal 一个交付 owner，另一方独立 review。** Goal Contract 由 Spec Owner 主笔、
    Delivery Owner review；Implementation 由 Delivery Owner 主写、Spec Owner 验收。
@@ -69,7 +73,7 @@ roles/        spec-owner / delivery-owner —— 两张职责角色卡，与 run
 protocol/     baton / verdict / escalation / owner-report / runtime —— 传棒、结论、升级、汇报、运行时
 calibration/  decision-log（校准记录）+ stage（阶段梯子与毕业状态）
 templates/    Goal / outcome roadmap / validation ledger + review 模板，实例化到工作仓库
-scripts/      已验证的 herdr pair 启动、门铃与态势工具
+scripts/      已验证的 Herdr agent 启动/resume、门铃与态势工具
 ```
 
 工作仓库接入方式：项目 `AGENTS.md` 声明 duet 入口；每次 pair 启动由 runtime manifest 和
@@ -86,11 +90,10 @@ devlog/移交单）按宿主仓的功能/类型惯例归档与命名，不以流
 - 实现中发现 Contract 缺陷，追加 Addendum；影响 Outcome/Core/AC 时局部重开，不包装成实现 finding。
 - P2 默认不阻塞，只登记到期点；P0/P1 与两轮上限见 `protocol/verdict.md`。
 - 纯调查/scout 不开 batch、不走两轮 review，报告交付即结束。
-- agent/pair 默认跨 Goal 续用，覆盖 scout、规划、review 与实现；宿主仓若要求一 Goal 一 worktree，
-  先创建下一 worktree 并把同一 session 迁入/恢复，确认新 cwd、instance 与上下文连续后再删旧树。
-  下一 Goal 未确定时保持 idle 和旧 clean worktree，不为清目录冷启动。多个 pair 可共用 Herdr
-  session，但仍须一 pair 一 workspace/工作树、实例名全局唯一；需要 terminal 完全隔离时可一
-  pair 一 session。
+- 所有 agent 默认住 Herdr `default` session，终端直接运行 `herdr` 即可查看；agent 是跨 Goal 续用的
+  长期席位，不按任务创建或删除。宿主仓若要求一 Goal 一 worktree，先创建下一树，再用同一 native
+  session 恢复同名 agent，确认 cwd、instance 与上下文连续后才删旧树。下一 Goal 未定时保持 idle 和旧
+  clean worktree，不为清目录冷启动。跨-session 只用于迁移/事故恢复，不是正常拓扑。
 - 顺手动作必须同时满足：结果唯一或可逆、不占他人决策权、留痕可 review；AC/scope/契约/
   金额权限/verdict 不得顺手改。
 - fetch 只在定 BASE、实施开工、Done 门禁三个边界做；轮次中不追新。无冲突可自行追平，

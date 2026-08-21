@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# 门铃 helper：跨 session 传棒 / 状态 / 等待 / 读 pane / escalate。协议见 protocol/baton.md。
+# 门铃 helper：default session 内传棒 / 状态 / 等待 / 读 pane / escalate。协议见 protocol/baton.md。
 #
 # 用法：
 #   baton.sh peers [--json]
-#       实时列出所有 running Herdr session 中的命名 agent；不轮询、不缓存。
+#       实时列出当前 Herdr session 中的命名 agent；不轮询、不缓存。
 #   baton.sh send <to-agent-name> <from-role> <message>
 #       组装 "[peer:<from-role>] <message>"，按目标 runtime 的已验证方式投递并读回。
 #       投递绑定实时 incarnation；提交前后发生重启则拒绝宣布送达。
@@ -20,13 +20,14 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 FEDERATION="$SCRIPT_DIR/herdr-federation.py"
+SESSION_NAME="${HERDR_SESSION:-default}"
 
 resolve_target() {
-  python3 "$FEDERATION" resolve "$1"
+  python3 "$FEDERATION" resolve "$SESSION_NAME/$1" --session "$SESSION_NAME"
 }
 
 verify_target() {
-  python3 "$FEDERATION" verify "$1" "$2" >/dev/null
+  python3 "$FEDERATION" verify "$1" "$2" --session "$SESSION_NAME" >/dev/null
 }
 
 route_field() {
@@ -60,7 +61,7 @@ sys.exit(0 if "result" in r and "error" not in r else 1)'; then
 cmd="${1:?用法见文件头}"; shift
 case "$cmd" in
   peers)
-    python3 "$FEDERATION" peers "$@"
+    python3 "$FEDERATION" peers "$@" --session "$SESSION_NAME"
     ;;
   send)
     to="${1:?to-agent-name}"; from="${2:?from-role}"; shift 2

@@ -63,6 +63,7 @@ class BatonTest(unittest.TestCase):
                 {
                     "PATH": f"{temp_dir}:{env['PATH']}",
                     "HERDR_BIN": str(fake_herdr),
+                    "HERDR_SESSION": "test-session",
                     "FAKE_PROMPT_LOG": str(prompt_log),
                     "FAKE_ARGS_LOG": str(args_log),
                 }

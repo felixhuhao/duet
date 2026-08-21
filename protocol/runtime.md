@@ -1,21 +1,21 @@
 # Runtime 绑定与资格协议
 
 职责角色固定，客户端可换：`spec_owner` = Plan 主笔 + Acceptance Reviewer；
-`delivery_owner` = Plan Reviewer + Implementation Owner。Herdr 活实例按 `<pair>-<role>` 唯一命名。
-Herdr 0.8.0 的具体创建、通信、resume、worktree迁移与故障恢复命令见
+`delivery_owner` = Plan Reviewer + Implementation Owner。Herdr agent 是长期开发席位，不是 Goal 容器；
+使用稳定名字（如 `dev1/dev2` 或 `<pair>-<role>`），换 Goal 不换 identity。Herdr 0.8.0 的具体创建、
+通信、resume、worktree迁移与故障恢复命令见
 [`scripts/HERDR-RUNBOOK.md`](../scripts/HERDR-RUNBOOK.md)；raw CLI 编排不得靠试错发现语义。
 
-## 多 pair 拓扑
+## 唯一默认拓扑
 
-运行隔离单位是 pair 的 workspace + 工作树，不强绑 session。默认一个 pair 独占一个命名
-Herdr session，适合多个 terminal 各看一对；owner 要在同一 sidebar 监控时，也可让多个 pair
-共用一个命名 session，但必须一 pair 一 workspace、实例名全局唯一，且不得跨工作树写入。
-`scripts/herdr-federation.py` 每次从所有 running session 实时聚合 agent；
-`baton.sh peers/send/read/wait` 对同 session 和跨 session 使用同一名称路由，不缓存状态、不发送
-heartbeat。原生 TUI sidebar 显示本 session 的所有 workspace；其他 session 状态按需查 `peers`。
+所有 agent 放在 Herdr `default` session，因此 owner 在 terminal 直接运行 `herdr` 就能看到全部席位。
+每个活 agent 独占一个 workspace/pane/工作树，名字在该 session 内唯一，且只能写自己的工作树。
+`baton.sh peers/send/read/wait` 默认只操作这个 session，不缓存状态、不发送 heartbeat。旧命名 session
+只在自然 Goal 迁移时搬入 `default`；不得为了统一显示中断在途工作。跨-session federation 仅是事故
+恢复兼容面，不进入正常调度或文档主路径。
 
 agent/pair 是跨 Goal 续用的协作上下文，不是一次性任务容器。scout、规划、review 与实现默认续用原
-session，从 owner 已授权的 Ready Queue 领取；不要仅因阶段或 Goal 编号变化冷启动。
+native session，从 owner 已授权的 Ready Queue 领取；不要仅因阶段或 Goal 编号变化冷启动。
 宿主仓要求一 Goal 一 worktree 时，切换顺序固定为：新 worktree 就绪 → 同一 session 迁入/恢复并回报
 新 cwd、instance 与上下文连续性 → 再删除旧 worktree/分支。下一 Goal 未确定时，agent 保持 idle，旧的
 clean worktree 暂留；不得为了目录整洁提前退出 agent。只有原 session 无法恢复时才冷启动新上下文。
@@ -23,8 +23,8 @@ clean worktree 暂留；不得为了目录整洁提前退出 agent。只有原 s
 ## 每个 pair 必须声明
 
 ```text
-spec_owner:     <global name> · <session> · <kind> · <instance_id> · <cwd> · roles/spec-owner.md
-delivery_owner: <global name> · <session> · <kind> · <instance_id> · <cwd> · roles/delivery-owner.md
+spec_owner:     <stable name> · default · <kind> · <instance_id> · <cwd> · roles/spec-owner.md
+delivery_owner: <stable name> · default · <kind> · <instance_id> · <cwd> · roles/delivery-owner.md
 ```
 
 名字只负责路由；`instance_id` 由 terminal + 本次前台进程实时计算，重启即变化。门铃提交前后必须
@@ -47,7 +47,7 @@ Herdr 的 `done` 表示本 turn 完成且进程仍在，归一为 `idle`，不�
 
 1. 用 `herdr agent start <name> --kind <kind>` 启动，重启后名字与原会话都能恢复；
 2. 从真实工作目录读取项目规则与角色卡，并验证该 batch 所需目录权限；
-3. 五态可归一，跨 session 门铃有 delivery-id + target-instance 回执；
+3. 五态可归一，门铃有 delivery-id + target-instance 回执；
 4. working 时普通门铃不会 steering 或丢失，stop 类能安全停止受影响工作；
 5. 跑通一次 plan review → implementation review → owner gate，并生成一屏自含摘要。
 

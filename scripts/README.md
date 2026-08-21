@@ -7,25 +7,29 @@
   默认 `<session>-spec=codex`、`<session>-delivery=opencode`，也可通过 kind 参数替换客户端；
   OpenCode 默认带官方 `--auto`，自动批准所有非显式 deny 的 permission request；
 - `herdr-setup.sh <work-repo> [codex-dir] [label]` —— 旧 Claude/Codex 组合的兼容入口；
-- `herdr-federation.py peers|resolve|verify` —— 聚合 running sessions，并从 terminal + 前台进程
-  计算本次 incarnation；不缓存、不轮询；
-- `baton.sh peers|send|wait|read|escalate` —— 全局名称路由与门铃 helper。
+- `herdr-agent-start.sh <name> <kind> <pane> [runtime args...]` —— 新建和 resume 的唯一启动入口；
+  准备 truecolor pane 环境，并对活 Codex 进程做禁色变量断言；
+- `herdr-federation.py peers|resolve|verify` —— `baton.sh` 的实时 instance 计算器；正常只看当前 session，
+  无缓存、无轮询，跨-session 仅保留为事故兼容；
+- `baton.sh peers|send|wait|read|escalate` —— 当前 session 内的名称路由与门铃 helper；默认 `default`。
 - `owner-turns.py` / `stop-turns.py` —— Claude/Codex JSONL 复盘；OpenCode 先经
   `opencode-turns.py <session-id>` 归一后从 stdin 输入。
-- [HERDR-RUNBOOK.md](HERDR-RUNBOOK.md) —— Herdr 0.8.0 owner 轨操作手册：命名 session、
-  agent 创建、跨 Goal resume、门铃、worktree 生命周期与故障恢复。任何 raw CLI 编排先查此页；
+- [HERDR-RUNBOOK.md](HERDR-RUNBOOK.md) —— Herdr 0.8.0 owner 轨操作手册：default session、
+  agent 创建、跨 Goal resume、门铃、worktree 生命周期与故障恢复；
   不用临场试错学习 Herdr。
 
-每个 pair 使用独立 workspace/工作树；可独占命名 session，也可在 owner 需要统一 sidebar 时与
-其他 pair 共用 session。实例名始终须全局唯一（推荐 `<pair>-spec/delivery`）。名字是路由，
+所有长期 agent 席位使用 Herdr `default` session，各自占独立 workspace/工作树；terminal 直接运行
+`herdr` 即可统一查看。实例名在该 session 内唯一（推荐稳定的 `dev1/dev2` 或
+`<pair>-spec/delivery`）。名字是路由，
 `instance_id` 才标识本次进程；`baton.sh send` 会在提交前后校验并把它写入门铃。恢复时保留名字：
-Codex 用 `herdr agent start ... -- resume <session-id> --disable network_proxy`；
-OpenCode 用 `herdr agent start ... -- --session <session-id> --auto`。恢复后必须用上一轮 delivery id
+Codex 用 `herdr-agent-start.sh ... resume <session-id> --disable network_proxy`；
+OpenCode 用 `herdr-agent-start.sh ... --session <session-id> --auto`。恢复后必须用上一轮 delivery id
 做一次上下文连续性检查，并用 `baton.sh peers` 取得新的 instance_id。
 
 Codex 权限由用户级配置统一提供；本机采用 `:danger-full-access` + `approval_policy=never`，
-无需再按 Herdr session 维护 socket allowlist。pair 启动会清除宿主注入的 `NO_COLOR` 并固定
-truecolor terminal，同时关闭当前会打断内置 `codex_apps` MCP 的实验 `network_proxy`；普通网络
+无需再按 Herdr session 维护 socket allowlist。唯一启动 helper 会清除宿主注入的 `NO_COLOR/CODEX_CI`、
+固定 truecolor terminal，并检查 Codex 活进程确实继承；Codex 同时关闭当前会打断内置
+`codex_apps` MCP 的实验 `network_proxy`；普通网络
 能力不受影响。OpenCode 除全局 permission 外仍在启动时带
 `--auto`，避免存量 `ask` 或项目级规则让非交互 pair 停在确认框；显式 `deny` 仍生效。
 

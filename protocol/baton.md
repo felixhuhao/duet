@@ -1,7 +1,7 @@
 # 传棒协议
 
-没有 driver，也没有 idle watchdog。每个 pair 独占一个 workspace/工作树，可独占或共用
-Herdr session；每个 Goal 独立传棒，pair 最多同时持有一个 ACTIVE + 一个 READY_FOR_REVIEW，接力棒按全局唯一 agent 名在 session 内外传递。
+没有 driver，也没有 idle watchdog。所有长期 agent 席位在 Herdr `default` session，各自独占一个
+workspace/工作树；每个 Goal 独立传棒，pair 最多持有一个 ACTIVE + 一个 READY_FOR_REVIEW，棒按稳定 agent 名传递。
 
 ## 不变量
 
@@ -22,8 +22,8 @@ runtime qualification 选择传输方式并做 delivery-id 读回：
 ```
 
 要素：脚本生成的 peer/delivery/instance 前缀 · 事件 · 文件路径 · 轮次 · verdict（如有）。一行说完。
-目标必须取 runtime 启动记录里的**全局唯一实例名**（如 `b-spec`）；`baton.sh peers` 可实时
-查看所有 session 的状态。pane id 只在 session 内唯一，职责名也不能直接当目标。
+目标必须取 runtime 启动记录里的**稳定实例名**（如 `dev1` 或 `b-spec`）；`baton.sh peers` 可实时
+查看当前 session 的状态。pane id 不能代替 agent 名，职责名也不能直接当目标。
 
 ## 交棒是 push，不做监听（✅ 2026-08-15，owner 指令废除 listen 模式）
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Discover and resolve named agents across all running Herdr sessions."""
+"""Resolve live agent instances in one session; all-session mode is legacy recovery."""
 
 from __future__ import annotations
 
@@ -84,8 +84,12 @@ def semantic_status(raw_status: str, instance_id: str) -> str:
     return status
 
 
-def discover() -> list[dict[str, Any]]:
-    sessions = run_json(["session", "list", "--json"]).get("sessions", [])
+def discover(session_filter: str | None = None) -> list[dict[str, Any]]:
+    sessions = (
+        [{"name": session_filter, "running": True}]
+        if session_filter
+        else run_json(["session", "list", "--json"]).get("sessions", [])
+    )
     agents: list[dict[str, Any]] = []
     for session in sessions:
         if not session.get("running"):
@@ -182,15 +186,18 @@ def main() -> int:
     subparsers = parser.add_subparsers(dest="command", required=True)
     peers_parser = subparsers.add_parser("peers")
     peers_parser.add_argument("--json", action="store_true")
+    peers_parser.add_argument("--session")
     resolve_parser = subparsers.add_parser("resolve")
     resolve_parser.add_argument("target")
+    resolve_parser.add_argument("--session")
     verify_parser = subparsers.add_parser("verify")
     verify_parser.add_argument("target")
     verify_parser.add_argument("instance_id")
+    verify_parser.add_argument("--session")
     args = parser.parse_args()
 
     try:
-        agents = discover()
+        agents = discover(args.session)
         if args.command == "peers":
             if args.json:
                 print(json.dumps(agents, ensure_ascii=False))

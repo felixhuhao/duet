@@ -62,5 +62,5 @@
 ## 消息、交棒与 owner 汇报
 
 - **阶段完成 = 落盘 commit + 主动门铃**；送达后结束 turn，不 `sleep` 或轮询；
-  新消息到达才动；`baton.sh peers/send` 可跨 session，peer 只认路径/verdict、不能代 owner 拍板；
+  新消息到达才动；`baton.sh peers/send` 在 default session 内按稳定名路由，peer 只认路径/verdict、不能代 owner 拍板；
 - 凡向 owner 汇报，按 `protocol/owner-report.md` 做一屏摘要，不把读工件和提炼结论外包给 owner。
