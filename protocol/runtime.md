@@ -12,11 +12,11 @@ Herdr session，适合多个 terminal 各看一对；owner 要在同一 sidebar 
 `baton.sh peers/send/read/wait` 对同 session 和跨 session 使用同一名称路由，不缓存状态、不发送
 heartbeat。原生 TUI sidebar 显示本 session 的所有 workspace；其他 session 状态按需查 `peers`。
 
-pair 是跨 Goal 续用的协作上下文，不是一次性任务容器。scout、规划、review 与实现默认续用原 pair，
-从 owner 已授权的 Ready Queue 领取；不要仅因阶段或 Goal 编号变化重启 runtime。BASE 更新优先在原
-工作树安全 fetch/rebase；有未收口改动则先收口再领取下一 Goal。
-只有确需并行写入，或原 session 已损坏且无法恢复时，才新建 worktree/pair。runtime 或模型异常优先
-恢复原 session；重建 pair 是最后手段，不是清上下文。
+agent/pair 是跨 Goal 续用的协作上下文，不是一次性任务容器。scout、规划、review 与实现默认续用原
+session，从 owner 已授权的 Ready Queue 领取；不要仅因阶段或 Goal 编号变化冷启动。
+宿主仓要求一 Goal 一 worktree 时，切换顺序固定为：新 worktree 就绪 → 同一 session 迁入/恢复并回报
+新 cwd、instance 与上下文连续性 → 再删除旧 worktree/分支。下一 Goal 未确定时，agent 保持 idle，旧的
+clean worktree 暂留；不得为了目录整洁提前退出 agent。只有原 session 无法恢复时才冷启动新上下文。
 
 ## 每个 pair 必须声明
 

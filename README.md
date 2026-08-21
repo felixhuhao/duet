@@ -86,8 +86,9 @@ devlog/移交单）按宿主仓的功能/类型惯例归档与命名，不以流
 - 实现中发现 Contract 缺陷，追加 Addendum；影响 Outcome/Core/AC 时局部重开，不包装成实现 finding。
 - P2 默认不阻塞，只登记到期点；P0/P1 与两轮上限见 `protocol/verdict.md`。
 - 纯调查/scout 不开 batch、不走两轮 review，报告交付即结束。
-- pair 默认跨 Goal 续用，覆盖 scout、规划、review 与实现；BASE 更新也优先在原工作树安全
-  追平。只有真实并行写入或原 session 无法恢复时才新建 worktree/pair。多个 pair 可共用 Herdr
+- agent/pair 默认跨 Goal 续用，覆盖 scout、规划、review 与实现；宿主仓若要求一 Goal 一 worktree，
+  先创建下一 worktree 并把同一 session 迁入/恢复，确认新 cwd、instance 与上下文连续后再删旧树。
+  下一 Goal 未确定时保持 idle 和旧 clean worktree，不为清目录冷启动。多个 pair 可共用 Herdr
   session，但仍须一 pair 一 workspace/工作树、实例名全局唯一；需要 terminal 完全隔离时可一
   pair 一 session。
 - 顺手动作必须同时满足：结果唯一或可逆、不占他人决策权、留痕可 review；AC/scope/契约/
