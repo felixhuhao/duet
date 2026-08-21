@@ -42,7 +42,9 @@ commit，由一个 delivery owner 汇总。共享热点遵守单写者。
 - Code Review 只以 AC、正确性、安全、数据、兼容边界和明确高风险问题阻塞；P2/Suggestion 入 follow-up；
 - 最多 substantive + closure 两轮；writer 等 review/merge 时可领取下一已授权 Goal；
 - reviewer PASS 后由 merge-owner 候选池串行合并；frozen HEAD 验证已合入 Goal，不是日常 merge gate；
-- 分支到 merged、superseded 或 owner cancelled 后才清理；阻塞时保留 HEAD + Resume Capsule。
+- Goal branch 到 merged、superseded 或 owner cancelled 后才删除；阻塞时保留 HEAD + Resume Capsule；
+- worktree checkout 生命周期独立：agent 已迁往别处或退出后，clean checkout 当次移除并保留 branch；
+  dirty/unowned 保留现场、记录 owner 与处置条件，不得把“未合 branch”当成长期保留 checkout 的理由。
 
 ## 5. Validation 成本模型
 

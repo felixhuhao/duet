@@ -17,8 +17,9 @@
 agent/pair 是跨 Goal 续用的协作上下文，不是一次性任务容器。scout、规划、review 与实现默认续用原
 native session，从 owner 已授权的 Ready Queue 领取；不要仅因阶段或 Goal 编号变化冷启动。
 宿主仓要求一 Goal 一 worktree 时，切换顺序固定为：新 worktree 就绪 → 同一 session 迁入/恢复并回报
-新 cwd、instance 与上下文连续性 → 再删除旧 worktree/分支。下一 Goal 未确定时，agent 保持 idle，旧的
-clean worktree 暂留；不得为了目录整洁提前退出 agent。只有原 session 无法恢复时才冷启动新上下文。
+新 cwd、instance 与上下文连续性 → `worktree-audit.py` → 当次移除旧 clean checkout（branch 保留）。
+下一 Goal 未确定时，agent 在原 cwd 保持 idle；一旦 agent 退出或迁往新 cwd，该例外立即失效。
+dirty/unowned 一律升级并保留现场。只有原 native session 无法恢复时才冷启动新上下文。
 
 ## 每个 pair 必须声明
 

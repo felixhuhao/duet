@@ -95,7 +95,8 @@ helper 在启动前清除 `NO_COLOR/CODEX_CI` 等宿主变量，固定
 5. 在新 pane 用 `herdr-agent-start.sh` 以同名、同 native session ID resume；
 6. 核对新 cwd、native session ID 不变、instance ID 已变化、`color=ok`；
 7. 用 `baton.sh send` 发 `RESUME-OK CHECK`，要求复述上一 Goal/commit/下一步，并读回 delivery ID；
-8. 上下文连续后才清旧 workspace/worktree。
+8. 运行 `scripts/worktree-audit.py <repo-root>`；clean source checkout 当次移除，dirty source 升级；
+9. audit 无未处置项后才能宣布迁移完成。
 
 MCP 启动阶段可能让第一次 prompt API 返回但屏幕尚无 delivery ID。此时判定“未送达”，等启动完成，
 确认消息没有消费后最多重投一次；API success 不是交棒成功。
@@ -114,16 +115,28 @@ Codex working 时门铃用 `Tab` 排入下一 turn。普通消息不得写入 bl
 ## 7. Worktree 收尾
 
 ```bash
+scripts/worktree-audit.py /absolute/repo/root
+```
+
+结果只有三种：`ACTIVE` 正被 agent 使用；`CLEAN_UNOWNED` 是契约违规，保留 branch 并在本次迁移动作
+中删除 checkout；`DIRTY_UNOWNED` 是未知在途现场，禁止删除，必须报告 dirty 文件、owner 和处置条件。
+audit 是事件后的单次验收，不是 heartbeat。
+
+Herdr 管理的 workspace 优先使用：
+
+```bash
 herdr worktree remove --workspace <old-workspace-id>
 ```
 
-它会关闭 workspace 并删除 checkout，但不删 branch。默认不用 `--force`。只有以下条件全满足才清：
+若 checkout 不在当前 Herdr session，使用 `git -C <repo-root> worktree remove <path>`。两者都不删 branch，
+都不得使用 `--force`。只有以下条件全满足才清：
 
 - 同一 native session 已在新 cwd 恢复，instance 与上下文连续性已确认；
 - 旧树 clean；
 - 旧 commit 有 branch、已合主线或其他可恢复指针。
 
-下一 Goal 未定时让 agent idle，并保留旧 clean worktree；不为目录整洁牺牲活 context。
+下一 Goal 未定时让 agent 在当前 worktree idle，不退出、不另留无 agent checkout；这同时保护活 context
+并避免残留。agent 一旦迁往新 cwd，旧 clean checkout 必须在同一动作清掉。
 
 ## 8. 最短诊断表
 

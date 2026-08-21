@@ -16,6 +16,7 @@
 | 首次 Integration投递假成功风险 | resume后用不等待状态变化的 `agent prompt`；API返回但delivery未读回 | `d1787283733-96605` 失败，多一轮诊断和重投；`d1787283773-97761` 成功 | Codex idle prompt改为先观察生命周期变化，再做instance与delivery双验证 |
 | resume 后终端无颜色 | 手工执行 `agent start ... resume`，漏掉 pair setup 中的 pane 环境准备 | `followup-solo` 活进程继承 `NO_COLOR=1`、`CODEX_CI=1`；用户可见颜色回归 | 新建/resume统一走 `herdr-agent-start.sh`；活 Codex 进程禁色变量断言进入自动测试 |
 | MCP startup 后首次门铃未读回 | resume ready早于内置 MCP 完成启动，prompt API进入状态变化但屏幕无delivery | `d1787285903-51712` 明确失败；启动完成后 `d1787285932-52534` 单次重投成功 | 保持“无读回=未送达”；resume check在MCP ready后投递，最多确认后重投一次 |
+| Goal 迁移后 clean worktree 残留 | 契约混同 branch 与 checkout 生命周期，迁移成功没有旧树 disposition 终止条件 | FOLLOWUP/NOTIFY clean、无 agent 仍留 checkout；API-CONTRACT dirty/unowned 另属在途现场 | 单次 worktree audit 成为迁移/关闭 agent 门禁；clean/unowned 删除 checkout留 branch，dirty/unowned 只升级 |
 | 旧 worktree清理绕过Herdr原语 | 先 `workspace close`，再raw `git worktree remove` | checkout成功删除、branch `cbff38b1` 保留，无数据损失；但绕过Herdr原子remove路径 | 后续统一 `herdr worktree remove --workspace`，默认不用force |
 | 校验脚本覆盖zsh特殊变量 | GitHub链接循环误用变量名 `path`，覆盖zsh的命令搜索数组 | 一次只读校验报 `gh: command not found`，无运行态或文件影响 | shell变量使用任务专用名；不复用 `path`/`HOME` 等系统语义名 |
 

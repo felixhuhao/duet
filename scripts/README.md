@@ -12,6 +12,8 @@
 - `herdr-federation.py peers|resolve|verify` —— `baton.sh` 的实时 instance 计算器；正常只看当前 session，
   无缓存、无轮询，跨-session 仅保留为事故兼容；
 - `baton.sh peers|send|wait|read|escalate` —— 当前 session 内的名称路由与门铃 helper；默认 `default`。
+- `worktree-audit.py <repo-root>` —— 一次性对账 linked worktree 与全部活 agent cwd；出现
+  `CLEAN_UNOWNED` 或 `DIRTY_UNOWNED` 返回 3，迁移/关闭 agent 后必须清零或升级，不轮询；
 - `owner-turns.py` / `stop-turns.py` —— Claude/Codex JSONL 复盘；OpenCode 先经
   `opencode-turns.py <session-id>` 归一后从 stdin 输入。
 - [HERDR-RUNBOOK.md](HERDR-RUNBOOK.md) —— Herdr 0.8.0 owner 轨操作手册：default session、
