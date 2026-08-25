@@ -6,6 +6,7 @@ set -euo pipefail
 SESSION_NAME="${HERDR_SESSION:-default}"
 HERDR_BIN="${HERDR_BIN:-$(command -v herdr)}"
 PS_BIN="${PS_BIN:-$(command -v ps)}"
+CODEX_EXECUTABLE=""
 
 AGENT_NAME="${1:?agent name}"
 AGENT_KIND="${2:?agent kind}"
@@ -18,6 +19,33 @@ hcmd() {
 }
 
 if [ "$AGENT_KIND" = "codex" ]; then
+  CODEX_EXECUTABLE="${CODEX_BIN:-$(command -v codex || true)}"
+  if [ -z "$CODEX_EXECUTABLE" ] || [ ! -x "$CODEX_EXECUTABLE" ]; then
+    echo "agent start failed codex executable not found: ${CODEX_EXECUTABLE:-<empty>}" >&2
+    exit 4
+  fi
+  python3 - "$CODEX_EXECUTABLE" <<'PY'
+import subprocess
+import sys
+
+try:
+    probe = subprocess.run(
+        [sys.argv[1], "--version"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        timeout=5,
+        check=False,
+    )
+except subprocess.TimeoutExpired:
+    print(f"codex binary preflight timed out: {sys.argv[1]}", file=sys.stderr)
+    raise SystemExit(4)
+if probe.returncode != 0:
+    print(f"codex binary preflight failed: {sys.argv[1]} · exit={probe.returncode}", file=sys.stderr)
+    print(probe.stdout, file=sys.stderr, end="")
+    raise SystemExit(4)
+PY
+
   pane_json="$(hcmd pane get "$PANE_ID")"
   pane_cwd="$(printf '%s' "$pane_json" | python3 -c '
 import json, sys
@@ -56,8 +84,14 @@ print(pane.get("cwd") or pane.get("foreground_cwd") or "")
 fi
 
 marker="__DUET_ENV_READY__"
+path_setup=""
+if [ "$AGENT_KIND" = "codex" ]; then
+  codex_dir="$(cd "$(dirname "$CODEX_EXECUTABLE")" && pwd -P)"
+  printf -v codex_dir_q '%q' "$codex_dir"
+  path_setup="export PATH=$codex_dir_q:\$PATH; "
+fi
 hcmd pane run "$PANE_ID" \
-  "unset NO_COLOR CODEX_CI CODEX_INTERNAL_ORIGINATOR_OVERRIDE CODEX_PERMISSION_PROFILE CODEX_THREAD_ID; export TERM=xterm-256color COLORTERM=truecolor; printf '__DUET_ENV_READY__\\n'"
+  "${path_setup}unset NO_COLOR CODEX_CI CODEX_INTERNAL_ORIGINATOR_OVERRIDE CODEX_PERMISSION_PROFILE CODEX_THREAD_ID; export TERM=xterm-256color COLORTERM=truecolor; printf '__DUET_ENV_READY__\\n'"
 hcmd pane wait-output "$PANE_ID" --match "$marker" --source recent --timeout 5000 >/dev/null
 
 if [ "${#RUNTIME_ARGS[@]}" -gt 0 ]; then

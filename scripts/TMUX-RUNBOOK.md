@@ -1,4 +1,6 @@
-# tmux solo runbook
+# tmux solo runbook（兼容路径）
+
+> 当前默认 runtime 是 Herdr。只有 owner 明确要求事故迁移到 tmux 时使用本页。
 
 tmux 只做两件事：把多个 terminal 放在一个 session，关闭 terminal app 后继续保活。
 

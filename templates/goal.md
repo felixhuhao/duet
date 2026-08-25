@@ -5,7 +5,8 @@ owner: <name>
 base: <sha>
 branch: <branch>
 worktree: <absolute path>
-tmux: <session:window.pane>
+herdr: <default/agent-name>
+pane: <pane id>
 native_session: <id>
 updated: <YYYY-MM-DD>
 ---

@@ -19,6 +19,7 @@ class HerdrAgentStartTest(unittest.TestCase):
             temp_path = pathlib.Path(temp_dir)
             fake_herdr = temp_path / "herdr"
             fake_ps = temp_path / "ps"
+            fake_codex = temp_path / "codex"
             call_log = temp_path / "calls.txt"
             fake_herdr.write_text(
                 textwrap.dedent(
@@ -39,10 +40,18 @@ class HerdrAgentStartTest(unittest.TestCase):
                 )
             )
             fake_ps.write_text(f"#!/bin/sh\nprintf '%s\\n' '{process_environment}'\n")
-            for executable in (fake_herdr, fake_ps):
+            fake_codex.write_text("#!/bin/sh\nprintf '%s\\n' 'codex-cli test'\n")
+            for executable in (fake_herdr, fake_ps, fake_codex):
                 executable.chmod(executable.stat().st_mode | stat.S_IXUSR)
             env = os.environ.copy()
-            env.update({"HERDR_BIN": str(fake_herdr), "PS_BIN": str(fake_ps), "CALL_LOG": str(call_log)})
+            env.update(
+                {
+                    "HERDR_BIN": str(fake_herdr),
+                    "PS_BIN": str(fake_ps),
+                    "CODEX_BIN": str(fake_codex),
+                    "CALL_LOG": str(call_log),
+                }
+            )
             result = subprocess.run(
                 [str(START), "dev1", "codex", "w1:p1", "resume", "native-session"],
                 cwd=SCRIPT_DIR.parent,
@@ -59,6 +68,7 @@ class HerdrAgentStartTest(unittest.TestCase):
         self.assertEqual(result.returncode, 0, result.stderr)
         self.assertIn("color=ok", result.stdout)
         self.assertLess(calls.index("pane run"), calls.index("agent start"))
+        self.assertIn("export PATH=", calls)
         self.assertIn("unset NO_COLOR CODEX_CI", calls)
         self.assertIn("agent start dev1 --kind codex --pane w1:p1 --timeout 120000 -- resume native-session", calls)
 

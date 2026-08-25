@@ -1,41 +1,47 @@
 # Runtime 协议
 
-默认 runtime 是 tmux + 长期 worktree。一个 solo Goal owner 在一个固定 window 中工作。
+默认 runtime 是 Herdr `default` session + 长期 worktree。一个 solo Goal owner 使用一个固定 agent 席位。
 
 ## 固定拓扑
 
-- 一个产品域一个 tmux session；
-- `main` window 使用 canonical 主树，负责规划、合并和真源维护；
-- `dev1/dev2/...` 各绑定一个 owner 预置的长期 worktree；
-- 换 Goal 只换 branch，不换 window 或 cwd；
-- worktree 的创建、移动和删除只由 owner 安排。
+- canonical 主树独立 workspace，负责规划、合并和真源维护；
+- `dev1/dev2/...` 各绑定 owner 预置的 `wt1/wt2/...` workspace 和长期 worktree；
+- idle 时使用同名分支 `wt1/wt2/...`，换 Goal 只换 branch，不换 workspace 或 cwd；
+- worktree 的创建、移动和删除只由 owner 安排；
+- 同一 native session 禁止跨 Herdr、tmux 或其他 terminal 双开。
 
-tmux 只提供 terminal 布局、PTY 和进程保活。它不知道 Goal 状态、agent identity、消息是否送达或上下文
-是否正确；不要用 `pane_current_command`、`capture-pane` 或自动 `send-keys` 构造状态机。
+## 两种状态不要混
+
+Herdr 的 `working/blocked/idle/done/unknown` 只描述 agent 当前是否可交互。`done` 与 `idle` 都表示可接收
+下一 turn；`unknown` 必须进入 pane 核实。
+
+Goal 的 `QUEUED/ACTIVE/BLOCKED/DONE/CANCELLED` 由 Goal 文件和 Git 裁决。agent 显示 `done` 不代表代码
+已合并，也不代表 AC 已满足。
 
 ## 席位记录
 
 每个 active Goal 记录一行即可：
 
 ```text
-owner=<name> · tmux=<session>:<window>.0 · native_session=<id> · cwd=<path> · branch=<branch>
+owner=<name> · herdr=default/<agent> · pane=<id> · native_session=<id> · cwd=<path> · branch=<branch>
 ```
 
 native session ID 用于恢复 conversation；Goal 文件与 Git 用于冷恢复工作。两者都要留，不能互相替代。
 
 ## 启动与恢复
 
-新进程或 resume 后人工确认四件事：
+只使用 `scripts/herdr-agent-start.sh` 新建或 resume。完成后确认：
 
-1. target window 和 cwd 正确；
+1. agent name、pane 和 cwd 正确；
 2. native session ID 正确；
 3. branch/HEAD 与 Goal 一致；
-4. agent 能读到项目规则并正常回复一次 prompt。
+4. Herdr 状态可识别且 agent 能正常回复。
 
-只有旧进程已退出后才能在另一 runtime resume 同一 native session，禁止双开。原 session 无法恢复时才
-cold start，并先从项目规则、Goal、当前 HEAD 和未验证面恢复上下文。
+原 session 无法恢复时才 cold start，并先从项目规则、Goal、当前 HEAD 和未验证面恢复上下文。
 
-## 例外
+## 通信边界
 
-独立 reviewer 可以临时使用另一个固定席位，但只 review 冻结 diff，不与 Goal owner 组成常驻 pair。
-Herdr 仅用于 owner 明确要求的兼容场景；不要为了消息通知在 tmux 上重建 Herdr。
+owner 通过 Herdr 面板直接进入目标 pane，或发送明确的人工消息。默认不启用 agent-to-agent 自动传棒、
+baton、heartbeat 或 delivery acknowledgement。独立 reviewer 只检查冻结 diff，不与 Goal owner 组成常驻 pair。
+
+tmux 仅作为事故兼容路径；迁移 runtime 前必须等 agent 可接收输入、安全退出旧进程，再 resume 原 session。
