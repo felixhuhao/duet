@@ -23,9 +23,11 @@
 | `track` | `全局` `B钱` `D对话` `E分身` `C经营` `AGT` `跨仓` … | 全部 |
 | `batch` | `B8` `D4` `D3b` … | batch 级工件 |
 | `status` | `queued` `active` `ready-for-review` `dev-done` `blocked` `needs-refresh` `cancelled`；旧值兼容 | 全部 |
+| `owner` / `runtime` | solo Goal owner 稳定名 · `codex/claude/opencode` 等 | 活跃 Goal |
+| `terminal` / `native_session` | `mobile:dev1.0` · conversation ID | 活跃 Goal 的 runtime 绑定 |
 | `integration` / `device` | `NOT_RUN` `PASS` `FAIL` `BLOCKED` `N/A` | Goal |
-| `baton` | `spec_owner` `delivery_owner` `owner` `none` | 活跃 batch |
-| `spec_runtime` / `delivery_runtime` | `codex` `claude` `opencode` … | 活跃 batch 的职责绑定 |
+| `baton` | `spec_owner` `delivery_owner` `owner` `none` | 双角色兼容 batch |
+| `spec_runtime` / `delivery_runtime` | `codex` `claude` `opencode` … | 双角色兼容 batch 的职责绑定 |
 | `round` | `1/2` 等（照 verdict 块抄） | review |
 | `base` / `covers` | 短 SHA | plan / review |
 | `blocked_on` | 列表：`["B4 ← D2b", "owner: 拍板"]` | 有阻塞时 |

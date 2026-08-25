@@ -4,7 +4,8 @@
 status:  draft | frozen（冻结日期）
 batch:   <track>-<批次号>
 BASE:    <冻结时的 repository commit SHA>
-pair:    spec_owner=<herdr name>/<runtime> · delivery_owner=<herdr name>/<runtime>
+owner:   goal_owner=<name>/<runtime> · tmux=<session:window.0> · cwd=<worktree>
+review:  <none | reviewer=<name>/<runtime> + trigger>
 ```
 
 ## Outcome

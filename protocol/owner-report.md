@@ -3,9 +3,9 @@
 > Goal v1：每个 Goal 在 DEV_DONE 生成结构化 Completion Package；是否立即推送、每日汇总或累计
 > 若干 Goal 汇总由 owner 指定。目标不是增加汇报频率，而是让 owner 用一屏看懂结果与决策点。
 
-## 与 peer 门铃的边界
+## 与 runtime/peer 的边界
 
-- **peer 门铃**只负责唤醒和路由：路径、轮次、verdict；不复制工件内容；
+- tmux 默认路径由 owner 直接切 window 调度；双角色例外的 **peer 门铃**只负责唤醒和路由；
 - **owner 汇报**负责信息压缩和注意力路由：是已提交工件的摘要投影，不是第二真源；
 - 汇报正文由 agent 在当前 turn 末尾输出；system notification 只提醒事件和真源路径，不能替代正文；
 - 仍然事件驱动：只在 owner 指定摘要点、gate、incident、有意义状态变化或 owner 主动询问时汇报，
@@ -37,7 +37,7 @@
 
 结论先说阶段是否完成；完成及影响、发现及意义、下一步为必填。无需 owner 动作时明确写
 “需拍板：无”，不得用疑问句把执行权递回 owner。外部依赖只报 parked 项、唯一唤醒事件和
-`pair available`，不能把“等待 X”写成 pair 的工作。
+`seat available`，不能把“等待 X”写成 worker 的工作。
 
 ### Decision / Gate
 
@@ -64,8 +64,8 @@ merge/push 回执另带 commit、冲突处置与回滚点。
 - 禁止以链接、路径或文件名代替完成内容和发现；证据默认最多两个引用，更多留在真源；
 - “值得看”默认省略；出现时必须说明需要 owner 亲自判断什么，不能只是推荐阅读；
 - “需拍板”不得裸写“等你决定”，也不得把尚未调查的不确定性外包给 owner；
-- 外部依赖不得写成 pair 的当前任务；必须区分 `dependency parked` 与 `pair released`，
-  并让 owner 一眼看出该 pair 是否可调度；
+- 外部依赖不得写成 worker 的当前任务；必须区分 `dependency parked` 与 `seat released`，
+  并让 owner 一眼看出该席位是否可调度；
 - 同一事件的更新必须指出“新在哪里”；没有新增事实就保持静默。
 
 ## 试行验收

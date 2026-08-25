@@ -1,7 +1,8 @@
 # Herdr 0.8.0 owner 操作手册
 
-> 原则：simple and effective。正常路径只有一个 Herdr `default` session、长期 agent 席位、
-> 每席位一个 workspace/工作树。跨-session 只用于迁移或事故恢复。
+> **兼容路径，不是当前默认运行时。** 只有 owner 明确要求双角色自动门铃或 Herdr 事故恢复时使用；
+> solo Goal 的正常路径见 [TMUX-RUNBOOK.md](TMUX-RUNBOOK.md)。不得同时为同一 native session
+> 启动 Herdr 与 tmux 两份进程。
 
 ## 1. 只记四个对象
 

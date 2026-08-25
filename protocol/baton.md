@@ -1,7 +1,7 @@
-# 传棒协议
+# 传棒协议（双角色例外）
 
-没有 driver，也没有 idle watchdog。所有长期 agent 席位在 Herdr `default` session，各自独占一个
-workspace/工作树；每个 Goal 独立传棒，pair 最多持有一个 ACTIVE + 一个 READY_FOR_REVIEW，棒按稳定 agent 名传递。
+> 默认 solo Goal 不使用本协议；只有 owner 明确启用已 qualification 的 spec/delivery runtime 时进入。
+> 没有 driver 或 idle watchdog；runtime 只负责送达，文件仍是真源。
 
 ## 不变量
 

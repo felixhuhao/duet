@@ -22,24 +22,24 @@
   改变才追加 Contract Addendum；普通实现发现不改合同；
 - 产品选择在 roadmap grooming 时完成。仍有方向二选一时先做 Decision/Discovery Goal；
 - Goal 只分 S（约半天）/M（约一天）/L（最多两天），超过 L 在 Ready 前拆分；
-- owner 一次授权每对 2–3 个有序 Goal；降到一个 Ready 时请求补队列，开工不重复确认。
+- owner 一次授权每个长期 solo 席位 2–3 个有序 Goal；降到一个 Ready 时请求补队列，开工不重复确认。
 
-**Ready 不等于已领取。** `QUEUED → ACTIVE` 前，Goal 必须冻结 Pickup Context：目标仓/cwd/role、
+**Ready 不等于已领取。** `QUEUED → ACTIVE` 前，Goal 必须冻结 Pickup Context：目标仓/cwd/owner、
 可从目标 cwd 解析的精确 `repo@sha:path` 必读集、继承决定/禁止重开项、首个 increment 与 refresh/stop
 条件。跨仓 Goal 各仓有同 Goal ID 的本地 child，链接 parent authority，不让接收者从另一仓零散文档拼合同。
 投递只需携 Goal 文件路径与 commit；接收者先只读装载并把 Context Receipt 落盘：实际读取的路径/SHA、
 Outcome/Core/Non-goals/invariants 复述、第一动作和冲突。Receipt `ACCEPTED` 前禁止生产写；缺文件、SHA
 漂移或结论冲突则记 `REJECTED`、Goal 转 `NEEDS_REFRESH` 并升级，不得以重新 discovery 代替上下文。
-新 Goal 领取前还必须冻结 canonical BASE（如本地 `v2@SHA`），让固定 worktree 的目标 branch 包含该
+新 Goal 领取前还必须冻结 canonical BASE（如本地 `main@SHA`），让固定 worktree 的目标 branch 包含该
 SHA，并以 `git merge-base --is-ancestor <SHA> HEAD` 通过为准；Receipt 记录命令与结果。不同步不 ACTIVE，
-冲突则停止；不得用 reset/rebase 覆盖现场，也不把“同步本地 v2”解释成自动 fetch/pull。
+冲突则停止；不得用 reset/rebase 覆盖现场，也不把“同步本地主线”解释成自动 fetch/pull。
 
 ## 3. 生命周期与并行
 
 `QUEUED → ACTIVE → READY_FOR_REVIEW → DEV_DONE`；`BLOCKED/NEEDS_REFRESH/CANCELLED` 为旁路状态。
-每对最多一个 ACTIVE + 一个 READY_FOR_REVIEW，不能同时开发两个 Goal。Goal 期间 ownership 固定；
+每个席位最多一个 ACTIVE + 一个 READY_FOR_REVIEW，不能同时开发两个 Goal。Goal 期间 ownership 固定；
 完成后从全局 Ready Queue 领取，领域熟悉度只作优先项。跨仓用户结果共用 Goal ID，各仓独立 branch/
-commit，由一个 delivery owner 汇总。共享热点遵守单写者。
+commit，由一个 goal owner 汇总。共享热点遵守单写者。
 
 两日是强制 checkpoint，不是停工线：Contract 与 stop condition 未变则继续；Core 外 extension 自动回队列。
 同一 Goal 的模型/session/terminal 更换读 Resume Capsule；换 Goal 必须重新走 Pickup Context/Receipt，
@@ -49,9 +49,10 @@ commit，由一个 delivery owner 汇总。共享热点遵守单写者。
 
 - 小问题：局部、可逆、不改 Contract/共享边界，记录后继续；
 - 大问题：可能改变 AC、架构、共享 API、数据、安全或后续前提，暂停当前 Goal 与依赖项并报告；
-  无法判断按大问题。无依赖的其他 pair 可继续；
-- Code Review 只以 AC、正确性、安全、数据、兼容边界和明确高风险问题阻塞；P2/Suggestion 入 follow-up；
-- 最多 substantive + closure 两轮；writer 等 review/merge 时可领取下一已授权 Goal；
+  无法判断按大问题。无依赖的其他 solo 席位可继续；
+- solo owner 在 DEV_DONE 前按 AC、正确性、安全、数据与兼容边界完成自检；P0/P1、安全/权限/金额/
+  数据删除、共享契约、owner 点名或 worker 请求时必须加独立 Code Review；
+- 独立 review 最多 substantive + closure 两轮；P2/Suggestion 入 follow-up；writer 等 review/merge 时可领取下一已授权 Goal；
 - reviewer PASS 后由 merge-owner 候选池串行合并；frozen HEAD 验证已合入 Goal，不是日常 merge gate；
 - Goal branch 到 merged、superseded 或 owner cancelled 后才删除；阻塞时保留 HEAD + Resume Capsule；
 - worktree 是 owner 预置的长期席位，Goal 完成只合并/处置 branch，不删除或新建 checkout；席位下一 Goal

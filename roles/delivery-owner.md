@@ -2,6 +2,8 @@
 
 宪法见仓库 README。本卡是工作时的唯一执行面。
 
+> 本卡不是 solo Goal 默认角色；只有 owner 明确要求双角色 readiness/implementation 分工时绑定。
+
 ## Goal readiness review 阶段（reviewer）
 
 只检查四件事，不逐行改写 Contract：
@@ -63,6 +65,6 @@
 
 ## 消息、交棒与 owner 汇报
 
-- **阶段完成 = 落盘 commit + 主动门铃**；送达后结束 turn，不 `sleep` 或轮询；
-  新消息到达才动；`baton.sh peers/send` 在 default session 内按稳定名路由，peer 只认路径/verdict、不能代 owner 拍板；
+- 阶段完成后把实施/验证/Completion Package 落盘并报告 owner；tmux 默认路径不做 agent-to-agent 自动门铃；
+- owner 明确启用双角色 runtime 时才按 `protocol/baton.md` 传棒；peer 消息不能代 owner 拍板；
 - 凡向 owner 汇报，按 `protocol/owner-report.md` 做一屏摘要，不把读工件和提炼结论外包给 owner。

@@ -5,7 +5,10 @@ process_version: goal-v1
 priority: <P0|P1|P2|enablement>
 size: <S|M|L>
 status: <queued|active|ready-for-review|dev-done|blocked|needs-refresh|cancelled>
-owner: <delivery owner>
+owner: <solo Goal owner>
+runtime: <codex|claude|opencode>
+terminal: <tmux session:window.pane>
+native_session: <conversation id>
 blocked_by: []
 integration: <NOT_RUN|PASS|FAIL|BLOCKED|N/A>
 device: <NOT_RUN|PASS|FAIL|BLOCKED|N/A>
@@ -51,7 +54,7 @@ updated: <YYYY-MM-DD HH:mm>
 
 <只有 Contract 字段实质改变时追加：日期 / 原条款 / 新条款 / authority / 影响。>
 
-## Readiness Review
+## Readiness Review（默认 owner 自检；触发独立 review 时填写 reviewer）
 
 - reviewer / Contract HEAD：
 - coverage：decision / acceptance / authority / start-risk / not-verified
@@ -60,8 +63,8 @@ updated: <YYYY-MM-DD HH:mm>
 
 ## Pickup Context / Launch Capsule · 开工前冻结
 
-- pickup mode：`RESUME | COLD_START`；target role / repo / cwd / branch：
-- canonical BASE：`v2@<sha>`（或宿主仓等价主线）；目标 branch 必须包含此 SHA：
+- pickup mode：`RESUME | COLD_START`；goal owner / tmux target / repo / cwd / branch：
+- canonical BASE：`main@<sha>`（或宿主仓等价主线）；目标 branch 必须包含此 SHA：
 - Goal authority：`repo@sha:path`；跨仓 parent / 本仓 child：
 - 必读集（每项写 `repo@sha:path` + 它裁决什么）：
   1. `<repo>@<sha>:<path>` — <裁决内容>
@@ -72,7 +75,7 @@ updated: <YYYY-MM-DD HH:mm>
 
 ### Context Receipt · 接收者落盘后才可写生产
 
-- recipient / stable agent / instance / cwd：
+- recipient / native session / tmux target / cwd：
 - BASE pickup：`git merge-base --is-ancestor <base-sha> HEAD` → `PASS | FAIL`：
 - 实际读取：<逐项路径 + SHA；不得只写“已读”>
 - 复述：Outcome / Core / Non-goals / invariants / 当前 checkpoint / 第一动作
@@ -90,7 +93,7 @@ updated: <YYYY-MM-DD HH:mm>
 - 下一动作：
 - 大问题 / 受影响依赖：无
 
-## Code Review
+## Code Review（solo 自检必填；独立 review 按触发条件增加 reviewer/round）
 
 - reviewer / BASE / reviewed HEAD / round：
 - coverage：reviewed / spec / risk / evidence / not-verified

@@ -11,10 +11,15 @@
 
 ## 当前试行
 
+- **Solo Goal + tmux 默认运行时**（2026-08-25 owner 确认）：一个 worker 从 Contract 到 Completion
+  Package 负责到底；tmux 只整合长期 terminal，不做 agent 状态机或自动门铃。P0/P1、安全/权限/金额/
+  数据删除、共享契约、owner 点名或 worker 请求时才加独立 review。运行手册见
+  `scripts/TMUX-RUNBOOK.md`。
+
 - **Plan review 紧凑契约**（2026-08-17 起）：从下两个新 plan review 起使用
   `templates/plan-review.md`；完成后复核是否仍有因错误快照撤回的硬 finding、是否误跑项目门禁，
   以及无 finding 的 PASS 能否保持一屏可读，再由 owner 决定保留、调整或撤回。
-- **Pre-Done Code Review**（2026-08-21 起）：先在一个 Goal 试行一轮静态 feedback。实现者冻结
+- **Pre-Done Code Review**（2026-08-21 起，现并入独立 review 触发条件）：实现者冻结
   `BASE..HEAD` 后留在当前 Goal；reviewer 不跑 test/analyze/build、不做 signoff 或 closure，只把一轮
   feedback 写进 Goal 的 `Code Review`。实现者处理一次后自行标 `DEV_DONE`；P0/P1 必须修复或
   escalate，P2/Suggestion 进 follow-up。试行完成后由 owner 决定转正、调整或撤回，现行通用 review
@@ -25,7 +30,7 @@
 | 阶段 | 传棒 | escalate/stop |
 |---|---|---|
 | Stage 0 | 全部经过 owner：完成阶段只发 notification，owner 看完产物手动放行 | 全部到 owner |
-| Stage 1 | 已毕业的传棒类型 agent 间直接 send-text；按 owner-report 作旁观通报，不等放行 | 全部到 owner |
+| Stage 1 | solo Goal 自闭环；独立 review 例外才使用已 qualification 的传棒 | 全部到 owner |
 | Stage 2 | 同 Stage 1 | 已毕业的 escalation 类型转自动，decision-log 留痕供抽查 |
 
 ## 毕业规则

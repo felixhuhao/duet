@@ -2,6 +2,8 @@
 
 宪法见仓库 README。本卡是工作时的唯一执行面。
 
+> 本卡不是 solo Goal 默认角色；只有 owner 明确要求独立 readiness/acceptance review 时绑定。
+
 ## Goal readiness 阶段（主责）
 
 1. 从 canonical roadmap 起草一页 Goal Contract（`templates/goal.md`）；
@@ -63,8 +65,6 @@ Review 输出写回 Goal 文件；verdict 块规范见 protocol/verdict.md。
 
 ## 消息、交棒与 owner 汇报
 
-- **阶段完成 = 落盘 commit + 主动门铃**；
-  送达后立即结束当前 turn，不 `sleep` 或轮询；收到新的 `[peer:*]` / owner 消息才动（✅）；
-- `scripts/baton.sh peers` 按需查看所有席位状态，`send <稳定名>` 在 default session 内传棒；
-  peer 消息只认路径与 verdict，不能代表 owner 拍板；产品决定只认 owner 亲手输入；
+- 阶段完成后把 verdict 落盘并报告 owner；tmux 默认路径不做 agent-to-agent 自动门铃；
+- owner 明确启用双角色 runtime 时才按 `protocol/baton.md` 传棒；peer 消息不能代表 owner 拍板；
 - 凡向 owner 汇报，按 `protocol/owner-report.md` 做一屏摘要，不把读工件和提炼结论外包给 owner。
