@@ -1,119 +1,63 @@
 ---
-doc: goal
 goal: <GOAL-ID>
-process_version: goal-v1
-priority: <P0|P1|P2|enablement>
-size: <S|M|L>
-status: <queued|active|ready-for-review|dev-done|blocked|needs-refresh|cancelled>
-owner: <solo Goal owner>
-runtime: <codex|claude|opencode>
-terminal: <tmux session:window.pane>
-native_session: <conversation id>
-blocked_by: []
-integration: <NOT_RUN|PASS|FAIL|BLOCKED|N/A>
-device: <NOT_RUN|PASS|FAIL|BLOCKED|N/A>
-base: <repo@sha；跨仓逐项列出>
-updated: <YYYY-MM-DD HH:mm>
+status: <QUEUED|ACTIVE|BLOCKED|DONE|CANCELLED>
+owner: <name>
+base: <sha>
+branch: <branch>
+worktree: <absolute path>
+tmux: <session:window.pane>
+native_session: <id>
+updated: <YYYY-MM-DD>
 ---
 
-# <GOAL-ID> · <用户结果>
+# <GOAL-ID> · <结果标题>
 
-## Goal Contract · 稳定层（目标一页内）
+## Goal
 
 ### Outcome
 
-<一个完整、可观察的用户结果。>
+<完成后，谁能得到什么可观察结果。>
 
-### Core / Non-goals
+### Scope / Non-goals
 
-- Core：
-- Non-goals：
+- 做：
+- 不做：
 
-### 产品边界与 Invariants
+### Acceptance Criteria
 
-- <用户可见、金额、权限、隐私、数据、平台红线；注明 authority。>
+- [ ] AC-1：
+- [ ] AC-2：
 
-### Acceptance Criteria（3–7 条）
+### Constraints / Stop conditions
 
-- [ ] AC-1：Given / When / Then，能在 UI、状态、请求或持久化层观察。
+- 不能破坏：
+- 遇到这些情况暂停：
 
-### Dependencies / Stop Conditions
+### Required context
 
-- `blocked_by`：
-- 必须停止讨论：<会改变 Contract 或污染后续 Goal 的条件。>
+- `<repo@sha:path>` — <它裁决什么>
 
-### Validation / Fallback Boundary
+## Work
 
-- tier：`I0 | I1 | I2`
-- 开发证据：
-- Integration 责任：<复用既有测试 | 关联 QA Goal | N/A + 理由>
-- Device residual：
-- Fallback boundary：<Core 外自动回队列的扩展项。>
-
-### Contract Addenda（只追加）
-
-<只有 Contract 字段实质改变时追加：日期 / 原条款 / 新条款 / authority / 影响。>
-
-## Readiness Review（默认 owner 自检；触发独立 review 时填写 reviewer）
-
-- reviewer / Contract HEAD：
-- coverage：decision / acceptance / authority / start-risk / not-verified
-- findings：无；或固定关闭条件
-- verdict：`PASS | FINDINGS | ESCALATE`（最多 substantive + closure 两轮）
-
-## Pickup Context / Launch Capsule · 开工前冻结
-
-- pickup mode：`RESUME | COLD_START`；goal owner / tmux target / repo / cwd / branch：
-- canonical BASE：`main@<sha>`（或宿主仓等价主线）；目标 branch 必须包含此 SHA：
-- Goal authority：`repo@sha:path`；跨仓 parent / 本仓 child：
-- 必读集（每项写 `repo@sha:path` + 它裁决什么）：
-  1. `<repo>@<sha>:<path>` — <裁决内容>
-- 继承决定 / 禁止重开项：
-- 本仓 writable scope / 明确不写：
-- 首个 increment / 第一动作：
-- refresh / stop：<文件缺失、SHA 漂移、契约冲突或其他条件>
-
-### Context Receipt · 接收者落盘后才可写生产
-
-- recipient / native session / tmux target / cwd：
-- BASE pickup：`git merge-base --is-ancestor <base-sha> HEAD` → `PASS | FAIL`：
-- 实际读取：<逐项路径 + SHA；不得只写“已读”>
-- 复述：Outcome / Core / Non-goals / invariants / 当前 checkpoint / 第一动作
-- mismatch / blocker：无；或 <精确冲突>
-- verdict：`PENDING | ACCEPTED | REJECTED`（`REJECTED` ⇒ `NEEDS_REFRESH`）
-
-## Execution Notes / Resume Capsule · 可更新层
-
-- branch / HEAD / worktree：
-- 当前 checkpoint：
+- 当前 HEAD：
 - 已完成：
-- 关键技术选择：
-- 已执行证据：`cmd / scope / result / noise`
-- 小问题与 follow-up：
+- 关键选择：
+- 验证：`<command>` → `<result>`
+- 风险 / 未验证：
 - 下一动作：
-- 大问题 / 受影响依赖：无
 
-## Code Review（solo 自检必填；独立 review 按触发条件增加 reviewer/round）
+## Review（仅需要独立 review 时填写）
 
-- reviewer / BASE / reviewed HEAD / round：
-- coverage：reviewed / spec / risk / evidence / not-verified
-- P0/P1：无；或 finding + 固定关闭条件
-- P2/Suggestion：<进入 follow-up，不阻塞>
-- verdict：`PASS | FINDINGS | ESCALATE`
-- merge：`PENDING | <merge commit>`
+- reviewer / BASE..HEAD：
+- findings：
+- result：`PASS | CHANGES_REQUESTED`
 
-## Completion Package · DEV_DONE 时填写
+## Result
 
-- **结论**：Outcome 是否成立；当前 lifecycle 状态。
-- **用户现在能做什么**：
-- **实际修改及影响**：
-- **意外发现及意义**：无；或 <事实 → 意义>。
-- **证据状态**：Development / Integration / Device 分别列明。
-- **Follow-up / 风险**：
-- **需 owner 拍板**：无；或题面 + 选项代价 + 推荐。
-- **下一步**：review / merge / QA Goal / Ready Queue。
-
-## Retrospective · 条件触发
-
-<只在 >2 天、反复 review、昂贵测试异常或 owner 点名时填写；从对话与执行记录提取，
-说明时间/token 花在哪里、根因、下次保留/删除/改变什么。>
+- 结论：
+- 用户或系统现在能做什么：
+- 主要改动：
+- 证据：
+- 未验证 / 风险：
+- 需 owner 决定：无
+- 下一步：
