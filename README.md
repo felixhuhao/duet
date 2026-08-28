@@ -38,11 +38,13 @@ protocol/   Goal 与 Herdr runtime 的最小协议
 templates/  Goal；仅在确有共享排序/验证需要时使用 roadmap/ledger
 skills/     第一方可移植 skills 与第三方来源清单
 scripts/    Herdr 启动和只读 worktree 审计
+docs/       机器生命周期 runbook 与跨项目 playbooks
 ```
 
 - [Goal 协议](protocol/goal.md)
 - [Runtime 协议](protocol/runtime.md)
 - [Herdr runbook](scripts/HERDR-RUNBOOK.md)
+- [机器生命周期 runbook](docs/machine-lifecycle.md) · [playbooks](docs/playbooks.md)
 - [Goal 模板](templates/goal.md)
 - [`duet-goal-workflow`](skills/duet-goal-workflow/SKILL.md)
 - [`mobile-ui-audit`](skills/mobile-ui-audit/SKILL.md)
