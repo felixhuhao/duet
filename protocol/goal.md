@@ -40,8 +40,10 @@ Goal 只需写清：
 
 ## 4. Review 与完成
 
-普通 Goal 由 owner 自检。安全、权限、金额、数据删除、共享契约、P0/P1、owner 点名或执行者请求时，增加
-独立 reviewer；reviewer 只检查冻结的 `BASE..HEAD`，不接管 Goal。
+普通 Goal 由 Goal owner 自检。安全、权限、金额、数据删除、共享契约或 P0/P1 要加强验证并在合并前报告
+owner，由 owner 决定是否需要独立 review；风险类别和优先级不自动占用其他席位。只有 Goal 合同已记录
+owner 预授权，或 owner 在执行中明确指派 reviewer/目标席位时，Goal owner 才可发起 review。执行者可以请求，
+但请求不是授权；reviewer 空闲也不是授权。reviewer 只检查冻结的 `BASE..HEAD`，不接管 Goal。
 
 完成时在同一 Goal 文件写四项：结果、证据、未验证/风险、下一步。代码合入 canonical 主线后标记
 `DONE`（非代码 Goal 在约定产物交付后标记）；仍待 review、合并、集中集成或真机验证时保持

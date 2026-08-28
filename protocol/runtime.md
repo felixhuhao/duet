@@ -42,6 +42,9 @@ native session ID 用于恢复 conversation；Goal 文件与 Git 用于冷恢复
 ## 通信边界
 
 owner 通过 Herdr 面板直接进入目标 pane，或发送明确的人工消息。默认不启用 agent-to-agent 自动传棒、
-baton、heartbeat 或 delivery acknowledgement。独立 reviewer 只检查冻结 diff，不与 Goal owner 组成常驻 pair。
+baton、heartbeat 或 delivery acknowledgement。agent 名称存在或状态为 `idle/done` 只表示可交互，不表示
+该席位可被其他 Goal owner 自行占用。Goal 合同未记录 owner 预授权、owner 也未明确指派目标席位时，Goal
+owner 不得向其他 agent 发任务、follow-up 或 review 请求；需要协助时先报告 owner。获授权的独立 reviewer
+只检查冻结 diff，不与 Goal owner 组成常驻 pair。
 
 tmux 仅作为事故兼容路径；迁移 runtime 前必须等 agent 可接收输入、安全退出旧进程，再 resume 原 session。

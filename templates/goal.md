@@ -47,8 +47,9 @@ updated: <YYYY-MM-DD>
 - 风险 / 未验证：
 - 下一动作：
 
-## Review（仅需要独立 review 时填写）
+## Review（仅 Goal 合同预授权或 owner 明确指派时填写）
 
+- authorization：<Goal 条款或 owner 指派记录；优先级/风险/空闲席位不构成授权>
 - reviewer / BASE..HEAD：
 - findings：
 - result：`PASS | CHANGES_REQUESTED`
