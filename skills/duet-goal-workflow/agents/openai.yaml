@@ -1,0 +1,4 @@
+interface:
+  display_name: "Duet Goal Workflow"
+  short_description: "Run a solo Goal from context to honest delivery"
+  default_prompt: "Use $duet-goal-workflow to turn this outcome into a bounded Goal and carry it through delivery."

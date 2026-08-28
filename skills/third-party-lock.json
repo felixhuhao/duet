@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "policy": "Known external skills are recorded, not vendored or automatically installed.",
+  "skills": [
+    {
+      "name": "diagnosing-bugs",
+      "source": "https://github.com/mattpocock/skills.git",
+      "skillPath": "skills/engineering/diagnosing-bugs/SKILL.md",
+      "installedSnapshotHash": "463c81def888fefa77b894837d301d9ed70e0994"
+    },
+    {
+      "name": "domain-modeling",
+      "source": "https://github.com/mattpocock/skills.git",
+      "skillPath": "skills/engineering/domain-modeling/SKILL.md",
+      "installedSnapshotHash": "959e63161ff78b4b1cd553b2c0e09e0c68418e5f"
+    },
+    {
+      "name": "grill-me",
+      "source": "https://github.com/mattpocock/skills.git",
+      "skillPath": "skills/productivity/grill-me/SKILL.md",
+      "installedSnapshotHash": "c817f6f36acd483294144694a935a76d3e3eb101"
+    },
+    {
+      "name": "grilling",
+      "source": "https://github.com/mattpocock/skills.git",
+      "skillPath": "skills/productivity/grilling/SKILL.md",
+      "installedSnapshotHash": "fd99bcbb818f7ef766b83656fb5fac0b58e223ad"
+    },
+    {
+      "name": "handoff",
+      "source": "https://github.com/mattpocock/skills.git",
+      "skillPath": "skills/productivity/handoff/SKILL.md",
+      "installedSnapshotHash": "184d485ae68a2132893a94239b2b85d253e6152b"
+    }
+  ],
+  "excluded": [
+    {
+      "name": "ui-ux-pro-max",
+      "reason": "The local copy has no pinned upstream/license manifest and contains machine-specific paths. duet v2 uses its own mobile-ui-audit skill; a future external copy must be downloaded from a verified source."
+    }
+  ]
+}

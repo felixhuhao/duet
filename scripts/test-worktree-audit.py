@@ -56,6 +56,29 @@ class WorktreeAuditTest(unittest.TestCase):
         self.assertIn(f"CLEAN_UNOWNED\t-\t{self.clean.resolve()}", result.stdout)
         self.assertIn(f"DIRTY_UNOWNED\t-\t{self.dirty.resolve()}", result.stdout)
 
+    def test_reads_local_herdr_agent_list_without_federation(self):
+        fake_herdr = pathlib.Path(self.temp.name) / "herdr"
+        fake_herdr.write_text(
+            "#!/usr/bin/env python3\n"
+            "import json\n"
+            f"print(json.dumps({{'result': {{'agents': [{{'name': 'dev1', 'cwd': {str(self.active)!r}}}]}}}}))\n"
+        )
+        fake_herdr.chmod(0o755)
+        env = os.environ.copy()
+        env.pop("DUET_WORKTREE_AGENTS_JSON", None)
+        env["HERDR_BIN"] = str(fake_herdr)
+
+        result = subprocess.run(
+            [str(AUDIT), str(self.root)],
+            env=env,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+        self.assertEqual(result.returncode, 3)
+        self.assertIn(f"ACTIVE\tdev1\t{self.active.resolve()}", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

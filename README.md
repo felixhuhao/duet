@@ -1,62 +1,50 @@
-# duet
+# duet v2
 
-一套简单的 Goal 开发约定：**一个人负责一个 Goal，从理解问题做到可交付。**
+duet 是一套可版本化、可迁移的个人 AI 工作方法：用一个 Goal owner 从理解问题走到可交付，用 Herdr 保存
+长期运行现场，用 skills 携带跨项目可复用的方法。
 
-Herdr 把长期 terminal 集中到一个面板并显示 agent 状态；Goal 文件和 Git 保存工作事实。没有默认双角色、
-自动传棒或复杂状态机。
+duet **不是业务仓依赖**。共享项目必须凭自己的 `AGENTS.md`、代码和文档自含；项目不需要引用、安装或知道
+duet。个人开发环境可以安装 duet skills，CI 也不需要它。
 
 ## 默认流程
 
-1. 写一个 Goal：结果、范围、验收标准、必要约束。
-2. 把 Goal 交给 Herdr `default` session 中的一个固定席位和 worktree。
-3. Goal owner 读项目规则与 Goal，确认 branch/base 后开始工作。
-4. 同一个 owner 实施、验证、自检，并在 Goal 文件记录结果和证据。
-5. 只有 Goal 合同预授权或 owner 明确指派时才叫独立 reviewer；否则自检后交付并由 canonical 主树合并。
+1. 用一个 Goal 写清 outcome、scope、验收标准、约束和停止条件。
+2. owner 把 Goal 交给 Herdr `default` session 中一个固定席位与 worktree。
+3. 同一个 Goal owner 读取项目规则，确认 cwd、branch、base 和写入权限。
+4. owner 实施、验证、自检，在 Goal 中记录结果、证据、未验证面和下一步。
+5. 只有 Goal 预授权或 owner 明确指派时才调用独立 reviewer；否则直接交付。
+6. 是否合并、push、部署或删除，始终服从目标项目和用户当前授权。
 
-默认只需要一个 Goal 文件。Goal 多到需要排序时再加 roadmap；昂贵的跨 Goal 验证需要集中管理时再加
-validation ledger。不要为可能发生的协作预先建流程。
+## 知识边界
 
-## 五条规则
+duet 可以保存：
 
-1. **一个 Goal，一个 owner。** 不在 spec/delivery 之间来回传棒。
-2. **Goal 写决定，不写教程。** 写清要达到什么、不能破坏什么、怎样算完成；实现方式由执行者决定。
-3. **Herdr 显示运行态，文件和 Git 裁决交付态。** 面板告诉你 agent 是否在工作；它不代替验收证据。
-4. **风险决定证据强度，不自动取得其他席位。** 普通改动自检；安全、权限、金额、数据删除、共享契约或
-   P0/P1 要加强验证并报告 owner，由 owner 决定是否指派独立 review。只有 Goal 合同预授权或 owner 明确
-   指派才可联系 reviewer；优先级、风险类别、执行者请求或 reviewer 空闲本身都不是授权。
-5. **只上报需要注意的事。** 产品选择、重大风险、真实阻塞立即找 owner；正常过程不 ping、不写流水账。
+- 跨项目稳定的方法、判断边界和验收纪律；
+- 第一方 skills 及其必要 reference/script；
+- Herdr solo runtime 和可复用 Goal 模板；
+- 已知来源的第三方 skill 清单，不复制同一依赖的多份安装结果。
 
-## 面板状态
+duet 不保存：
 
-| Herdr 状态 | 含义 | owner 动作 |
-|---|---|---|
-| `working` | agent 正在执行 turn | 等待或查看 pane |
-| `blocked` | 等待审批或回答 | 进入 pane 处理 |
-| `idle` / `done` | 可接收下一条消息；`done` 表示后台完成后尚未查看 | 查看回复或派下一项 |
-| `unknown` | Herdr 无法可靠判断 | 进入 pane 核实 |
+- 产品/API/支付/隐私等业务真源；
+- 项目工具链、branch、release 或 CI 私有约定；
+- token、账号、session、浏览器状态、签名私钥、机器审批记录或绝对用户路径；
+- Codex 系统 skills、plugin cache 或来源/许可证不明的第三方大包。
 
-这些是 agent 运行态，不是 Goal lifecycle。只有代码合入 canonical 主线（或非代码产物已交付）后，Goal
-才标 `DONE`。
-
-## 默认布局
+## v2 内容
 
 ```text
-Herdr session: default
-├── byteme_mobile   canonical 主树：规划、合并、真源维护
-├── wt1 / dev1      固定 worktree：solo Goal owner
-├── wt2 / dev2      固定 worktree：solo Goal owner
-└── wt3 / dev3      固定 worktree：solo Goal owner
+protocol/   Goal 与 Herdr runtime 的最小协议
+templates/  Goal；仅在确有共享排序/验证需要时使用 roadmap/ledger
+skills/     第一方可移植 skills 与第三方来源清单
+scripts/    Herdr 启动和只读 worktree 审计
 ```
 
-打开统一面板只需运行 `herdr`。workspace、worktree 和 agent name 长期复用；idle 分支使用
-`wt1/wt2/wt3`，换 Goal 再切 Goal branch。
+- [Goal 协议](protocol/goal.md)
+- [Runtime 协议](protocol/runtime.md)
+- [Herdr runbook](scripts/HERDR-RUNBOOK.md)
+- [Goal 模板](templates/goal.md)
+- [`duet-goal-workflow`](skills/duet-goal-workflow/SKILL.md)
+- [`mobile-ui-audit`](skills/mobile-ui-audit/SKILL.md)
 
-## 日常只读这些
-
-- [Goal 协议](protocol/goal.md)：Goal 怎么开始、停止和完成；
-- [Goal 模板](templates/goal.md)：复制到工作仓，按需删掉空项；
-- [Runtime 协议](protocol/runtime.md)：Herdr 状态、worktree 与 native session 的边界；
-- [Herdr runbook](scripts/HERDR-RUNBOOK.md)：打开、resume 和恢复命令。
-
-其余双角色、baton、旧 batch 模板和 tmux 工具是兼容/历史资料，**不是默认流程，日常无需阅读**。
-具体项目规则、产品红线、文档落点和 Git 约定始终以工作仓自己的 `AGENTS.md` 为准。
+v2 之前的现场由 Git tag `v1-final` 保存，不在当前工作树维护兼容副本。

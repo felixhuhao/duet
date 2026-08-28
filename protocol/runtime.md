@@ -1,50 +1,36 @@
 # Runtime 协议
 
-默认 runtime 是 Herdr `default` session + 长期 worktree。一个 solo Goal owner 使用一个固定 agent 席位。
+默认 runtime 是 Herdr `default` session + owner 预置的长期 workspace/worktree。一个 Goal owner 使用一个固定
+agent 席位；换 Goal 不靠重建 terminal 获取“干净上下文”。
 
-## 固定拓扑
+## 固定现场
 
-- canonical 主树独立 workspace，负责规划、合并和真源维护；
-- `dev1/dev2/...` 各绑定 owner 预置的 `wt1/wt2/...` workspace 和长期 worktree；
-- idle 时使用同名分支 `wt1/wt2/...`，换 Goal 只换 branch，不换 workspace 或 cwd；
+- workspace、agent name、cwd 和 worktree 由 owner 预置并长期复用；
 - worktree 的创建、移动和删除只由 owner 安排；
-- 同一 native session 禁止跨 Herdr、tmux 或其他 terminal 双开。
+- Goal 开始前确认 branch/HEAD/base，结束后按项目规则合并或保留恢复指针；
+- 同一 native session 不得在两个 runtime 或 pane 同时运行。
 
-## 两种状态不要混
+## 两种状态
 
-Herdr 的 `working/blocked/idle/done/unknown` 只描述 agent 当前是否可交互。`done` 与 `idle` 都表示可接收
-下一 turn；`unknown` 必须进入 pane 核实。
+Herdr 的 `working/blocked/idle/done/unknown` 只说明 agent 是否可交互。Goal lifecycle、AC、验证、Git 和是否已
+交付由目标项目的文件与仓库裁决。`idle/done` 不等于 Goal 完成，`unknown` 必须进入 pane 核实。
 
-Goal 的 `QUEUED/ACTIVE/BLOCKED/DONE/CANCELLED` 由 Goal 文件和 Git 裁决。agent 显示 `done` 不代表代码
-已合并，也不代表 AC 已满足。
-
-## 席位记录
-
-每个 active Goal 记录一行即可：
+每个 active Goal 至少记录：
 
 ```text
-owner=<name> · herdr=default/<agent> · pane=<id> · native_session=<id> · cwd=<path> · branch=<branch>
+owner=<name> · herdr=default/<agent> · pane=<id> · native_session=<id>
+cwd=<path> · branch=<branch> · base=<sha>
 ```
-
-native session ID 用于恢复 conversation；Goal 文件与 Git 用于冷恢复工作。两者都要留，不能互相替代。
 
 ## 启动与恢复
 
-只使用 `scripts/herdr-agent-start.sh` 新建或 resume。完成后确认：
+只使用 `scripts/herdr-agent-start.sh` 在现存 shell pane 新建或 resume。恢复后核对 agent、pane、cwd、native
+session、branch/HEAD 和一次普通回复。原 session 无法恢复时才 cold start，并从项目规则、Goal、Git 和
+未验证面恢复上下文。
 
-1. agent name、pane 和 cwd 正确；
-2. native session ID 正确；
-3. branch/HEAD 与 Goal 一致；
-4. Herdr 状态可识别且 agent 能正常回复。
+## 通信与权限
 
-原 session 无法恢复时才 cold start，并先从项目规则、Goal、当前 HEAD 和未验证面恢复上下文。
+agent 存在或显示 `idle/done` 不表示可被其他 Goal owner 占用。没有 Goal 预授权或 owner 对目标席位的明确
+指派时，Goal owner 不得发送 agent-to-agent task、follow-up 或 review 请求；需要协助先报告 owner。
 
-## 通信边界
-
-owner 通过 Herdr 面板直接进入目标 pane，或发送明确的人工消息。默认不启用 agent-to-agent 自动传棒、
-baton、heartbeat 或 delivery acknowledgement。agent 名称存在或状态为 `idle/done` 只表示可交互，不表示
-该席位可被其他 Goal owner 自行占用。Goal 合同未记录 owner 预授权、owner 也未明确指派目标席位时，Goal
-owner 不得向其他 agent 发任务、follow-up 或 review 请求；需要协助时先报告 owner。获授权的独立 reviewer
-只检查冻结 diff，不与 Goal owner 组成常驻 pair。
-
-tmux 仅作为事故兼容路径；迁移 runtime 前必须等 agent 可接收输入、安全退出旧进程，再 resume 原 session。
+Herdr 只保存运行现场，不扩大 Git、网络、发布、删除、跨仓或外部系统权限。

@@ -8,9 +8,6 @@ import subprocess
 import sys
 
 
-SCRIPT_DIR = pathlib.Path(__file__).resolve().parent
-
-
 def run(args, cwd):
     result = subprocess.run(args, cwd=cwd, text=True, capture_output=True, check=False)
     if result.returncode != 0:
@@ -38,11 +35,12 @@ def agents():
     injected = os.environ.get("DUET_WORKTREE_AGENTS_JSON")
     if injected is not None:
         return json.loads(injected)
-    output = run(
-        [sys.executable, str(SCRIPT_DIR / "herdr-federation.py"), "peers", "--json"],
-        SCRIPT_DIR.parent,
-    )
-    return json.loads(output)
+    herdr_bin = os.environ.get("HERDR_BIN", "herdr")
+    payload = json.loads(run([herdr_bin, "agent", "list"], pathlib.Path.cwd()))
+    live_agents = payload.get("result", {}).get("agents")
+    if not isinstance(live_agents, list):
+        raise ValueError("herdr agent list returned no result.agents array")
+    return live_agents
 
 
 def main():
