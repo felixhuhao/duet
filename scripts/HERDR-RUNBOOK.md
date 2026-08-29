@@ -13,13 +13,7 @@ herdr agent read <agent-name> --source recent-unwrapped --lines 80
 
 裸 `herdr` 进入长期 `default` session。`q` 只退出当前 UI client，不结束其中的 agent。
 
-Herdr `working/blocked/idle/done/unknown` 只说明 agent 是否可交互，不等于 Goal 完成。`unknown` 时进入 pane
-核实，不从状态名猜测进程或交付结果。
-
-## 固定 workspace
-
-owner 预先建立 canonical workspace 和需要的长期 Goal owner workspace。workspace、agent name、cwd 和 worktree
-长期复用；换 Goal 只按项目规则切 branch，不为任务临时创建或删除 workspace/worktree。
+状态语义、固定 workspace 与跨席位授权规范见 [runtime 协议](../protocol/runtime.md)，本 runbook 只记操作。
 
 ## 启动与 resume
 

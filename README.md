@@ -8,12 +8,9 @@ duet。个人开发环境可以安装 duet skills，CI 也不需要它。
 
 ## 默认流程
 
-1. 用一个 Goal 写清 outcome、scope、验收标准、约束和停止条件。
-2. owner 把 Goal 交给 Herdr `default` session 中一个固定席位与 worktree。
-3. 同一个 Goal owner 读取项目规则，确认 cwd、branch、base 和写入权限。
-4. owner 实施、验证、自检，在 Goal 中记录结果、证据、未验证面和下一步。
-5. 只有 Goal 预授权或 owner 明确指派时才调用独立 reviewer；否则直接交付。
-6. 是否合并、push、部署或删除，始终服从目标项目和用户当前授权。
+一个 Goal owner 在 Herdr 固定席位上，从合同（outcome/scope/AC/停止条件）走到带证据的诚实交付；
+review 与外发动作的授权边界见协议。细节以 [Goal 协议](protocol/goal.md)与
+[Runtime 协议](protocol/runtime.md)为准，本文件不复述。
 
 ## 知识边界
 
