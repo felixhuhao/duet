@@ -20,6 +20,8 @@ duet。个人开发环境可以安装 duet skills，CI 也不需要它。
 duet 可以保存：
 
 - 跨项目稳定的方法、判断边界和验收纪律；
+- owner 自己的多仓工作站 bootstrap / 机器生命周期操作手册；其中可以列出项目安装步骤，但不得取代
+  项目仓内的实时工具链、验证、Release 或 CI authority；
 - 第一方 skills 及其必要 reference/script；
 - Herdr solo runtime 和可复用 Goal 模板；
 - 已知来源的第三方 skill 清单，不复制同一依赖的多份安装结果。
@@ -44,7 +46,9 @@ docs/       机器生命周期 runbook 与跨项目 playbooks
 - [Goal 协议](protocol/goal.md)
 - [Runtime 协议](protocol/runtime.md)
 - [Herdr runbook](scripts/HERDR-RUNBOOK.md)
-- [机器生命周期 runbook](docs/machine-lifecycle.md) · [playbooks](docs/playbooks.md)
+- [机器生命周期 runbook](docs/machine-lifecycle.md) ·
+  [ByteMe Mobile 三端开发机 bootstrap](docs/byteme-mobile-three-platform-bootstrap.md) ·
+  [playbooks](docs/playbooks.md)
 - [Goal 模板](templates/goal.md)
 - [`duet-goal-workflow`](skills/duet-goal-workflow/SKILL.md)
 - [`mobile-ui-audit`](skills/mobile-ui-audit/SKILL.md)

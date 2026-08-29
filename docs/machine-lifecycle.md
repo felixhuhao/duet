@@ -1,8 +1,9 @@
 # 机器生命周期 runbook · 新开发机 bootstrap 与旧机退役
 
-方法与顺序，不含任何机器私有值（token、账号、审批记录、绝对路径）。项目工具链细节归各仓
-（例：byteme_mobile 的 `docs/dev/新MacBook-Air三端环境安装指南.md` 与
-`docs/dev/本地开发测试说明.md`），本文件不重复。
+方法与顺序，不含任何机器私有值（token、账号、审批记录、绝对用户路径）。owner 自己的完整
+ByteMe Mobile 工作站安装步骤见 [三端开发机 bootstrap](byteme-mobile-three-platform-bootstrap.md)；
+项目的实时工具链、验证、Release 与 CI authority 仍归 `byteme_mobile/docs/dev/本地开发测试说明.md`
+等项目仓文档，本文件不重复、不覆盖。
 
 ## 新开发机 bootstrap
 
@@ -15,7 +16,7 @@
    `scripts/worktree-audit.py` 确认 clean。
 6. `scripts/herdr-agent-start.sh` 起各席位 agent；核对 Context Receipt：
    owner/herdr/pane/native_session + cwd/branch/base。
-7. 各仓工具链自检按该仓文档执行（如上例），全绿后席位进入 idle 待命。
+7. 按个人 bootstrap 完成软件安装，再回各仓执行该仓实时工具链自检；全绿后席位进入 idle 待命。
 
 ## 旧开发机退役（转 CI appliance）
 
