@@ -8,8 +8,9 @@ ByteMe Mobile 工作站安装步骤见 [三端开发机 bootstrap](byteme-mobile
 ## 新开发机 bootstrap
 
 1. 基础：git、herdr（官方 release 二进制或包管理器任一）。tmux 是 legacy，不需要。
-2. 建 workspace 根目录。**根目录不是 git 仓**：`AGENTS.md` / `CLAUDE.md` 是两份手工文件，
-   必须单独从旧机迁移或按最新内容重建——它们是「写仓前必读 + 路由表」的唯一入口。
+2. 建 workspace 根目录。**根目录不是 git 仓**：把 duet `templates/workspace/` 的
+   `AGENTS.md` / `CLAUDE.md` 拷到根目录——它们是「写仓前必读 + 路由表」的唯一入口；
+   规则变更先改 duet，再同步拷贝。
 3. 克隆各业务仓；写任何仓之前先读该仓根目录 AGENTS.md（workspace 硬规则，只读不受限）。
 4. clone duet，安装需要的 skills。
 5. owner 建 canonical 主树与席位 worktree（拓扑 owner 管理，agent 不建树）；跑
