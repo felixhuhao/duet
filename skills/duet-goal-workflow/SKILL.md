@@ -57,7 +57,10 @@ Record:
 - commits or artifacts;
 - verification commands and exact results;
 - unverified Integration, Device, Release, or external-state work;
-- remaining risks and next step.
+- remaining risks and next step;
+- structural, long-lived improvement candidates surfaced during work — route them
+  through the target repository's own candidate channel when it defines one, or report
+  them to the owner at closure; never bundle them into the current Goal.
 
 Self-review is the default. Risk can justify stronger evidence or a request to the owner, but does not authorize an independent
 reviewer. Merge, push, deployment, release, deletion, messaging, or cross-repository writes still require the target project's and
