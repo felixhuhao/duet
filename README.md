@@ -34,7 +34,8 @@ duet 不保存：
 
 ```text
 protocol/   Goal 与 Herdr runtime 的最小协议
-templates/  Goal；仅在确有共享排序/验证需要时使用 roadmap/ledger
+templates/  Goal、workspace 共享 hand files 与 host-local overlay 示例；仅在确有共享排序/验证
+            需要时使用 roadmap/ledger
 skills/     第一方可移植 skills 与第三方来源清单
 scripts/    Herdr 启动和只读 worktree 审计
 docs/       机器生命周期 runbook 与跨项目 playbooks
