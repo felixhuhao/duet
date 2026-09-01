@@ -1,4 +1,0 @@
-interface:
-  display_name: "Mobile UI Audit"
-  short_description: "Audit native mobile UI with production evidence"
-  default_prompt: "Use $mobile-ui-audit to investigate this mobile UI issue and separate the safe fix from the long-term rule."

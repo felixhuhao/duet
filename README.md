@@ -1,10 +1,10 @@
 # duet v2
 
 duet 是一套可版本化、可迁移的个人 AI 工作方法：用一个 Goal owner 从理解问题走到可交付，用 Herdr 保存
-长期运行现场，用 skills 携带跨项目可复用的方法。
+长期运行现场。
 
 duet **不是业务仓依赖**。共享项目必须凭自己的 `AGENTS.md`、代码和文档自含；项目不需要引用、安装或知道
-duet。个人开发环境可以安装 duet skills，CI 也不需要它。
+duet。个人技能由独立的 agent config 管理，不再从 duet 安装；CI 也不需要 duet。
 
 ## 默认流程
 
@@ -19,9 +19,7 @@ duet 可以保存：
 - 跨项目稳定的方法、判断边界和验收纪律；
 - owner 自己的多仓工作站 bootstrap / 机器生命周期操作手册；其中可以列出项目安装步骤，但不得取代
   项目仓内的实时工具链、验证、Release 或 CI authority；
-- 第一方 skills 及其必要 reference/script；
 - Herdr solo runtime 和可复用 Goal 模板；
-- 已知来源的第三方 skill 清单，不复制同一依赖的多份安装结果。
 
 duet 不保存：
 
@@ -36,7 +34,6 @@ duet 不保存：
 protocol/   Goal 与 Herdr runtime 的最小协议
 templates/  Goal、workspace 共享 hand files 与 host-local overlay 示例；仅在确有共享排序/验证
             需要时使用 roadmap/ledger
-skills/     第一方可移植 skills 与第三方来源清单
 scripts/    Herdr 启动和只读 worktree 审计
 docs/       机器生命周期 runbook 与跨项目 playbooks
 ```
@@ -48,7 +45,5 @@ docs/       机器生命周期 runbook 与跨项目 playbooks
   [ByteMe Mobile 三端开发机 bootstrap](docs/byteme-mobile-three-platform-bootstrap.md) ·
   [playbooks](docs/playbooks.md)
 - [Goal 模板](templates/goal.md)
-- [`duet-goal-workflow`](skills/duet-goal-workflow/SKILL.md)
-- [`mobile-ui-audit`](skills/mobile-ui-audit/SKILL.md)
 
 v2 之前的现场由 Git tag `v1-final` 保存，不在当前工作树维护兼容副本。
